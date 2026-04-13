@@ -1,0 +1,708 @@
+{
+  "_README": {
+    "title": "RavenFit — Fitness Egzersiz Havuzu",
+    "version": "1.0.0",
+
+    "JSON_DÜZENLEME_REHBERİ": {
+      "nasıl_eklenir": "Aşağıdaki 'exercises' dizisine yeni bir {} bloğu ekle. Her blok virgülle ayrılır. Son blokta virgül OLMAZ.",
+      "zorunlu_alanlar": ["id", "name_tr", "branch", "category", "equipment", "difficulty", "muscles"],
+      "opsiyonel_alanlar": ["name_en", "instructions_tr", "tips_tr", "common_mistakes_tr", "contraindications", "gif", "video_url", "is_compound", "force_type"],
+
+      "id": "Benzersiz tanımlayıcı. Küçük harf, tire ile birleştir. Örn: 'incline-bench-press'. ASLA değiştirme, antrenman kayıtlarında referans olarak kullanılıyor.",
+      "name_tr": "Türkçe egzersiz adı. Örn: 'Eğik Bench Press'",
+      "name_en": "İngilizce egzersiz adı. Opsiyonel.",
+      "branch": "Hangi branşa ait: 'fitness' | 'swimming' | 'boxing' | 'yoga' (şimdilik sadece 'fitness')",
+      "category": "Egzersizin ana kas grubu: aşağıdaki CATEGORY_LISTESI'ne bak.",
+      "equipment": "Gereken ekipman listesi. Boş liste [] = vücut ağırlığı. Değerler: 'barbell' | 'dumbbell' | 'cable' | 'machine' | 'bench' | 'pullup-bar' | 'kettlebell' | 'resistance-band' | 'dip-bar' | 'ez-bar' | 'smith-machine'",
+      "difficulty": "1=Başlangıç | 2=Orta | 3=İleri",
+      "is_compound": "true = Bileşik hareket (birden fazla eklem). false = İzole hareket. Opsiyonel, varsayılan false.",
+      "force_type": "'push' | 'pull' | 'legs' | 'core'. Opsiyonel.",
+
+      "muscles": {
+        "açıklama": "Egzersizin çalıştırdığı kaslar ve şiddet değerleri. 0-10 arası. 0 = hiç çalışmaz, 10 = maksimum çalışır.",
+        "KAS_GRUBU_LİSTESİ": {
+          "GÖĞÜS": ["chest", "upper-chest", "lower-chest"],
+          "OMUZ": ["front-shoulder", "mid-shoulder", "rear-shoulder"],
+          "ÜST_KOL": ["biceps", "triceps-long", "triceps-medial", "triceps-lateral"],
+          "ÖN_KOL": ["forearm-flexors", "forearm-extensors", "brachioradialis"],
+          "SIRT": ["upper-traps", "mid-traps", "lower-traps", "lats", "rhomboids", "rear-delt"],
+          "CORE": ["abs-upper", "abs-lower", "obliques", "transverse-abs", "erector-spinae"],
+          "BACAK": ["quads", "hamstrings", "glutes", "hip-flexors", "adductors", "abductors"],
+          "KALF": ["gastrocnemius", "soleus"],
+          "GENEL": ["full-body", "grip", "rotator-cuff"]
+        },
+        "örnek": { "chest": 9, "front-shoulder": 7, "triceps-long": 6 }
+      },
+
+      "contraindications": "Bu egzersizi yapmaması gereken durumlar. conditions.json'daki 'warn_tags' ile eşleşir. Örn: ['shoulder-injury', 'cardiovascular']",
+      "gif": "GIF dosyasının CDN URL'i. Henüz yoksa null bırak.",
+      "video_url": "Video URL'i. Henüz yoksa null bırak.",
+      "instructions_tr": "Adım adım nasıl yapılır. Dizi olarak yaz.",
+      "tips_tr": "Önemli ipuçları. Dizi olarak yaz.",
+      "common_mistakes_tr": "Yaygın yapılan hatalar. Dizi olarak yaz."
+    },
+
+    "CATEGORY_LİSTESİ": {
+      "chest": "Göğüs",
+      "back": "Sırt",
+      "shoulders": "Omuzlar",
+      "arms": "Kollar",
+      "legs": "Bacaklar",
+      "core": "Core / Karın",
+      "full-body": "Tüm Vücut",
+      "cardio": "Kardiyo",
+      "glutes": "Kalça",
+      "posture": "Postür / Duruş"
+    },
+
+    "EKİPMAN_ETİKETLERİ": {
+      "barbell": "Halter (Uzun Bar)",
+      "dumbbell": "Dumbbell (Bilyeli)",
+      "cable": "Kablo Makinesi",
+      "machine": "Makine",
+      "bench": "Bench (Sehpa)",
+      "pullup-bar": "Çekiş Barı",
+      "kettlebell": "Kettlebell",
+      "resistance-band": "Direnç Bandı",
+      "dip-bar": "Paralel Bar",
+      "ez-bar": "EZ Bar",
+      "smith-machine": "Smith Makinesi"
+    }
+  },
+
+  "exercises": [
+
+    {
+      "id": "bench-press",
+      "name_tr": "Bench Press",
+      "name_en": "Barbell Bench Press",
+      "branch": "fitness",
+      "category": "chest",
+      "equipment": ["barbell", "bench"],
+      "difficulty": 2,
+      "is_compound": true,
+      "force_type": "push",
+      "muscles": {
+        "chest": 9,
+        "upper-chest": 6,
+        "front-shoulder": 7,
+        "triceps-long": 6,
+        "triceps-medial": 5,
+        "triceps-lateral": 5
+      },
+      "contraindications": ["shoulder-injury", "cardiovascular"],
+      "gif": null,
+      "video_url": null,
+      "instructions_tr": [
+        "Bench'e sırt üstü uzan, gözlerin bar altında olsun.",
+        "Barı omuz genişliğinin biraz dışından tut, başparmaklar içinde.",
+        "Kürek kemiklerini sıkıştır ve köprü oluştur (kalça bench'te kalır).",
+        "Barı göğsüne in, dirsekler 45-75° açıyla.",
+        "Barı iterek başlangıç pozisyonuna dön, nefes ver."
+      ],
+      "tips_tr": [
+        "Ayakları yere sağlam bas.",
+        "Bileğin düz kalmalı, kırılmamalı.",
+        "Bar inişte göğüs ortasına değmeli."
+      ],
+      "common_mistakes_tr": [
+        "Barı çok geniş ya da çok dar tutmak.",
+        "Kalçayı bench'ten kaldırmak.",
+        "Nefesi tutmamak veya yanlış nefes almak."
+      ]
+    },
+
+    {
+      "id": "incline-bench-press",
+      "name_tr": "Eğik Bench Press",
+      "name_en": "Incline Barbell Bench Press",
+      "branch": "fitness",
+      "category": "chest",
+      "equipment": ["barbell", "bench"],
+      "difficulty": 2,
+      "is_compound": true,
+      "force_type": "push",
+      "muscles": {
+        "upper-chest": 9,
+        "chest": 7,
+        "front-shoulder": 8,
+        "triceps-long": 5,
+        "triceps-lateral": 4
+      },
+      "contraindications": ["shoulder-injury"],
+      "gif": null,
+      "video_url": null,
+      "instructions_tr": [
+        "Bench'i 30-45° eğime ayarla.",
+        "Barı omuz genişliğinin biraz dışından tut.",
+        "Kürek kemiklerini sıkıştır.",
+        "Barı üst göğse in, dirsekler hafifçe içe gelsin.",
+        "İterek başlangıç pozisyonuna dön."
+      ],
+      "tips_tr": ["45°'den fazla eğim omuz baskısını artırır, 30-45° ideal."],
+      "common_mistakes_tr": ["Çok dik açı kullanmak (omuz baskısı artar)."]
+    },
+
+    {
+      "id": "dumbbell-flye",
+      "name_tr": "Dumbbell Flye (Kelebek)",
+      "name_en": "Dumbbell Chest Flye",
+      "branch": "fitness",
+      "category": "chest",
+      "equipment": ["dumbbell", "bench"],
+      "difficulty": 2,
+      "is_compound": false,
+      "force_type": "push",
+      "muscles": {
+        "chest": 9,
+        "upper-chest": 5,
+        "front-shoulder": 4,
+        "biceps": 2
+      },
+      "contraindications": ["shoulder-injury"],
+      "gif": null,
+      "video_url": null,
+      "instructions_tr": [
+        "Düz bench'e uzan, dumbbell'ları göğüs hizasında tut.",
+        "Dirsekler hafifçe kırık, kolları yanlara aç.",
+        "Göğüste gerginlik hissedince dur.",
+        "Göğüs kaslarını sıkıştırarak başlangıca dön."
+      ],
+      "tips_tr": ["İzole bir harekettir, ağırlığı çok artırma."],
+      "common_mistakes_tr": ["Dirsekleri çok büyük açıyla bükmek."]
+    },
+
+    {
+      "id": "overhead-press",
+      "name_tr": "Overhead Press (Baş Üstü Baskı)",
+      "name_en": "Barbell Overhead Press",
+      "branch": "fitness",
+      "category": "shoulders",
+      "equipment": ["barbell"],
+      "difficulty": 2,
+      "is_compound": true,
+      "force_type": "push",
+      "muscles": {
+        "front-shoulder": 9,
+        "mid-shoulder": 7,
+        "triceps-long": 6,
+        "triceps-lateral": 5,
+        "upper-traps": 4,
+        "abs-upper": 3
+      },
+      "contraindications": ["shoulder-injury", "overhead-press", "cardiovascular"],
+      "gif": null,
+      "video_url": null,
+      "instructions_tr": [
+        "Barı klavikula hizasında tut, omuz genişliğinde kavra.",
+        "Core'u sık, sırt düz.",
+        "Barı başın üstüne doğru bas.",
+        "Kollar tam açılınca kulaklar omuzlarla hizalanmalı.",
+        "Kontrollü olarak başlangıca dön."
+      ],
+      "tips_tr": ["Beli aşırı germe, core sıkı kalmalı."],
+      "common_mistakes_tr": ["Aşırı lumbar extension (bel germe)", "Barı önden itmek yerine arkaya eğmek."]
+    },
+
+    {
+      "id": "lateral-raise",
+      "name_tr": "Lateral Raise (Yan Kaldırma)",
+      "name_en": "Dumbbell Lateral Raise",
+      "branch": "fitness",
+      "category": "shoulders",
+      "equipment": ["dumbbell"],
+      "difficulty": 1,
+      "is_compound": false,
+      "force_type": "pull",
+      "muscles": {
+        "mid-shoulder": 9,
+        "front-shoulder": 4,
+        "upper-traps": 3
+      },
+      "contraindications": ["shoulder-injury"],
+      "gif": null,
+      "video_url": null,
+      "instructions_tr": [
+        "Dik dur, dumbbell'lar yanda.",
+        "Hafifçe öne eğil.",
+        "Dirsekleri hafifçe kırık tut.",
+        "Kolları omuz hizasına kadar yan kaldır.",
+        "Kontrollü olarak indir."
+      ],
+      "tips_tr": ["Küçük parmak tarafı hafifçe yukarı bakmalı.", "Momentum kullanma, kontrollü olsun."],
+      "common_mistakes_tr": ["Omuzları kulağa doğru kaldırmak.", "Sallanarak momentum kullanmak."]
+    },
+
+    {
+      "id": "pull-up",
+      "name_tr": "Pull-Up (Çekiş)",
+      "name_en": "Pull-Up",
+      "branch": "fitness",
+      "category": "back",
+      "equipment": ["pullup-bar"],
+      "difficulty": 3,
+      "is_compound": true,
+      "force_type": "pull",
+      "muscles": {
+        "lats": 9,
+        "mid-traps": 6,
+        "rhomboids": 6,
+        "rear-delt": 5,
+        "biceps": 7,
+        "brachioradialis": 5,
+        "abs-upper": 3
+      },
+      "contraindications": ["shoulder-injury"],
+      "gif": null,
+      "video_url": null,
+      "instructions_tr": [
+        "Barı omuz genişliğinin biraz dışından, avuç içi sana bakacak şekilde tut.",
+        "Kürek kemiklerini aşağı ve içe çek.",
+        "Göğsü bara doğru çekerek çıkış yap.",
+        "Çeneni bar hizasına ulaştır.",
+        "Kontrollü olarak başlangıca in."
+      ],
+      "tips_tr": ["Tam aralık hareketi için tam ine.", "Skapular retraksiyonla başla."],
+      "common_mistakes_tr": ["Yarım tekrar yapmak.", "Boynu uzatarak çeneyi bara götürmek."]
+    },
+
+    {
+      "id": "bent-over-row",
+      "name_tr": "Bent Over Row (Eğik Sırt Çekişi)",
+      "name_en": "Barbell Bent Over Row",
+      "branch": "fitness",
+      "category": "back",
+      "equipment": ["barbell"],
+      "difficulty": 2,
+      "is_compound": true,
+      "force_type": "pull",
+      "muscles": {
+        "lats": 8,
+        "mid-traps": 8,
+        "rhomboids": 7,
+        "rear-delt": 6,
+        "biceps": 6,
+        "erector-spinae": 5,
+        "brachioradialis": 4
+      },
+      "contraindications": ["lower-back", "spinal-load"],
+      "gif": null,
+      "video_url": null,
+      "instructions_tr": [
+        "Barı omuz genişliğinde tut, kalçadan öne eğil (45-60°).",
+        "Sırt düz, core sıkı.",
+        "Barı karın bölgesine çek, dirsekler arkaya.",
+        "Kürek kemiklerini sıkıştır.",
+        "Kontrollü olarak indir."
+      ],
+      "tips_tr": ["Bel nötral kalmalı, asla yuvarlama."],
+      "common_mistakes_tr": ["Sırtı yuvarlama.", "Vücudu sallamak."]
+    },
+
+    {
+      "id": "lat-pulldown",
+      "name_tr": "Lat Pulldown",
+      "name_en": "Lat Pulldown",
+      "branch": "fitness",
+      "category": "back",
+      "equipment": ["cable", "machine"],
+      "difficulty": 1,
+      "is_compound": true,
+      "force_type": "pull",
+      "muscles": {
+        "lats": 9,
+        "mid-traps": 5,
+        "rhomboids": 5,
+        "rear-delt": 4,
+        "biceps": 6,
+        "brachioradialis": 4
+      },
+      "contraindications": [],
+      "gif": null,
+      "video_url": null,
+      "instructions_tr": [
+        "Barı geniş tutuşla kavra.",
+        "Hafifçe geriye yaslan.",
+        "Barı göğüs üst kısmına çek, dirsekler aşağı ve arkaya.",
+        "Kontrollü olarak tam uzat."
+      ],
+      "tips_tr": ["Arkaya yatışı fazlaya kaçırma."],
+      "common_mistakes_tr": ["Barı boyun arkasına çekmek (boyun yaralanması riski)."]
+    },
+
+    {
+      "id": "barbell-curl",
+      "name_tr": "Barbell Curl (Halter Küklüsü)",
+      "name_en": "Barbell Bicep Curl",
+      "branch": "fitness",
+      "category": "arms",
+      "equipment": ["barbell"],
+      "difficulty": 1,
+      "is_compound": false,
+      "force_type": "pull",
+      "muscles": {
+        "biceps": 9,
+        "brachioradialis": 6,
+        "forearm-flexors": 5
+      },
+      "contraindications": [],
+      "gif": null,
+      "video_url": null,
+      "instructions_tr": [
+        "Dik dur, barı omuz genişliğinde alt tutuşla kavra.",
+        "Dirsekleri sabit tutarak barı yukarı kıvır.",
+        "Zirveye ulaşınca biceps'i sık.",
+        "Kontrollü olarak indir."
+      ],
+      "tips_tr": ["Dirsekler gövdeye yapışık kalmalı."],
+      "common_mistakes_tr": ["Vücudu sallamak (momentum kullanmak)."]
+    },
+
+    {
+      "id": "tricep-pushdown",
+      "name_tr": "Tricep Pushdown (Kablo İniş)",
+      "name_en": "Cable Tricep Pushdown",
+      "branch": "fitness",
+      "category": "arms",
+      "equipment": ["cable"],
+      "difficulty": 1,
+      "is_compound": false,
+      "force_type": "push",
+      "muscles": {
+        "triceps-lateral": 8,
+        "triceps-medial": 7,
+        "triceps-long": 5
+      },
+      "contraindications": [],
+      "gif": null,
+      "video_url": null,
+      "instructions_tr": [
+        "Kablonun önünde dik dur, barı yukarıdan kavra.",
+        "Dirsekleri gövdeye sıkıştır ve sabit tut.",
+        "Barı aşağıya it, kollar tam açılsın.",
+        "Kontrollü olarak başlangıca dön."
+      ],
+      "tips_tr": ["Dirseklerin kaymaması kritik."],
+      "common_mistakes_tr": ["Dirsekleri öne almak."]
+    },
+
+    {
+      "id": "squat",
+      "name_tr": "Squat (Çömelme)",
+      "name_en": "Barbell Back Squat",
+      "branch": "fitness",
+      "category": "legs",
+      "equipment": ["barbell"],
+      "difficulty": 3,
+      "is_compound": true,
+      "force_type": "legs",
+      "muscles": {
+        "quads": 9,
+        "glutes": 8,
+        "hamstrings": 5,
+        "adductors": 5,
+        "erector-spinae": 6,
+        "abs-upper": 3,
+        "transverse-abs": 4
+      },
+      "contraindications": ["knee-injury", "deep-squat", "lower-back", "cardiovascular", "valsalva"],
+      "gif": null,
+      "video_url": null,
+      "instructions_tr": [
+        "Barı trapez kaslarına yerleştir, omuz genişliğinde tut.",
+        "Ayaklar omuz genişliğinde, parmaklar hafifçe dışa.",
+        "Core'u sık ve nefes al.",
+        "Diz ve kalçayı eş zamanlı bükerek in.",
+        "Uyluğun yere paralel olduğu noktada dur.",
+        "Topuklardan iteleyerek yüksel."
+      ],
+      "tips_tr": [
+        "Dizler ayak parmakları hizasını takip etmeli.",
+        "Sırt nötral kalmalı.",
+        "Topuklar yerde kalmalı."
+      ],
+      "common_mistakes_tr": [
+        "Dizlerin içe çökmesi.",
+        "Topukların kalkması.",
+        "Aşırı öne eğilme."
+      ]
+    },
+
+    {
+      "id": "romanian-deadlift",
+      "name_tr": "Romanian Deadlift (RDL)",
+      "name_en": "Romanian Deadlift",
+      "branch": "fitness",
+      "category": "legs",
+      "equipment": ["barbell"],
+      "difficulty": 2,
+      "is_compound": true,
+      "force_type": "pull",
+      "muscles": {
+        "hamstrings": 9,
+        "glutes": 8,
+        "erector-spinae": 7,
+        "lower-traps": 4,
+        "adductors": 4,
+        "gastrocnemius": 3
+      },
+      "contraindications": ["lower-back", "spinal-load"],
+      "gif": null,
+      "video_url": null,
+      "instructions_tr": [
+        "Barı kalça genişliğinde tut, ayaklar kalça genişliğinde.",
+        "Hafifçe dizleri kır ve sabitle.",
+        "Kalçayı arkaya iterek öne eğil.",
+        "Bar bacakları boyunca aşağı in, hamstrings gerginlik.",
+        "Kalçayı öne iterek kalk."
+      ],
+      "tips_tr": ["Bar bacağa yakın kalmalı.", "Bel yuvarlama."],
+      "common_mistakes_tr": ["Beli yuvarlama.", "Dizleri tam kilitlemek."]
+    },
+
+    {
+      "id": "plank",
+      "name_tr": "Plank",
+      "name_en": "Plank",
+      "branch": "fitness",
+      "category": "core",
+      "equipment": [],
+      "difficulty": 1,
+      "is_compound": false,
+      "force_type": "core",
+      "muscles": {
+        "transverse-abs": 9,
+        "abs-upper": 7,
+        "abs-lower": 7,
+        "obliques": 6,
+        "erector-spinae": 5,
+        "glutes": 4,
+        "front-shoulder": 4
+      },
+      "contraindications": [],
+      "gif": null,
+      "video_url": null,
+      "instructions_tr": [
+        "Dirsekler omuz altında, underarm pozisyonunda.",
+        "Vücut baştan topuğa düz bir çizgi oluşturmalı.",
+        "Core'u ve gluteus'u sık.",
+        "Pozisyonu koru."
+      ],
+      "tips_tr": ["Kalça ne yukarı ne aşağı, nötr olmalı."],
+      "common_mistakes_tr": ["Kalçayı çok yükseltmek veya düşürmek."]
+    },
+
+    {
+      "id": "crunch",
+      "name_tr": "Crunch (Karın Mekiği)",
+      "name_en": "Crunch",
+      "branch": "fitness",
+      "category": "core",
+      "equipment": [],
+      "difficulty": 1,
+      "is_compound": false,
+      "force_type": "core",
+      "muscles": {
+        "abs-upper": 9,
+        "abs-lower": 5,
+        "obliques": 4
+      },
+      "contraindications": ["lower-back", "sit-ups"],
+      "gif": null,
+      "video_url": null,
+      "instructions_tr": [
+        "Sırt üstü uzan, dizler büküp ayaklar yerde.",
+        "Eller kulak yanına ya da göğüs üstüne.",
+        "Kürek kemiklerini yerden kaldır, bel yerde kalır.",
+        "Kontrollü olarak in."
+      ],
+      "tips_tr": ["Boynu elleriyle çekme."],
+      "common_mistakes_tr": ["Boynu öne fırlatmak."]
+    },
+
+    {
+      "id": "push-up",
+      "name_tr": "Şınav (Push-Up)",
+      "name_en": "Push-Up",
+      "branch": "fitness",
+      "category": "chest",
+      "equipment": [],
+      "difficulty": 1,
+      "is_compound": true,
+      "force_type": "push",
+      "muscles": {
+        "chest": 8,
+        "front-shoulder": 6,
+        "triceps-long": 5,
+        "triceps-medial": 5,
+        "transverse-abs": 4
+      },
+      "contraindications": [],
+      "gif": null,
+      "video_url": null,
+      "instructions_tr": [
+        "Eller omuz genişliğinde, parmaklar öne.",
+        "Vücut düz çizgi oluşturur (baş-topuk).",
+        "Core ve gluteus sıkı.",
+        "Göğüs yere değinceye kadar in.",
+        "İterek başlangıca dön."
+      ],
+      "tips_tr": ["Dirsekler çok geniş açılmamalı, 45° ideal."],
+      "common_mistakes_tr": ["Kalçayı yukarı kaldırmak.", "Boynu öne uzatmak."]
+    },
+
+    {
+      "id": "dumbbell-shoulder-press",
+      "name_tr": "Dumbbell Omuz Presi",
+      "name_en": "Dumbbell Shoulder Press",
+      "branch": "fitness",
+      "category": "shoulders",
+      "equipment": ["dumbbell"],
+      "difficulty": 1,
+      "is_compound": true,
+      "force_type": "push",
+      "muscles": {
+        "front-shoulder": 9,
+        "mid-shoulder": 8,
+        "triceps-long": 6,
+        "triceps-lateral": 5,
+        "upper-traps": 3
+      },
+      "contraindications": ["shoulder-injury", "overhead-press"],
+      "gif": null,
+      "video_url": null,
+      "instructions_tr": [
+        "Dik otur veya ayakta dur.",
+        "Dumbbell'ları omuz hizasında tut, avuç öne.",
+        "Doğrudan yukarı bas.",
+        "Kollar tam açılınca kontrollü indir."
+      ],
+      "tips_tr": ["Bel aşırı germe."],
+      "common_mistakes_tr": ["Dumbbell'ları çarpıştırmak."]
+    },
+
+    {
+      "id": "calf-raise",
+      "name_tr": "Calf Raise (Baldır Yükseltme)",
+      "name_en": "Standing Calf Raise",
+      "branch": "fitness",
+      "category": "legs",
+      "equipment": [],
+      "difficulty": 1,
+      "is_compound": false,
+      "force_type": "legs",
+      "muscles": {
+        "gastrocnemius": 9,
+        "soleus": 7
+      },
+      "contraindications": [],
+      "gif": null,
+      "video_url": null,
+      "instructions_tr": [
+        "Ayakları kalça genişliğinde aç.",
+        "Topukları kaldırarak parmakucu üzerine çık.",
+        "Zirveye ulaşınca 1 saniye tut.",
+        "Yavaşça indir."
+      ],
+      "tips_tr": ["Tam aralık için topuklar aşağıya inmeli."],
+      "common_mistakes_tr": ["Yarım tekrar (topuklar hiç indirme)."]
+    },
+
+    {
+      "id": "dips",
+      "name_tr": "Dips (Paralel Bar İniş-Kalkış)",
+      "name_en": "Weighted Dips",
+      "branch": "fitness",
+      "category": "chest",
+      "equipment": ["dip-bar"],
+      "difficulty": 2,
+      "is_compound": true,
+      "force_type": "push",
+      "muscles": {
+        "chest": 9,
+        "upper-chest": 8,
+        "front-shoulder": 8,
+        "triceps-long": 8,
+        "triceps-lateral": 5,
+        "abs-upper": 6,
+        "mid-shoulder": 6
+      },
+      "contraindications": ["shoulder-injury", "dip"],
+      "gif": null,
+      "video_url": null,
+      "instructions_tr": [
+        "Paralel barlara çık, kollar düz.",
+        "Hafifçe öne eğil (göğüs odaklı için).",
+        "Dirsekler hafifçe dışa açık.",
+        "Göğüsü barların hizasına kadar in.",
+        "İterek yukarı çık."
+      ],
+      "tips_tr": ["Öne eğiş miktarı göğüs/triceps oranını değiştirir."],
+      "common_mistakes_tr": ["Çok dik durmak (sadece triceps olur)."]
+    },
+
+    {
+      "id": "face-pull",
+      "name_tr": "Face Pull",
+      "name_en": "Cable Face Pull",
+      "branch": "fitness",
+      "category": "shoulders",
+      "equipment": ["cable"],
+      "difficulty": 1,
+      "is_compound": false,
+      "force_type": "pull",
+      "muscles": {
+        "rear-delt": 9,
+        "mid-traps": 7,
+        "rhomboids": 6,
+        "rotator-cuff": 7,
+        "upper-traps": 4
+      },
+      "contraindications": [],
+      "gif": null,
+      "video_url": null,
+      "instructions_tr": [
+        "Kabloyu göz hizasına ayarla, halka bağla.",
+        "İki elle halkayı tut.",
+        "Yüze doğru çek, dirsekler omuz hizasında.",
+        "Parmakları yukarı döndür.",
+        "Kontrollü uzat."
+      ],
+      "tips_tr": ["Postür ve omuz sağlığı için hafta 2-3 kez yap."],
+      "common_mistakes_tr": ["Çok ağır kullanmak."]
+    },
+
+    {
+      "id": "hip-thrust",
+      "name_tr": "Hip Thrust (Kalça İtişi)",
+      "name_en": "Barbell Hip Thrust",
+      "branch": "fitness",
+      "category": "glutes",
+      "equipment": ["barbell", "bench"],
+      "difficulty": 2,
+      "is_compound": true,
+      "force_type": "legs",
+      "muscles": {
+        "glutes": 9,
+        "hamstrings": 6,
+        "adductors": 5,
+        "abs-lower": 4,
+        "quads": 3
+      },
+      "contraindications": [],
+      "gif": null,
+      "video_url": null,
+      "instructions_tr": [
+        "Bench'e yaslan (kürek kemikleri bench üzerinde).",
+        "Barı kalça kıvrımına yerleştir.",
+        "Ayaklar yerde, dizler 90°.",
+        "Kalçayı yukarı it, vücut düz çizgi.",
+        "Zirveye ulaşınca glutes'u sık.",
+        "Kontrollü indir."
+      ],
+      "tips_tr": ["Chin-to-chest pozisyonu koruyun."],
+      "common_mistakes_tr": ["Beli aşırı germek (hyperextension)."]
+    }
+
+  ]
+}
