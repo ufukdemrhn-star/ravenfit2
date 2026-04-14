@@ -300,7 +300,31 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 .ws-report-stat{background:var(--card2);border-radius:12px;padding:12px;text-align:center}
 .ws-report-val{font-family:'Bebas Neue',cursive;font-size:30px;letter-spacing:1px;color:var(--accent);line-height:1;margin-bottom:3px}
 .ws-report-lbl{font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
-/* ── EGZERSİZ HAVUZU ──────────────────────────────────────  */
+/* ── ANTRENMAN ANA EKRANI GRID ───────────────────────────  */
+.wh-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wh-full{grid-column:1/-1}
+.wh-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;cursor:pointer;transition:border-color .18s,background .18s;-webkit-tap-highlight-color:transparent;display:flex;flex-direction:column;gap:6px}
+.wh-card:active{background:var(--card2)}
+.wh-card.accent{border-color:var(--accent);border-width:2px}
+.wh-card.tools{background:linear-gradient(135deg,var(--card),var(--card2))}
+.wh-card-icon{font-size:28px;line-height:1;margin-bottom:2px}
+.wh-card-label{font-family:'Bebas Neue',cursive;font-size:16px;letter-spacing:1px;color:var(--text);line-height:1.1}
+.wh-card-sub{font-size:10px;color:var(--text2);line-height:1.3}
+.wh-tools-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.wh-tool-btn{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 4px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:border-color .15s}
+.wh-tool-btn:active{border-color:var(--accent)}
+.wh-tool-icon{font-size:20px}
+.wh-tool-label{font-size:9px;font-weight:600;color:var(--text2);text-align:center;line-height:1.2}
+/* Program filtre */
+.prog-filter-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:10px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.prog-filter-row::-webkit-scrollbar{display:none}
+/* Özel program builder geliştirilmiş */
+.cwb-ex-card{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px}
+.cwb-ex-name{font-size:13px;font-weight:700;margin-bottom:8px}
+.cwb-params{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.cwb-param-label{font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
+.cwb-param-input{background:var(--card);border:1.5px solid var(--border);border-radius:8px;padding:7px 6px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;text-align:center;width:100%;outline:none;-webkit-appearance:none;appearance:none}
+.cwb-param-input:focus{border-color:var(--accent)}
 .ex-search{background:var(--card);border:1.5px solid var(--border);border-radius:11px;padding:10px 14px;color:var(--text);font-family:'Outfit',sans-serif;font-size:14px;outline:none;width:100%;transition:border-color .2s;margin-bottom:10px}
 .ex-search:focus{border-color:var(--accent)}
 .ex-filter-row{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;margin-bottom:10px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
@@ -458,10 +482,13 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 @media(max-width:380px){.frow,.gender-grid{grid-template-columns:1fr}.splash-title{font-size:52px}.tb{font-size:9px}.r-stats{gap:10px}}
 </style>
 
-<link rel="icon" href="favicon.png">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#E63946">
+<meta name="description" content="Kişisel fitness analiz ve antrenman takip uygulaması">
 
 </head>
 <body>
@@ -522,6 +549,19 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
         <button id="auth-btn-register" onclick="doRegister()" style="background:var(--accent);color:#fff;border:none;border-radius:11px;padding:14px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;cursor:pointer;width:100%;box-shadow:0 4px 16px var(--ag)">Kayıt Ol</button>
       </div>
     </div>
+    <!-- Misafir Girişi -->
+    <div style="margin-top:16px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="flex:1;height:1px;background:var(--border)"></div>
+        <div style="font-size:11px;color:var(--text3);white-space:nowrap">veya</div>
+        <div style="flex:1;height:1px;background:var(--border)"></div>
+      </div>
+      <button onclick="enterAsGuest()" style="width:100%;background:none;border:1.5px solid var(--border);border-radius:11px;padding:13px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+        <span style="font-size:18px">👀</span>
+        Misafir Olarak Devam Et
+      </button>
+      <div style="font-size:10px;color:var(--text3);margin-top:7px;text-align:center;line-height:1.5">Kayıt olmadan keşfet. Veriler yalnızca bu cihazda saklanır,<br>hesap oluşturulana kadar buluta yüklenmez.</div>
+    </div>
   </div>
 </div>
 
@@ -535,7 +575,7 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
   <img src="logo.png" width="120">
 </div>
   <h1 class="splash-title">RAVEN<span style="color:var(--accent)">FIT</span></h1>
-  <div class="splash-tag">Versiyon 0.5.4(beta)</div>
+  <div class="splash-tag">Versiyon 0.6.1(beta)</div>
   <div class="splash-sub">Sen sadece antrenmanına odaklan</div>
   <div class="pills">
     <div class="pill"><div class="pill-dot"></div>Navy Yağ Formülü</div>
@@ -859,7 +899,7 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
         </div>
       </div>
       <div class="rc">
-        <div class="rct">📋 Başlangıç / Ana Ölçülerim</div>
+        <div class="rct">📋 Ölçülerim — Başlangıç & Şu An</div>
         <div id="mlist"></div>
       </div>
     </div>
@@ -1009,6 +1049,7 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
           <div>
             <div style="font-size:11px;color:var(--text2);margin-bottom:2px">Giriş yapılan hesap</div>
             <div id="user-email-display" style="font-size:14px;font-weight:600;color:var(--text)">—</div>
+            <div id="guest-mode-note" style="display:none;font-size:10px;color:var(--warn);margin-top:2px">👀 Misafir Modu — veriler buluta kaydedilmiyor</div>
           </div>
           <div style="display:flex;gap:8px">
             <button onclick="openSettingsDrawer()" style="background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:8px 14px;font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer">⚙️ Ayarlar</button>
@@ -1239,11 +1280,11 @@ var WORKOUTS_SWIM=null;
 
 /* ── BRANŞ SİSTEMİ ───────────────────────────────────────── */
 var BRANCH_DEFS=[
-  {id:'fitness',  label:'Fitness',    icon:'🏋️', desc:'Ağırlık antrenmanı & vücut geliştirme', always:true},
-  {id:'swimming', label:'Yüzme',      icon:'🏊', desc:'Havuz antrenmanları & stil çalışmaları'},
-  {id:'boxing',   label:'Boks',       icon:'🥊', desc:'Boks teknikleri & kondisyon', coming:true},
-  {id:'yoga',     label:'Yoga',       icon:'🧘', desc:'Esneklik, denge ve nefes çalışması', coming:true},
-  {id:'posture',  label:'Postür',     icon:'🦴', desc:'Duruş düzeltme & fizyoterapik egzersizler', coming:true},
+  {id:'fitness',   label:'GYM',       icon:'🏋️', desc:'Ağırlık antrenmanı & vücut geliştirme', always:true},
+  {id:'swimming',  label:'Yüzme',     icon:'🏊', desc:'Havuz antrenmanları & stil çalışmaları'},
+  {id:'boxing',    label:'Boks',      icon:'🥊', desc:'Boks teknikleri & kondisyon', coming:true},
+  {id:'yoga',      label:'Yoga',      icon:'🧘', desc:'Esneklik, denge ve nefes çalışması', coming:true},
+  {id:'posture',   label:'Postür',    icon:'🦴', desc:'Duruş düzeltme & fizyoterapik egzersizler', coming:true},
   {id:'gymnastics',label:'Jimnastik', icon:'🤸', desc:'Hareketlilik & vücut ağırlığı kontrolü', coming:true}
 ];
 function getUserBranches(){
@@ -1270,21 +1311,19 @@ function renderBranchManager(){
   var active=getUserBranches();
   var html='<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">'+
     '<button class="btn btn-s" onclick="renderWorkoutHome()" style="padding:8px 12px;font-size:12px">← Geri</button>'+
-    '<div style="font-size:16px;font-weight:700">Branşlarım</div>'+
-  '</div>';
-  html+='<div style="font-size:12px;color:var(--text2);margin-bottom:12px">Yaptığın sporları ekle. Sadece ilgilendiğin branşları göreceksin.</div>';
+    '<div style="font-size:16px;font-weight:700">Branşlarım</div></div>';
+  html+='<div style="font-size:12px;color:var(--text2);margin-bottom:12px">Yaptığın sporları seç. Sadece seçtiklerin ana ekranda görünür.</div>';
   BRANCH_DEFS.forEach(function(b){
     var isActive=active.indexOf(b.id)>=0;
-    html+='<div class="rc" style="padding:12px 14px;opacity:'+(b.coming?'.5':'1')+'" onclick="toggleBranch(\''+b.id+'\')" style="cursor:pointer">'+
+    html+='<div class="rc" style="padding:12px 14px;cursor:pointer;opacity:'+(b.coming?'.55':'1')+'" onclick="toggleBranch(\''+b.id+'\')">'+
       '<div style="display:flex;align-items:center;gap:12px">'+
-        '<div style="font-size:24px;width:36px;text-align:center">'+b.icon+'</div>'+
-        '<div style="flex:1">'+
-          '<div style="font-size:14px;font-weight:700">'+b.label+(b.coming?' <span style="font-size:9px;background:var(--card2);border-radius:5px;padding:2px 5px;color:var(--text3)">Yakında</span>':'')+(b.always?' <span style="font-size:9px;background:rgba(46,196,182,.15);border-radius:5px;padding:2px 5px;color:var(--success)">Zorunlu</span>':'')+'</div>'+
-          '<div style="font-size:11px;color:var(--text2)">'+b.desc+'</div>'+
-        '</div>'+
-        '<div style="width:24px;height:24px;border-radius:50%;border:2px solid '+(isActive?'var(--accent)':'var(--border)')+';background:'+(isActive?'var(--accent)':'none')+';display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;flex-shrink:0">'+(isActive?'✓':'')+'</div>'+
-      '</div>'+
-    '</div>';
+      '<div style="font-size:26px;width:36px;text-align:center">'+b.icon+'</div>'+
+      '<div style="flex:1"><div style="font-size:14px;font-weight:700">'+b.label+
+        (b.coming?' <span style="font-size:9px;background:var(--card2);border-radius:5px;padding:2px 6px;color:var(--text3)">Yakında</span>':'')+
+        (b.always?' <span style="font-size:9px;background:rgba(46,196,182,.15);border-radius:5px;padding:2px 6px;color:var(--success)">Zorunlu</span>':'')+'</div>'+
+      '<div style="font-size:11px;color:var(--text2)">'+b.desc+'</div></div>'+
+      '<div style="width:26px;height:26px;border-radius:50%;border:2px solid '+(isActive?'var(--accent)':'var(--border)')+';background:'+(isActive?'var(--accent)':'none')+';display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;flex-shrink:0">'+(isActive?'✓':'')+'</div>'+
+      '</div></div>';
   });
   el.innerHTML=html;
 }
@@ -1303,7 +1342,7 @@ window.addEventListener('load',function(){
 function saveData(){
   var str=JSON.stringify({U:U,R:R,A:A,BT:BT,selST:selST,selGL:selGL,conditions:U.conditions||[]});
   localStorage.setItem('rf_data',str);
-  saveToFirebase();
+  if(!_isGuest)saveToFirebase();
 }
 
 /* ── JSON VERİ YÜKLE ─────────────────────────────────── */
@@ -1341,7 +1380,7 @@ function switchMain(id){
   if(id==='vucudum')setTimeout(drawCharts,100);
   window.scrollTo(0,0);
 }
-function showResults(){showScreen('results');document.getElementById('bottom-nav').classList.add('visible');switchMain('vucudum');renderAll();}
+function showResults(){showScreen('results');document.getElementById('bottom-nav').classList.add('visible');switchMain('vucudum');renderAll();if(_isGuest){var nickEl=document.getElementById('user-email-display');if(nickEl)nickEl.textContent='Misafir';var note=document.getElementById('guest-mode-note');if(note)note.style.display='block';setAvatarInitials('MI');}}
 function startWizard(){step=0;selST=null;selGL=null;showScreen('wizard');document.getElementById('bottom-nav').classList.remove('visible');updWizStep();updGenderUI();restoreWiz();}
 function startWizardFromTouch(e){if(e)e.preventDefault();startWizard();}
 
@@ -1955,10 +1994,57 @@ function renderOlculerim(){
   var iwPct=clamp((U.weight-iw.lo)/range*100,4,96);
   setTimeout(function(){document.getElementById('iw-mrk').style.left=iwPct+'%';},250);
 
-  var rows=[['Boy',U.height+' cm'],['Kilo',U.weight+' kg'],['Boyun',U.neck+' cm'],['Bel',U.waist+' cm'],
-    male?['Omuz',(U.shoulder||0)+' cm']:['Kalça',(U.hip||0)+' cm'],['Yaş',U.age+' yaş'],
-    ['VKİ',R.bmi],['Yağ Oranı',R.bf.toFixed(2)+'%'],['Yağsız Kütle',R.lm.toFixed(2)+' kg'],['FFMI',R.ffmi.toFixed(2)]];
-  document.getElementById('mlist').innerHTML=rows.map(function(r){return'<div class="mlist-row"><div class="mlist-lbl">'+r[0]+'</div><div class="mlist-val">'+r[1]+'</div></div>';}).join('');
+  var entries=getEntries();
+  var startEntry=entries.length>0?entries[0]:null; /* En eski kayıt = başlangıç */
+
+  var rows=[
+    {l:'Boy',      k:'height',  cur:U.height,              unit:'cm',  lb:false},
+    {l:'Kilo',     k:'weight',  cur:U.weight,              unit:'kg',  lb:true},
+    {l:'Boyun',    k:'neck',    cur:U.neck,                unit:'cm',  lb:true},
+    {l:'Bel',      k:'waist',   cur:U.waist,               unit:'cm',  lb:true},
+    male?
+      {l:'Omuz',   k:'shoulder',cur:U.shoulder||null,      unit:'cm',  lb:false}:
+      {l:'Kalça',  k:'hip',     cur:U.hip||null,           unit:'cm',  lb:false},
+    {l:'Yaş',      k:'age',     cur:U.age,                 unit:'yaş', lb:false},
+    {l:'VKİ',      k:'bmi',     cur:R.bmi,                 unit:'',    lb:true},
+    {l:'Yağ Oranı',k:'bf',      cur:R.bf?R.bf.toFixed(2):null,unit:'%',lb:true},
+    {l:'Yağsız Kütle',k:'lm',   cur:R.lm?R.lm.toFixed(2):null,unit:'kg',lb:false},
+    {l:'FFMI',     k:'ffmi',    cur:R.ffmi?R.ffmi.toFixed(2):null,unit:'',lb:false}
+  ];
+
+  function diffArrow(cur,start,lb){
+    if(cur==null||start==null)return'';
+    var d=Math.round((parseFloat(cur)-parseFloat(start))*10)/10;
+    if(d===0)return'';
+    var good=(lb&&d<0)||(!lb&&d>0);
+    return' <span style="font-size:10px;font-weight:700;color:'+(good?'var(--success)':'var(--accent)')+'">'+(d>0?'↑':'↓')+Math.abs(d)+'</span>';
+  }
+
+  var mlistHTML='';
+  if(startEntry&&entries.length>1){
+    /* İki sütun: Başlangıç | Şu An */
+    mlistHTML+='<div style="display:grid;grid-template-columns:1fr 80px 80px;gap:0;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:4px">'+
+      '<div style="background:var(--card2);padding:6px 8px;font-size:9px;font-weight:700;color:var(--text2);text-transform:uppercase">ÖLÇÜ</div>'+
+      '<div style="background:var(--card2);padding:6px 8px;font-size:9px;font-weight:700;color:var(--text2);text-transform:uppercase;text-align:center">BAŞLANGIÇ</div>'+
+      '<div style="background:var(--card2);padding:6px 8px;font-size:9px;font-weight:700;color:var(--accent);text-transform:uppercase;text-align:center">ŞU AN</div>';
+    rows.forEach(function(r){
+      var sv=startEntry[r.k];
+      if(r.cur==null&&sv==null)return;
+      mlistHTML+=
+        '<div style="padding:7px 8px;font-size:11px;color:var(--text2);border-top:1px solid var(--border)">'+r.l+'</div>'+
+        '<div style="padding:7px 8px;font-size:12px;font-weight:600;text-align:center;border-top:1px solid var(--border);color:var(--text3)">'+(sv!=null?sv+'':' — ')+'</div>'+
+        '<div style="padding:7px 8px;font-size:12px;font-weight:700;text-align:center;border-top:1px solid var(--border);color:var(--text)">'+(r.cur!=null?r.cur+'':' — ')+diffArrow(r.cur,sv,r.lb)+'</div>';
+    });
+    mlistHTML+='</div>';
+    mlistHTML+='<div style="font-size:10px;color:var(--text3);text-align:center">📅 Başlangıç: '+startEntry.date+'</div>';
+  } else {
+    /* Sadece tek kayıt veya hiç yok — düz liste */
+    mlistHTML=rows.filter(function(r){return r.cur!=null;}).map(function(r){
+      return'<div class="mlist-row"><div class="mlist-lbl">'+r.l+'</div><div class="mlist-val">'+r.cur+(r.unit?' '+r.unit:'')+'</div></div>';
+    }).join('');
+    if(!startEntry)mlistHTML+='<div style="font-size:11px;color:var(--text2);margin-top:8px">💡 İlerleme karşılaştırması için haftalık takipten ölçü gir.</div>';
+  }
+  document.getElementById('mlist').innerHTML=mlistHTML;
 }
 
 /* ── İLK HAFTA ÖLÇÜMLERINI KAYDET (wizard step 5) ──────── */
@@ -2189,8 +2275,8 @@ function renderProfilMlist(){
   if(!R.bf)return;
   var male=U.gender==='male';
   var entries=getEntries();
-  var first=entries.length>0?entries[0]:null;
-  var last=entries.length>0?entries[entries.length-1]:null;
+  var first=entries.length>0?entries[0]:null;          /* En eski = başlangıç */
+  var last=entries.length>1?entries[entries.length-1]:null; /* En yeni = şu an */
 
   function diffBadge(cur,prev,lowerBetter){
     if(cur==null||prev==null)return'';
@@ -2201,42 +2287,54 @@ function renderProfilMlist(){
     return'<span style="font-size:10px;color:'+col+';font-weight:700"> '+(d>0?'↑':'↓')+Math.abs(d)+'</span>';
   }
 
+  /* Şu An değerleri: önce en yeni entry, yoksa U objesi */
+  function curVal(k){
+    if(last&&last[k]!=null)return last[k];
+    return U[k]||null;
+  }
+  function curCalc(k){
+    /* hesaplanan değerler (bf, lm, ffmi) sadece son analizden */
+    if(last&&last[k]!=null)return last[k];
+    if(k==='bf')return R.bf?parseFloat(R.bf.toFixed(2)):null;
+    if(k==='lm')return R.lm?parseFloat(R.lm.toFixed(2)):null;
+    if(k==='ffmi')return R.ffmi?parseFloat(R.ffmi.toFixed(2)):null;
+    return null;
+  }
+
   var fields=[
-    {l:'Kilo (kg)',   k:'weight', cur:U.weight,  lb:false},
-    {l:'Yağ Oranı %',k:'bf',     cur:R.bf.toFixed(2), lb:true},
-    {l:'Yağsız Kütle',k:'lm',    cur:R.lm.toFixed(2), lb:false},
-    {l:'FFMI',        k:'ffmi',   cur:R.ffmi.toFixed(2),lb:false},
-    {l:'Boyun (cm)',  k:'neck',   cur:U.neck,    lb:false},
-    {l:'Bel (cm)',    k:'waist',  cur:U.waist,   lb:true},
-    male?{l:'Omuz (cm)',k:'shoulder',cur:U.shoulder,lb:false}
-        :{l:'Kalça (cm)',k:'hip',    cur:U.hip,     lb:false},
-    {l:'Göğüs (cm)', k:'chest',  cur:U.chest,   lb:false},
-    {l:'Kol (cm)',   k:'arm',    cur:U.arm,     lb:false},
+    {l:'Kilo (kg)',    k:'weight',  cur:curVal('weight'),   lb:true},
+    {l:'Yağ Oranı %', k:'bf',      cur:curCalc('bf'),      lb:true},
+    {l:'Yağsız Kütle',k:'lm',      cur:curCalc('lm'),      lb:false},
+    {l:'FFMI',        k:'ffmi',    cur:curCalc('ffmi'),     lb:false},
+    {l:'Boyun (cm)',  k:'neck',    cur:curVal('neck'),      lb:false},
+    {l:'Bel (cm)',    k:'waist',   cur:curVal('waist'),     lb:true},
+    male?{l:'Omuz (cm)',k:'shoulder',cur:curVal('shoulder'),lb:false}
+        :{l:'Kalça (cm)',k:'hip',    cur:curVal('hip'),     lb:false},
+    {l:'Göğüs (cm)', k:'chest',   cur:curVal('chest'),     lb:false},
+    {l:'Kol (cm)',   k:'arm',     cur:curVal('arm'),        lb:false},
   ];
 
   var html='';
 
-  /* Başlangıç vs Şu An karşılaştırması */
-  if(first&&entries.length>1){
-    html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;margin-bottom:12px;border:1px solid var(--border);border-radius:10px;overflow:hidden">'+
-      '<div style="background:var(--card2);padding:7px 8px;font-size:9px;font-weight:700;text-transform:uppercase;color:var(--text2);letter-spacing:.5px">Ölçü</div>'+
-      '<div style="background:var(--card2);padding:7px 8px;font-size:9px;font-weight:700;text-transform:uppercase;color:var(--text2);letter-spacing:.5px;text-align:center">Başlangıç</div>'+
-      '<div style="background:var(--card2);padding:7px 8px;font-size:9px;font-weight:700;text-transform:uppercase;color:var(--accent);letter-spacing:.5px;text-align:center">Şu An</div>';
+  if(first){
+    html+='<div style="display:grid;grid-template-columns:1fr 80px 80px;gap:0;margin-bottom:10px;border:1px solid var(--border);border-radius:10px;overflow:hidden">'+
+      '<div style="background:var(--card2);padding:7px 8px;font-size:9px;font-weight:700;text-transform:uppercase;color:var(--text2);letter-spacing:.5px">ÖLÇÜ</div>'+
+      '<div style="background:var(--card2);padding:7px 8px;font-size:9px;font-weight:700;text-transform:uppercase;color:var(--text2);letter-spacing:.5px;text-align:center">BAŞLANGIÇ</div>'+
+      '<div style="background:var(--card2);padding:7px 8px;font-size:9px;font-weight:700;text-transform:uppercase;color:var(--accent);letter-spacing:.5px;text-align:center">ŞU AN</div>';
     fields.forEach(function(f){
       var fv=first[f.k]!=null?parseFloat(first[f.k]):null;
       var cv=f.cur!=null?parseFloat(f.cur):null;
       if(fv==null&&cv==null)return;
-      html+='<div style="padding:8px;font-size:11px;color:var(--text2);border-top:1px solid var(--border)">'+f.l+'</div>'+
-        '<div style="padding:8px;font-size:12px;font-weight:600;text-align:center;border-top:1px solid var(--border)">'+(fv!=null?fv:'—')+'</div>'+
+      html+=
+        '<div style="padding:8px;font-size:11px;color:var(--text2);border-top:1px solid var(--border)">'+f.l+'</div>'+
+        '<div style="padding:8px;font-size:12px;font-weight:600;text-align:center;border-top:1px solid var(--border);color:var(--text3)">'+(fv!=null?fv:'—')+'</div>'+
         '<div style="padding:8px;font-size:12px;font-weight:700;color:var(--accent);text-align:center;border-top:1px solid var(--border)">'+(cv!=null?cv:'—')+diffBadge(cv,fv,f.lb)+'</div>';
     });
     html+='</div>';
-    /* Son ölçüm tarihi */
-    html+='<div style="font-size:10px;color:var(--text3);text-align:center;margin-bottom:4px">'+
-      '📅 Başlangıç: '+first.date+' &nbsp;·&nbsp; Son güncelleme: '+last.date+'</div>';
+    html+='<div style="font-size:10px;color:var(--text3);text-align:center">'+
+      '📅 Başlangıç: '+first.date+(last?' &nbsp;·&nbsp; Son: '+last.date:'')+'</div>';
   } else {
-    /* Sadece mevcut veriler */
-    html+='<div style="font-size:12px;color:var(--text2);margin-bottom:8px">İlk ölçüm kaydedildikten sonra başlangıç ile karşılaştırma burada görünür.</div>';
+    html+='<div style="font-size:12px;color:var(--text2);margin-bottom:8px">Haftalık takipten ölçü girdikten sonra başlangıç karşılaştırması burada görünür.</div>';
     fields.forEach(function(f){
       if(f.cur==null)return;
       html+='<div class="mlist-row"><div class="mlist-lbl">'+f.l+'</div><div class="mlist-val">'+f.cur+'</div></div>';
@@ -2506,6 +2604,9 @@ var SUPP_QS=[
   }
 ];
 
+/* Son analiz sonuçlarını sakla — "Geçmiş Analiz" butonu için */
+var _lastSuppResults=null;
+
 function openSuppModal(){
   _suppStep=0;_suppAnswers={};_suppMaxStep=SUPP_QS.length-1;
   /* Uygulama verilerinden otomatik doldur */
@@ -2516,10 +2617,24 @@ function openSuppModal(){
   if(selST==='bb')_suppAnswers.sport='bb';
   else if(selST==='cardio')_suppAnswers.sport='cardio';
   else if(selST==='hybrid')_suppAnswers.sport='hybrid';
+  /* Nav'ı her açılışta sıfırla — bug fix: önceki sonuç ekranından gelen display:none kalıyor */
+  var nav=document.getElementById('supp-nav');
+  if(nav)nav.style.display='flex';
   document.getElementById('supp-modal').classList.add('active');
   renderSuppStep();
 }
 function closeSuppModal(){document.getElementById('supp-modal').classList.remove('active');}
+
+function openLastSuppResults(){
+  if(!_lastSuppResults){showToast('Henüz analiz yapılmadı.','warn');return;}
+  var nav=document.getElementById('supp-nav');
+  if(nav)nav.style.display='none';
+  document.getElementById('supp-progress').innerHTML='';
+  document.getElementById('supp-body').innerHTML=_lastSuppResults;
+  var body=document.getElementById('supp-body');
+  if(body)body.scrollTop=0;
+  document.getElementById('supp-modal').classList.add('active');
+}
 
 function renderSuppStep(){
   var q=SUPP_QS[_suppStep];
@@ -2758,10 +2873,7 @@ function renderSuppResults(){
   var results=calcSuppScores(_suppAnswers);
   results.sort(function(a,b){return b.score-a.score;});
 
-  /* Bütçeye göre gösterilecek sayı */
   var maxShow={min:1,low:2,mid:4,high:7}[_suppAnswers.budget]||3;
-
-  /* Sadece skoru 0'dan büyük olanları göster */
   var shown=results.filter(function(s){return s.score>0;}).slice(0,maxShow);
 
   var html='<div style="font-size:13px;font-weight:700;margin-bottom:4px">📋 '+shown.length+' supplement önerisi</div>'+
@@ -2787,21 +2899,29 @@ function renderSuppResults(){
     '<button class="btn btn-s btn-full" onclick="resetSuppSurvey()">🔄 Tekrar Analiz Et</button>'+
     '</div>';
 
+  /* Tam sonucu kaydet (geçmiş analiz için) */
+  _lastSuppResults=html;
+
   document.getElementById('supp-body').innerHTML=html;
-  /* Nav gizle, progress temizle, scroll başa al */
   var nav=document.getElementById('supp-nav');
   if(nav)nav.style.display='none';
   document.getElementById('supp-progress').innerHTML='';
   var body=document.getElementById('supp-body');
   if(body)body.scrollTop=0;
 
-  /* Inline özet */
+  /* Inline özet — son 4'ü listele + "Geçmiş Analiz" butonu */
   var inlineEl=document.getElementById('supp-inline-result');
   if(inlineEl){
-    var short='<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">'+
-      '<div style="font-size:11px;color:var(--text2);margin-bottom:6px">✅ Son analiz sonuçların:</div>';
-    shown.slice(0,4).forEach(function(s){
-      short+='<div style="font-size:12px;margin-bottom:4px;display:flex;align-items:center;gap:5px">'+s.emoji+' <strong>'+s.name+'</strong> <span style="color:var(--text3);font-size:10px">'+s.dose+'</span></div>';
+    var short='<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">';
+    short+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">';
+    short+='<div style="font-size:11px;color:var(--text2)">✅ Son analiz sonuçların:</div>';
+    short+='<button onclick="openLastSuppResults()" style="background:var(--card2);border:1px solid var(--border);border-radius:7px;padding:4px 10px;font-size:10px;font-weight:600;color:var(--text2);cursor:pointer;font-family:\'Outfit\',sans-serif">📋 Tamamını Gör</button>';
+    short+='</div>';
+    shown.forEach(function(s){
+      short+='<div style="font-size:12px;margin-bottom:5px;display:flex;align-items:center;gap:6px">'+
+        '<span style="font-size:16px">'+s.emoji+'</span>'+
+        '<div><strong>'+s.name+'</strong> <span style="color:var(--text3);font-size:10px">'+s.dose+'</span></div>';
+      short+='</div>';
     });
     short+='</div>';
     inlineEl.innerHTML=short;
@@ -2971,34 +3091,54 @@ function resetWaterToday(){
 
 /* ── ÖZEL DURUMLAR (WIZARD S6) ───────────────────────── */
 var BUILTIN_CONDITIONS=[
-  {id:'cardiovascular',label_tr:'Kalp / Kardiyovasküler Hastalık',icon:'❤️'},
-  {id:'hypertension',label_tr:'Hipertansiyon',icon:'🔴'},
-  {id:'diabetes-type1',label_tr:'Tip 1 Diyabet',icon:'🩸'},
-  {id:'diabetes-type2',label_tr:'Tip 2 Diyabet',icon:'🩸'},
-  {id:'lower-back',label_tr:'Bel Fıtığı / Bel Ağrısı',icon:'🔧'},
-  {id:'knee-injury',label_tr:'Diz Problemi',icon:'🦵'},
-  {id:'shoulder-injury',label_tr:'Omuz Problemi',icon:'💪'},
-  {id:'osteoporosis',label_tr:'Osteoporoz / Kemik Erimesi',icon:'🦴'},
-  {id:'asthma',label_tr:'Astım',icon:'🫁'},
-  {id:'pregnancy',label_tr:'Hamilelik',icon:'🤱'},
-  {id:'epilepsy',label_tr:'Epilepsi',icon:'⚡'},
-  {id:'vegetarian',label_tr:'Vejetaryen',icon:'🥬'},
-  {id:'vegan',label_tr:'Vegan',icon:'🌱'},
-  {id:'gluten',label_tr:'Gluten Hassasiyeti / Çölyak',icon:'🌾'},
-  {id:'lactose',label_tr:'Laktoz İntoleransı',icon:'🥛'}
+  /* Grup 1: Sağlık */
+  {id:'cardiovascular', label_tr:'Kalp / Kardiyovasküler Hastalık', icon:'❤️', group:'saglik'},
+  {id:'hypertension',   label_tr:'Hipertansiyon (Yüksek Tansiyon)',  icon:'🔴', group:'saglik'},
+  {id:'diabetes-type1', label_tr:'Tip 1 Diyabet',                    icon:'🩸', group:'saglik'},
+  {id:'diabetes-type2', label_tr:'Tip 2 Diyabet',                    icon:'🩸', group:'saglik'},
+  {id:'asthma',         label_tr:'Astım',                            icon:'🫁', group:'saglik'},
+  {id:'osteoporosis',   label_tr:'Osteoporoz / Kemik Erimesi',       icon:'🦴', group:'saglik'},
+  {id:'epilepsy',       label_tr:'Epilepsi',                         icon:'⚡', group:'saglik'},
+  /* Grup 2: Fiziksel Durum */
+  {id:'lower-back',     label_tr:'Bel Fıtığı / Bel Ağrısı',         icon:'🔧', group:'fiziksel'},
+  {id:'knee-injury',    label_tr:'Diz Rahatsızlığı',                 icon:'🦵', group:'fiziksel'},
+  {id:'shoulder-injury',label_tr:'Omuz Rahatsızlığı',                icon:'💪', group:'fiziksel'},
+  {id:'pregnancy',      label_tr:'Hamilelik',                        icon:'🤱', group:'fiziksel'},
+  /* Grup 3: Beslenme & Diyet */
+  {id:'vegetarian',     label_tr:'Vejetaryen',                       icon:'🥬', group:'beslenme'},
+  {id:'vegan',          label_tr:'Vegan',                            icon:'🌱', group:'beslenme'},
+  {id:'gluten',         label_tr:'Gluten Hassasiyeti / Çölyak',      icon:'🌾', group:'beslenme'},
+  {id:'lactose',        label_tr:'Laktoz İntoleransı',               icon:'🥛', group:'beslenme'}
 ];
+
+var CONDITIONS_GROUPS=[
+  {id:'saglik',   label:'❤️ Sağlık Durumları'},
+  {id:'fiziksel', label:'🏃 Fiziksel Durumlar'},
+  {id:'beslenme', label:'🥗 Beslenme & Diyet'}
+];
+
 function renderConditionsStep(){
   var list=CONDITIONS_DATA?CONDITIONS_DATA.conditions:BUILTIN_CONDITIONS;
   var selected=U.conditions||[];
   var grid=document.getElementById('conditions-grid');
   if(!grid)return;
-  grid.innerHTML=list.map(function(c){
-    var sel=selected.indexOf(c.id)>=0;
-    return '<div class="oc compact'+(sel?' sel':'')+'" onclick="toggleCondition(\''+c.id+'\',this)" style="user-select:none">'+
-      '<div class="oi">'+c.icon+'</div>'+
-      '<div class="ot"><div class="on">'+c.label_tr+'</div></div>'+
-      '<div class="orad"></div></div>';
-  }).join('');
+
+  var html='';
+  CONDITIONS_GROUPS.forEach(function(grp){
+    var items=list.filter(function(c){return c.group===grp.id;});
+    if(!items.length)return;
+    html+='<div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin:8px 0 5px 2px">'+grp.label+'</div>';
+    html+='<div style="display:grid;gap:6px">';
+    items.forEach(function(c){
+      var sel=selected.indexOf(c.id)>=0;
+      html+='<div class="oc compact'+(sel?' sel':'')+'" onclick="toggleCondition(\''+c.id+'\',this)" style="user-select:none">'+
+        '<div class="oi">'+c.icon+'</div>'+
+        '<div class="ot"><div class="on">'+c.label_tr+'</div></div>'+
+        '<div class="orad"></div></div>';
+    });
+    html+='</div>';
+  });
+  grid.innerHTML=html;
 }
 function toggleCondition(id,el){
   if(!U.conditions)U.conditions=[];
@@ -3231,220 +3371,341 @@ function renderExerciseDetail(exId){
 }
 
 /* ── Program Seç (hazır programlar) ─────────────────────── */
-function renderWorkoutBrowse(){
+/* ── Antrenman Ana Ekranı ────────────────────────────────── */
+function renderWorkoutHome(){
   var el=document.getElementById('workout-main');
   if(!el)return;
-
-  var html='<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">'+
-    '<button class="btn btn-s" onclick="renderWorkoutHome()" style="padding:8px 12px;font-size:12px">← Geri</button>'+
-    '<div style="font-size:16px;font-weight:700">Program Seç</div>'+
-  '</div>';
-
-  /* Sekmeler: Hazır / Özel */
-  var tab=window._browseTab||'ready';
-  html+='<div style="display:flex;background:var(--card2);border-radius:9px;padding:3px;margin-bottom:12px;border:1px solid var(--border)">'+
-    '<button style="flex:1;padding:8px;border:none;border-radius:6px;font-family:\'Outfit\',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;background:'+(tab==='ready'?'var(--card)':'transparent')+';color:'+(tab==='ready'?'var(--text)':'var(--text2)')+'" onclick="window._browseTab=\'ready\';renderWorkoutBrowse()">Hazır Programlar</button>'+
-    '<button style="flex:1;padding:8px;border:none;border-radius:6px;font-family:\'Outfit\',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;background:'+(tab==='custom'?'var(--card)':'transparent')+';color:'+(tab==='custom'?'var(--text)':'var(--text2)')+'" onclick="window._browseTab=\'custom\';renderWorkoutBrowse()">Özel Programlarım</button>'+
-  '</div>';
-
-  if(tab==='ready'){
-    if(!WORKOUTS_DATA){
-      html+='<div style="color:var(--text2);font-size:12px;text-align:center;padding:20px 0">Veriler yükleniyor...</div>';
-    } else {
-      WORKOUTS_DATA.workouts.forEach(function(prog){
-        var isActive=U.active_workout_fitness===prog.id;
-        var goalTr={bulk:'Kas Kazanımı',cut:'Yağ Yakımı',recomp:'Rekomp',health:'Sağlık',perf:'Performans'};
-        var goals=(prog.goal||[]).map(function(g){return goalTr[g]||g;}).join(', ');
-        html+='<div class="rc" style="'+(isActive?'border-color:var(--accent);border-width:2px':'')+'" onclick="selectWorkoutProgram(\''+prog.id+'\')">';
-        html+='<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">';
-        html+='<div><div style="font-size:15px;font-weight:700;margin-bottom:3px">'+prog.name_tr+'</div>';
-        html+='<div style="font-size:11px;color:var(--text2);margin-bottom:5px">'+prog.description_tr+'</div>';
-        html+='<div style="display:flex;gap:5px;flex-wrap:wrap">'+
-          '<span class="badge bb">'+prog.days_per_week+' gün/hafta</span>'+
-          '<span class="badge '+(prog.difficulty===1?'bg':prog.difficulty===2?'by':'br')+'">'+ ['','Başlangıç','Orta','İleri'][prog.difficulty||1]+'</span>'+
-          '<span class="badge bb">'+goals+'</span></div></div>';
-        html+=(isActive?'<span class="badge bg" style="flex-shrink:0">✓ Aktif</span>':'<span style="color:var(--text3);font-size:20px">›</span>');
-        html+='</div></div>';
-      });
-    }
-  } else {
-    /* Özel programlar */
-    var customs=getCustomWorkouts();
-    if(!customs.length){
-      html+='<div style="text-align:center;padding:20px;color:var(--text2);font-size:13px">Henüz özel programın yok.<br>Aşağıdan yeni oluştur!</div>';
-    } else {
-      customs.forEach(function(p){
-        var isActive=U.active_workout_fitness===p.id;
-        html+='<div class="rc" style="'+(isActive?'border-color:var(--accent);border-width:2px':'')+'">';
-        html+='<div style="display:flex;align-items:center;gap:8px">';
-        html+='<div onclick="selectWorkoutProgram(\''+p.id+'\')" style="flex:1;cursor:pointer">';
-        html+='<div style="font-size:14px;font-weight:700">'+p.name_tr+'</div>';
-        html+='<div style="font-size:11px;color:var(--text2)">'+p.days_per_week+' gün &nbsp;·&nbsp; Gün başına '+(p.days[0]?p.days[0].exercises.length:0)+' egzersiz</div>';
-        html+='</div>';
-        if(isActive)html+='<span class="badge bg">✓ Aktif</span>';
-        html+='<button onclick="deleteCustomWorkout(\''+p.id+'\')" style="background:none;border:none;color:var(--text3);font-size:16px;cursor:pointer;padding:4px;flex-shrink:0">✕</button>';
-        html+='</div></div>';
-      });
-    }
-    html+='<button class="btn btn-p btn-full" onclick="renderCustomWorkoutBuilder()" style="margin-top:6px">➕ Yeni Program Oluştur</button>';
+  var logs=getWorkoutLogs();
+  var streak=_calcStreak(logs);
+  var branches=getUserBranches();
+  var html='<div class="wh-grid">';
+  /* Araçlar kartı — tam genişlik */
+  html+='<div class="wh-card tools wh-full">';
+  html+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">';
+  html+='<div style="font-family:\'Bebas Neue\',cursive;font-size:18px;letter-spacing:1.5px">🛠️ ARAÇLAR</div>';
+  html+='<button onclick="renderBranchManager()" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:5px 10px;font-size:10px;font-weight:600;color:var(--text2);cursor:pointer;font-family:\'Outfit\',sans-serif">+ Branş Ekle</button>';
+  html+='</div>';
+  html+='<div class="wh-tools-row">';
+  html+='<div class="wh-tool-btn" onclick="window._exCat=\'all\';window._exSearch=\'\';renderExerciseLibrary()"><div class="wh-tool-icon">📚</div><div class="wh-tool-label">Egzersiz Havuzu</div></div>';
+  html+='<div class="wh-tool-btn" onclick="showWorkoutTool(\'chrono\')"><div class="wh-tool-icon">⏱️</div><div class="wh-tool-label">Kronometre</div></div>';
+  html+='<div class="wh-tool-btn" onclick="showWorkoutTool(\'rest\')"><div class="wh-tool-icon">💪</div><div class="wh-tool-label">Set Sayacı</div></div>';
+  html+='<div class="wh-tool-btn" onclick="renderWorkoutHistory()"><div class="wh-tool-icon">📋</div><div class="wh-tool-label">Geçmiş</div></div>';
+  html+='</div></div>';
+  /* Streak */
+  if(streak>0){
+    var sc=streak>=7?'var(--warn)':'var(--success)';
+    var sb=streak>=7?'rgba(255,159,28,.1)':'rgba(46,196,182,.08)';
+    html+='<div class="wh-full" style="background:'+sb+';border:1px solid '+sc+';border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px">';
+    html+='<div style="font-size:22px">'+(streak>=7?'🔥':'⚡')+'</div>';
+    html+='<div style="flex:1"><div style="font-size:13px;font-weight:700;color:'+sc+'">'+streak+' Günlük Seri!</div><div style="font-size:11px;color:var(--text2)">Harika gidiyorsun!</div></div></div>';
   }
-
+  /* Branş kartları */
+  branches.forEach(function(bId){
+    var bDef=BRANCH_DEFS.find(function(b){return b.id===bId;})||{id:bId,label:bId,icon:'💪'};
+    var activeKey='active_workout_'+bId;
+    var activeId=U[activeKey]||null;
+    var prog=null;
+    if(activeId){
+      if(bId==='fitness'&&WORKOUTS_DATA)prog=WORKOUTS_DATA.workouts.find(function(w){return w.id===activeId;});
+      else if(bId==='swimming'&&WORKOUTS_SWIM)prog=WORKOUTS_SWIM.workouts.find(function(w){return w.id===activeId;});
+      if(!prog)prog=getCustomWorkouts().find(function(w){return w.id===activeId;});
+    }
+    var nextInfo='';
+    if(prog){
+      var bLogs=logs.filter(function(l){return l.programId===prog.id;});
+      var lastDayIdx=bLogs.length>0?bLogs[bLogs.length-1].dayIndex:-1;
+      var nextDayIdx=(lastDayIdx+1)%prog.days.length;
+      var nd=prog.days[nextDayIdx];
+      if(nd)nextInfo='Gün '+(nextDayIdx+1)+': '+nd.name;
+    }
+    html+='<div class="wh-card'+(prog?' accent':'')+'">';
+    html+='<div class="wh-card-icon">'+bDef.icon+'</div>';
+    html+='<div class="wh-card-label">'+bDef.label+'</div>';
+    if(prog){
+      html+='<div class="wh-card-sub" style="color:var(--success)">'+nextInfo+'</div>';
+      html+='<button class="btn btn-p" onclick="window._browseBranch=\''+bId+'\';_startBranchWorkout(\''+bId+'\')" style="margin-top:6px;font-size:11px;padding:7px 0;border-radius:8px;width:100%">▶ Başlat</button>';
+      html+='<button class="btn btn-s" onclick="window._browseBranch=\''+bId+'\';renderWorkoutBrowse()" style="margin-top:4px;font-size:10px;padding:5px 0;border-radius:8px;width:100%">Değiştir</button>';
+    } else {
+      html+='<div class="wh-card-sub">Program seçilmedi</div>';
+      html+='<button class="btn btn-s" onclick="window._browseBranch=\''+bId+'\';window._browseTab=\'ready\';renderWorkoutBrowse()" style="margin-top:6px;font-size:11px;padding:7px 0;border-radius:8px;width:100%">📋 Program Seç</button>';
+    }
+    html+='</div>';
+  });
+  html+='</div>';
   el.innerHTML=html;
 }
 
-function selectWorkoutProgram(id){
+function _startBranchWorkout(branchId){
+  var activeKey='active_workout_'+branchId;
+  var activeId=U[activeKey]||null;
+  if(!activeId){showToast('Önce bir program seç.','warn');return;}
+  /* Geçici olarak active_workout_fitness'e set et — mevcut motor bu key'i kullanıyor */
+  var prevActive=U.active_workout_fitness;
+  U.active_workout_fitness=activeId;
+  startWorkoutSession();
+  U.active_workout_fitness=prevActive;
+}
+
+/* ── Program Seç (hazır + filtrelenebilir) ───────────────── */
+function renderWorkoutBrowse(){
+  var el=document.getElementById('workout-main');
+  if(!el)return;
+  var branch=window._browseBranch||'fitness';
+  var tab=window._browseTab||'ready';
+  var filterGoal=window._browseGoal||'all';
+  var filterDiff=window._browseDiff||'all';
+  var bDef=BRANCH_DEFS.find(function(b){return b.id===branch;})||{label:branch,icon:'💪'};
+
+  var html='<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">'+
+    '<button class="btn btn-s" onclick="renderWorkoutHome()" style="padding:8px 12px;font-size:12px">← Geri</button>'+
+    '<div style="font-size:16px;font-weight:700">'+bDef.icon+' '+bDef.label+' Programları</div>'+
+  '</div>';
+
+  html+='<div style="display:flex;background:var(--card2);border-radius:9px;padding:3px;margin-bottom:12px;border:1px solid var(--border)">'+
+    '<button style="flex:1;padding:8px;border:none;border-radius:6px;font-family:\'Outfit\',sans-serif;font-size:12px;font-weight:600;cursor:pointer;background:'+(tab==='ready'?'var(--card)':'transparent')+';color:'+(tab==='ready'?'var(--text)':'var(--text2)')+'" onclick="window._browseTab=\'ready\';renderWorkoutBrowse()">Hazır Programlar</button>'+
+    '<button style="flex:1;padding:8px;border:none;border-radius:6px;font-family:\'Outfit\',sans-serif;font-size:12px;font-weight:600;cursor:pointer;background:'+(tab==='custom'?'var(--card)':'transparent')+';color:'+(tab==='custom'?'var(--text)':'var(--text2)')+'" onclick="window._browseTab=\'custom\';renderWorkoutBrowse()">Özel Programlarım</button>'+
+  '</div>';
+
+  if(tab==='ready'){
+    var goalTr={all:'Tüm Hedefler',bulk:'Kas Kazanımı',cut:'Yağ Yakımı',recomp:'Rekomp',health:'Sağlık',perf:'Performans'};
+    html+='<div class="prog-filter-row">';
+    ['all','bulk','cut','recomp','health','perf'].forEach(function(g){
+      html+='<div class="ex-chip'+(filterGoal===g?' sel':'')+'" onclick="window._browseGoal=\''+g+'\';renderWorkoutBrowse()">'+goalTr[g]+'</div>';
+    });
+    html+='</div>';
+    html+='<div class="prog-filter-row">';
+    [{v:'all',l:'Tüm Seviyeler'},{v:'1',l:'Başlangıç'},{v:'2',l:'Orta'},{v:'3',l:'İleri'}].forEach(function(d){
+      html+='<div class="ex-chip'+(filterDiff===d.v?' sel':'')+'" onclick="window._browseDiff=\''+d.v+'\';renderWorkoutBrowse()">'+d.l+'</div>';
+    });
+    html+='</div>';
+    var data=branch==='swimming'?WORKOUTS_SWIM:WORKOUTS_DATA;
+    if(!data){html+='<div style="text-align:center;padding:20px;color:var(--text2);font-size:13px">Veriler yükleniyor...</div>';}
+    else{
+      var filtered=data.workouts.filter(function(p){
+        var matchGoal=filterGoal==='all'||(p.goal&&p.goal.indexOf(filterGoal)>=0);
+        var matchDiff=filterDiff==='all'||String(p.difficulty)===filterDiff;
+        return matchGoal&&matchDiff;
+      });
+      if(!filtered.length){html+='<div style="text-align:center;padding:20px;color:var(--text2);font-size:13px">Eşleşen program yok.</div>';}
+      filtered.forEach(function(prog){
+        var activeKey='active_workout_'+branch;
+        var isActive=U[activeKey]===prog.id;
+        html+='<div class="rc" style="'+(isActive?'border-color:var(--accent);border-width:2px':'')+'" onclick="selectWorkoutProgram(\''+prog.id+'\',\''+branch+'\')">'+
+          '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">'+
+          '<div style="flex:1;min-width:0">'+
+          '<div style="font-size:15px;font-weight:700;margin-bottom:3px">'+prog.name_tr+'</div>'+
+          '<div style="font-size:11px;color:var(--text2);margin-bottom:6px">'+prog.description_tr+'</div>'+
+          '<div style="display:flex;gap:5px;flex-wrap:wrap">'+
+            '<span class="badge bb">'+prog.days_per_week+' gün/hafta</span>'+
+            '<span class="badge '+(prog.difficulty===1?'bg':prog.difficulty===2?'by':'br')+'">'+ ['','Başlangıç','Orta','İleri'][prog.difficulty||1]+'</span></div></div>'+
+          (isActive?'<span class="badge bg" style="flex-shrink:0">✓ Aktif</span>':'<span style="color:var(--text3);font-size:20px">›</span>')+
+          '</div></div>';
+      });
+    }
+  } else {
+    var customs=getCustomWorkouts();
+    if(!customs.length){html+='<div style="text-align:center;padding:20px;color:var(--text2);font-size:13px">Henüz özel programın yok.</div>';}
+    else{
+      customs.forEach(function(p){
+        var activeKey='active_workout_'+(p._branch||branch);
+        var isActive=U[activeKey]===p.id;
+        html+='<div class="rc" style="'+(isActive?'border-color:var(--accent);border-width:2px':'')+'">'+
+          '<div style="display:flex;align-items:center;gap:8px">'+
+          '<div onclick="selectWorkoutProgram(\''+p.id+'\',\''+(p._branch||branch)+'\')" style="flex:1;cursor:pointer">'+
+          '<div style="font-size:14px;font-weight:700">'+p.name_tr+'</div>'+
+          '<div style="font-size:11px;color:var(--text2)">'+(p.days[0]?p.days[0].exercises.length:0)+' egzersiz/gün</div></div>'+
+          (isActive?'<span class="badge bg">✓ Aktif</span>':'')+
+          '<button onclick="deleteCustomWorkout(\''+p.id+'\')" style="background:none;border:none;color:var(--accent);font-size:18px;cursor:pointer;padding:2px 6px">✕</button>'+
+          '</div></div>';
+      });
+    }
+    html+='<button class="btn btn-p btn-full" onclick="renderCustomWorkoutBuilder()" style="margin-top:8px">➕ Yeni Program Oluştur</button>';
+  }
+  el.innerHTML=html;
+}
+
+function selectWorkoutProgram(id,branch){
+  branch=branch||'fitness';
+  var activeKey='active_workout_'+branch;
   var prog=null;
-  if(WORKOUTS_DATA)prog=WORKOUTS_DATA.workouts.find(function(w){return w.id===id;});
+  var data=branch==='swimming'?WORKOUTS_SWIM:WORKOUTS_DATA;
+  if(data)prog=data.workouts.find(function(w){return w.id===id;});
   if(!prog)prog=getCustomWorkouts().find(function(w){return w.id===id;});
   if(!prog)return;
-  if(U.active_workout_fitness===id){renderWorkoutHome();return;}
+  if(U[activeKey]===id){renderWorkoutHome();return;}
   showConfirm(prog.name_tr,'Bu programı seçmek istiyor musun?',function(){
-    U.active_workout_fitness=id;saveData();
-    showToast('✅ Program seçildi: '+prog.name_tr);
-    window._browseTab='ready';
-    renderWorkoutHome();
+    U[activeKey]=id;
+    if(branch==='fitness')U.active_workout_fitness=id;
+    saveData();showToast('✅ Program seçildi!');
+    window._browseTab='ready';renderWorkoutHome();
   },'Seç');
 }
 
-/* ── Özel Antrenman Oluşturucu ───────────────────────────── */
-var _cwExercises=[]; /* {id, name_tr, sets, rest_sec} */
+/* ── Özel Antrenman Oluşturucu ─────────────────────────── */
+var _cwExercises=[];
 var _cwName='Benim Programım';
-
 function getCustomWorkouts(){try{return JSON.parse(localStorage.getItem('rf_custom_workouts')||'[]');}catch(e){return[];}}
 function saveCustomWorkouts(list){localStorage.setItem('rf_custom_workouts',JSON.stringify(list));saveToFirebase();}
 function deleteCustomWorkout(id){
-  showConfirm('Programı Sil','Bu özel program silinecek. Emin misin?',function(){
+  showConfirm('Programı Sil','Bu özel program silinecek.',function(){
     var list=getCustomWorkouts().filter(function(w){return w.id!==id;});
     saveCustomWorkouts(list);
-    if(U.active_workout_fitness===id){U.active_workout_fitness=null;saveData();}
-    showToast('Program silindi.');
-    renderWorkoutBrowse();
+    BRANCH_DEFS.forEach(function(b){var k='active_workout_'+b.id;if(U[k]===id)delete U[k];});
+    if(U.active_workout_fitness===id)delete U.active_workout_fitness;
+    saveData();showToast('Program silindi.');renderWorkoutBrowse();
   },'Evet, Sil');
 }
 
 function renderCustomWorkoutBuilder(){
-  var el=document.getElementById('workout-main');
-  if(!el)return;
-
+  var el=document.getElementById('workout-main');if(!el)return;
   var html='<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">'+
     '<button class="btn btn-s" onclick="window._browseTab=\'custom\';renderWorkoutBrowse()" style="padding:8px 12px;font-size:12px">← Geri</button>'+
-    '<div style="font-size:16px;font-weight:700">Yeni Program</div>'+
-  '</div>';
-
-  /* Program adı */
-  html+='<div class="rc" style="margin-bottom:8px">'+
-    '<div class="rct">📝 Program Adı</div>'+
-    '<input class="ex-search" type="text" placeholder="Program adı..." value="'+(_cwName||'')+'" oninput="_cwName=this.value" style="margin-bottom:0">'+
-  '</div>';
-
-  /* Egzersizler */
-  html+='<div class="rc" style="margin-bottom:8px"><div class="rct">💪 Egzersizler</div>';
+    '<div style="font-size:16px;font-weight:700">Yeni Program</div></div>';
+  html+='<div class="rc" style="margin-bottom:8px"><div class="rct">📝 Program Adı</div>'+
+    '<input class="ex-search" type="text" placeholder="Örn: Benim Push Günüm" value="'+(_cwName||'')+'" oninput="_cwName=this.value" style="margin-bottom:0"></div>';
+  html+='<div class="rc" style="margin-bottom:8px">';
+  html+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">'+
+    '<div class="rct" style="margin-bottom:0">💪 Egzersizler ('+_cwExercises.length+')</div>'+
+    '<button class="btn btn-s" onclick="window._exCat=\'all\';window._exSearch=\'\';window._cwReturnToBuilder=true;renderExerciseLibrary()" style="font-size:11px;padding:6px 10px">+ Ekle</button></div>';
   if(!_cwExercises.length){
-    html+='<div style="font-size:12px;color:var(--text2);text-align:center;padding:10px 0">Egzersiz havuzundan egzersiz ekle</div>';
+    html+='<div style="text-align:center;padding:14px;color:var(--text2);font-size:12px;background:var(--card2);border-radius:10px">Sağ üstten egzersiz ekle</div>';
   } else {
     _cwExercises.forEach(function(e,i){
-      html+='<div class="cw-ex-row">';
-      html+='<div style="color:var(--text3);font-size:12px;min-width:20px">'+(i+1)+'</div>';
-      html+='<div class="cw-ex-name">'+e.name_tr+'</div>';
-      html+='<div style="font-size:10px;color:var(--text3);margin-right:4px">Set:</div>';
-      html+='<input class="cw-ex-sets" type="number" min="1" max="10" value="'+(e.sets||3)+'" onchange="_cwSetSets('+i+',this.value)">';
-      html+='<button class="cw-remove" onclick="_cwRemoveEx('+i+')">×</button>';
+      html+='<div class="cwb-ex-card">';
+      html+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">';
+      html+='<div style="font-size:11px;color:var(--text3);min-width:16px">'+(i+1)+'</div>';
+      html+='<div style="flex:1;font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+e.name_tr+'</div>';
+      html+='<button onclick="_cwMoveEx('+i+',-1)" style="background:none;border:none;color:var(--text3);font-size:14px;cursor:pointer;padding:0 3px" '+(i===0?'disabled':'')+'>↑</button>';
+      html+='<button onclick="_cwMoveEx('+i+',1)" style="background:none;border:none;color:var(--text3);font-size:14px;cursor:pointer;padding:0 3px" '+(i===_cwExercises.length-1?'disabled':'')+'>↓</button>';
+      html+='<button onclick="_cwRemoveEx('+i+')" style="background:none;border:1px solid var(--border);border-radius:7px;color:var(--accent);font-size:11px;cursor:pointer;padding:3px 7px">✕</button>';
       html+='</div>';
+      html+='<div class="cwb-params">';
+      html+='<div><div class="cwb-param-label">Set</div><input class="cwb-param-input" type="number" min="1" max="20" value="'+(e.sets||3)+'" onchange="_cwUpdate('+i+',\'sets\',this.value)"></div>';
+      html+='<div><div class="cwb-param-label">Tekrar</div><input class="cwb-param-input" type="text" placeholder="8-12" value="'+(e.reps||'10-12')+'" onchange="_cwUpdate('+i+',\'reps\',this.value)"></div>';
+      html+='<div><div class="cwb-param-label">Dinlenme (sn)</div><input class="cwb-param-input" type="number" min="15" max="600" value="'+(e.rest_sec||90)+'" onchange="_cwUpdate('+i+',\'rest_sec\',this.value)"></div>';
+      html+='</div></div>';
     });
   }
-  html+='<button class="btn btn-s btn-full" onclick="window._exCat=\'all\';window._exSearch=\'\';renderExerciseLibrary()" style="margin-top:8px">+ Egzersiz Ekle</button>';
   html+='</div>';
-
-  /* Kaydet */
-  html+='<button class="btn btn-p btn-full" onclick="saveCustomWorkout()" style="margin-bottom:20px">💾 Programı Kaydet</button>';
-
+  if(_cwExercises.length)html+='<button class="btn btn-p btn-full" onclick="saveCustomWorkout()" style="margin-bottom:20px">💾 Programı Kaydet</button>';
   el.innerHTML=html;
 }
 
+function _cwUpdate(i,field,val){if(!_cwExercises[i])return;if(field==='sets'||field==='rest_sec')_cwExercises[i][field]=parseInt(val)||3;else _cwExercises[i][field]=val;}
+function _cwRemoveEx(i){_cwExercises.splice(i,1);renderCustomWorkoutBuilder();}
+function _cwMoveEx(i,dir){var j=i+dir;if(j<0||j>=_cwExercises.length)return;var tmp=_cwExercises[i];_cwExercises[i]=_cwExercises[j];_cwExercises[j]=tmp;renderCustomWorkoutBuilder();}
+
 function cwToggleExercise(exId){
-  if(!EXERCISES_DATA)return;
-  var ex=EXERCISES_DATA.exercises.find(function(e){return e.id===exId;});
+  if(!EXERCISES_DATA&&!EXERCISES_SWIM)return;
+  var ex=null;
+  if(EXERCISES_DATA)ex=EXERCISES_DATA.exercises.find(function(e){return e.id===exId;});
+  if(!ex&&EXERCISES_SWIM)ex=EXERCISES_SWIM.exercises.find(function(e){return e.id===exId;});
   if(!ex)return;
   var idx=(_cwExercises||[]).findIndex(function(e){return e.id===exId;});
-  if(idx>=0){
-    _cwExercises.splice(idx,1);
-    showToast('Egzersiz kaldırıldı.');
-  } else {
-    if(!_cwExercises)_cwExercises=[];
-    _cwExercises.push({id:ex.id,name_tr:ex.name_tr,sets:3,reps:'10-12',rest_sec:90});
-    showToast('✅ '+ex.name_tr+' eklendi!');
-  }
+  if(idx>=0){_cwExercises.splice(idx,1);showToast('Egzersiz kaldırıldı.');}
+  else{if(!_cwExercises)_cwExercises=[];_cwExercises.push({id:ex.id,name_tr:ex.name_tr,sets:3,reps:'10-12',rest_sec:90});showToast('✅ '+ex.name_tr+' eklendi!');}
   renderExerciseDetail(exId);
 }
-function _cwSetSets(i,v){if(_cwExercises[i])_cwExercises[i].sets=parseInt(v)||3;}
-function _cwRemoveEx(i){_cwExercises.splice(i,1);renderCustomWorkoutBuilder();}
 
 function saveCustomWorkout(){
   if(!_cwExercises||!_cwExercises.length){showToast('❌ En az 1 egzersiz ekle.','error');return;}
   var name=(_cwName||'').trim()||'Benim Programım';
+  var branch=window._browseBranch||'fitness';
   var id='custom_'+Date.now();
-  var prog={
-    id:id,
-    name_tr:name,
-    branch:'fitness',
-    days_per_week:1,
-    goal:['recomp'],
-    difficulty:2,
-    duration_weeks:8,
-    description_tr:'Kendi oluşturduğum program.',
-    _isCustom:true,
-    days:[{
-      day:1,
-      name:'Antrenman',
-      exercises:_cwExercises.map(function(e){
-        return{exercise_id:e.id,sets:e.sets,reps:e.reps||'10-12',rest_sec:e.rest_sec||90};
-      })
-    }]
-  };
-  var list=getCustomWorkouts();
-  list.push(prog);
-  saveCustomWorkouts(list);
-  _cwExercises=[];_cwName='Benim Programım';
-  showToast('✅ Program kaydedildi!');
-  window._browseTab='custom';
-  renderWorkoutBrowse();
+  var prog={id:id,name_tr:name,branch:branch,_branch:branch,_isCustom:true,days_per_week:1,goal:['recomp'],difficulty:2,duration_weeks:8,description_tr:'Kendi oluşturduğum program.',
+    days:[{day:1,name:'Antrenman',exercises:_cwExercises.map(function(e){return{exercise_id:e.id,sets:e.sets||3,reps:e.reps||'10-12',rest_sec:e.rest_sec||90};})}]};
+  var list=getCustomWorkouts();list.push(prog);saveCustomWorkouts(list);
+  _cwExercises=[];_cwName='Benim Programım';window._cwReturnToBuilder=false;
+  showToast('✅ Program kaydedildi!');window._browseTab='custom';renderWorkoutBrowse();
 }
 
-/* ── Progressive Overload Uyarısı ───────────────────────── */
-function _ws_getPoHint(progId,dayIdx,exId,setIdx,kg,reps){
+/* ── Antrenman Geçmişi ───────────────────────────────────── */
+function renderWorkoutHistory(){
+  var el=document.getElementById('workout-main');if(!el)return;
   var logs=getWorkoutLogs();
-  /* Son 3 log'da aynı egzersizin aynı setini bul */
-  var prevSets=[];
-  for(var i=logs.length-1;i>=0;i--){
-    var l=logs[i];
-    if(l.programId!==progId||l.dayIndex!==dayIdx)continue;
-    var match=l.sets&&l.sets.filter(function(s){return s.exId===exId;});
-    if(match&&match.length){prevSets.push(match);if(prevSets.length>=2)break;}
-  }
-  if(!prevSets.length)return null;
-  var last=prevSets[0][Math.min(setIdx,prevSets[0].length-1)];
-  if(!last)return null;
-  var prevKg=parseFloat(last.kg)||0;
-  var prevReps=parseInt(last.reps)||0;
-  var curKg=parseFloat(kg)||0;
-  var curReps=parseInt(reps)||0;
-  var result={_prevKg:prevKg||null,_prevReps:prevReps||null};
-  if(curKg>prevKg)return Object.assign(result,{type:'up',msg:'+'+(Math.round((curKg-prevKg)*10)/10)+'kg önceki antrenmandan'});
-  if(curReps>prevReps)return Object.assign(result,{type:'up',msg:'+'+( curReps-prevReps)+' tekrar önceki antrenmandan'});
-  if(prevKg>0||prevReps>0)return Object.assign(result,{type:'same',msg:'Geçen: '+(prevKg?prevKg+'kg':'')+(prevKg&&prevReps?' × ':'')+( prevReps?prevReps+' tekrar':'')});
-  return null;
+  var html='<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">'+
+    '<button class="btn btn-s" onclick="renderWorkoutHome()" style="padding:8px 12px;font-size:12px">← Geri</button>'+
+    '<div style="font-size:16px;font-weight:700">Antrenman Geçmişi</div></div>';
+  if(!logs.length){html+='<div class="rc" style="text-align:center;padding:24px"><div style="font-size:36px;margin-bottom:8px">📭</div><div style="font-size:13px;color:var(--text2)">Henüz antrenman kaydın yok.</div></div>';el.innerHTML=html;return;}
+  var totalKcal=logs.reduce(function(a,l){return a+(l.kcal||0);},0);
+  var totalMin=logs.reduce(function(a,l){return a+Math.floor((l.elapsedSec||0)/60);},0);
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px">'+
+    '<div class="ws-report-stat"><div class="ws-report-val">'+logs.length+'</div><div class="ws-report-lbl">Antrenman</div></div>'+
+    '<div class="ws-report-stat"><div class="ws-report-val">'+totalMin+'dk</div><div class="ws-report-lbl">Toplam Süre</div></div>'+
+    '<div class="ws-report-stat"><div class="ws-report-val">'+totalKcal+'</div><div class="ws-report-lbl">Toplam kcal</div></div></div>';
+  logs.slice().reverse().forEach(function(log,i){
+    var realIdx=logs.length-1-i;
+    var prog=null;
+    if(WORKOUTS_DATA)prog=WORKOUTS_DATA.workouts.find(function(w){return w.id===log.programId;});
+    if(!prog&&WORKOUTS_SWIM)prog=WORKOUTS_SWIM.workouts.find(function(w){return w.id===log.programId;});
+    if(!prog)prog=getCustomWorkouts().find(function(w){return w.id===log.programId;});
+    var progName=prog?prog.name_tr:(log.programId||'Program');
+    var dayName=prog&&prog.days&&prog.days[log.dayIndex]?prog.days[log.dayIndex].name:'Antrenman';
+    var dur=Math.floor((log.elapsedSec||0)/60);
+    html+='<div class="rc" style="padding:12px 14px">';
+    html+='<div style="display:flex;align-items:flex-start;gap:8px">';
+    html+='<div style="flex:1"><div style="font-size:13px;font-weight:700;margin-bottom:2px">'+dayName+'</div>'+
+      '<div style="font-size:10px;color:var(--text2);margin-bottom:5px">'+progName+' · 📅 '+log.date+(log.note?'<br>📝 '+log.note:'')+'</div>'+
+      '<div style="display:flex;gap:8px;flex-wrap:wrap">'+
+        '<span style="font-size:11px;color:var(--accent)">⏱ '+dur+'dk</span>'+
+        '<span style="font-size:11px;color:var(--warn)">🔥 '+(log.kcal||0)+' kcal</span>'+
+        '<span style="font-size:11px;color:var(--success)">💪 '+(log.doneSets||0)+' set</span></div></div>';
+    html+='<div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0">'+
+      '<button onclick="editWorkoutLog('+realIdx+')" style="background:var(--card2);border:1px solid var(--border);border-radius:7px;padding:4px 8px;font-size:10px;color:var(--text2);cursor:pointer;font-family:\'Outfit\',sans-serif">✏️</button>'+
+      '<button onclick="deleteWorkoutLog('+realIdx+')" style="background:none;border:1px solid var(--border);border-radius:7px;padding:4px 8px;font-size:10px;color:var(--accent);cursor:pointer;font-family:\'Outfit\',sans-serif">🗑</button>'+
+      '</div></div></div>';
+  });
+  el.innerHTML=html;
 }
 
-/* PO badge'ini set satırına ekle — _ws_renderBody'de çağrılır */
-function _ws_buildPoHint(ei,si,kg,reps){
-  if(!_ws.program)return'';
-  var day=_ws.program.days[_ws.dayIndex];
-  var ex=day&&day.exercises[ei];
-  if(!ex)return'';
-  var hint=_ws_getPoHint(_ws.programId,_ws.dayIndex,ex.exercise_id,si,kg,reps);
-  if(!hint)return'';
-  return'<span class="po-badge po-'+hint.type+'">'+( hint.type==='up'?'↑':'')+hint.msg+'</span>';
+function deleteWorkoutLog(idx){
+  showConfirm('Kaydı Sil','Bu antrenman kaydı silinecek.',function(){
+    var logs=getWorkoutLogs();logs.splice(idx,1);
+    localStorage.setItem('rf_workout_logs',JSON.stringify(logs));saveToFirebase();
+    showToast('Silindi.');renderWorkoutHistory();
+  },'Evet, Sil');
 }
+
+function editWorkoutLog(idx){
+  var logs=getWorkoutLogs();var log=logs[idx];if(!log)return;
+  var el=document.getElementById('workout-main');
+  var prog=null;
+  if(WORKOUTS_DATA)prog=WORKOUTS_DATA.workouts.find(function(w){return w.id===log.programId;});
+  if(!prog&&WORKOUTS_SWIM)prog=WORKOUTS_SWIM.workouts.find(function(w){return w.id===log.programId;});
+  if(!prog)prog=getCustomWorkouts().find(function(w){return w.id===log.programId;});
+  var dayName=prog&&prog.days&&prog.days[log.dayIndex]?prog.days[log.dayIndex].name:'Antrenman';
+  var progName=prog?prog.name_tr:(log.programId||'Program');
+  var html='<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">'+
+    '<button class="btn btn-s" onclick="renderWorkoutHistory()" style="padding:8px 12px;font-size:12px">← Geri</button>'+
+    '<div style="font-size:16px;font-weight:700">Kaydı Düzenle</div></div>';
+  html+='<div class="rc">';
+  html+='<div style="font-size:14px;font-weight:700;margin-bottom:2px">'+dayName+'</div>';
+  html+='<div style="font-size:11px;color:var(--text2);margin-bottom:12px">'+progName+' · 📅 '+log.date+'</div>';
+  html+='<div style="margin-bottom:10px"><div style="font-size:11px;color:var(--text2);margin-bottom:4px">⏱ Süre (dakika)</div>'+
+    '<input id="edit-dur" type="number" class="cwb-param-input" value="'+Math.floor((log.elapsedSec||0)/60)+'" style="width:120px;text-align:left;padding:8px 12px"></div>';
+  html+='<div style="margin-bottom:10px"><div style="font-size:11px;color:var(--text2);margin-bottom:4px">🔥 Kalori (kcal)</div>'+
+    '<input id="edit-kcal" type="number" class="cwb-param-input" value="'+(log.kcal||0)+'" style="width:120px;text-align:left;padding:8px 12px"></div>';
+  html+='<div style="margin-bottom:14px"><div style="font-size:11px;color:var(--text2);margin-bottom:4px">📝 Not</div>'+
+    '<input id="edit-note" type="text" class="ex-search" placeholder="Antrenman notu..." value="'+(log.note||'')+'" style="margin-bottom:0"></div>';
+  html+='<button class="btn btn-p btn-full" onclick="saveWorkoutLogEdit('+idx+')">💾 Kaydet</button></div>';
+  el.innerHTML=html;
+}
+
+function saveWorkoutLogEdit(idx){
+  var logs=getWorkoutLogs();var log=logs[idx];if(!log)return;
+  log.elapsedSec=(parseInt(document.getElementById('edit-dur').value)||0)*60;
+  log.kcal=parseInt(document.getElementById('edit-kcal').value)||0;
+  log.note=document.getElementById('edit-note').value||'';
+  logs[idx]=log;
+  localStorage.setItem('rf_workout_logs',JSON.stringify(logs));saveToFirebase();
+  showToast('✅ Kaydedildi!');renderWorkoutHistory();
+}
+
+function showWorkoutTool(type){
+  var el=type==='chrono'?document.getElementById('chrono-display'):document.getElementById('rest-display');
+  if(el)el.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function renderWorkoutTools(){}
 
 /* ── Isınma / Soğuma ─────────────────────────────────────── */
 var WARMUP_MOVES=[
@@ -3539,6 +3800,7 @@ function _doStartSession(prog){
   _ws_updateProgress();
   window.scrollTo(0,0);
 }
+
 
 /* ══════════════════════════════════════════════════════════
    🏋️ AKTİF ANTRENMAN MOTORU (FAZ 2)
@@ -4095,9 +4357,6 @@ function renderWorkoutHistory(){
   el.innerHTML=html;
 }
 
-function renderWorkoutTools(){
-  /* placeholder */
-}
 
 /* ── UTILS ────────────────────────────────────────────── */
 function clamp(v,lo,hi){return Math.min(hi,Math.max(lo,v));}
@@ -4180,6 +4439,53 @@ function hideAuthScreen(){
   document.getElementById('app-main').style.display='block';
 }
 
+/* ── Misafir Girişi ──────────────────────────────────── */
+var _isGuest=false;
+
+function enterAsGuest(){
+  _isGuest=true;
+  hideAuthScreen();
+  /* Mevcut localStorage verisini yükle (varsa) */
+  try{
+    var raw=localStorage.getItem('rf_data');
+    if(raw&&raw.length>2){
+      var d=JSON.parse(raw);
+      U=d.U||{};R=d.R||{};A=d.A||{};BT=d.BT||{};
+      selST=d.selST||null;selGL=d.selGL||null;
+    }
+  }catch(e){}
+  /* Verisi varsa results ekranına, yoksa splash'e git */
+  if(Object.keys(R).length&&R.bf){
+    showResults();
+  } else {
+    goHome();
+  }
+  /* Misafir banner'ını göster */
+  showGuestBanner();
+}
+
+function showGuestBanner(){
+  if(document.getElementById('guest-banner'))return;
+  var bn=document.createElement('div');
+  bn.id='guest-banner';
+  bn.style.cssText='position:fixed;bottom:68px;left:0;right:0;background:var(--card);border-top:1px solid var(--border);padding:8px 14px;display:flex;align-items:center;gap:10px;z-index:300;animation:slideUp .3s ease';
+  bn.innerHTML='<span style="font-size:14px">👀</span>'+
+    '<div style="flex:1;min-width:0"><div style="font-size:11px;font-weight:700;color:var(--text)">Misafir Modu</div>'+
+    '<div style="font-size:10px;color:var(--text2)">Veriler yalnızca bu cihazda</div></div>'+
+    '<button onclick="exitGuestMode()" style="background:var(--accent);border:none;border-radius:8px;padding:6px 12px;font-family:\'Outfit\',sans-serif;font-size:11px;font-weight:700;color:#fff;cursor:pointer;flex-shrink:0">Hesap Oluştur</button>'+
+    '<button onclick="document.getElementById(\'guest-banner\').style.display=\'none\'" style="background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;padding:0 2px;flex-shrink:0">✕</button>';
+  document.body.appendChild(bn);
+}
+
+function exitGuestMode(){
+  /* Çıkış yapmadan auth'a yönlendir — veriler korunuyor */
+  var bn=document.getElementById('guest-banner');
+  if(bn)bn.remove();
+  _isGuest=false;
+  showAuthScreen();
+  showRegisterTab();
+}
+
 /* ── Giriş Yap ───────────────────────────────────────── */
 function doLogin(){
   var nick=document.getElementById('auth-nick').value.trim().toLowerCase();
@@ -4224,6 +4530,13 @@ function doRegister(){
   _fbAuth.createUserWithEmailAndPassword(email,pass)
     .then(function(cred){
       btn.textContent='Kayıt Ol';btn.disabled=false;
+      /* Misafir verisini hesaba taşı */
+      if(_isGuest){
+        _isGuest=false;
+        var bn=document.getElementById('guest-banner');
+        if(bn)bn.remove();
+        showToast('✅ Hesap oluşturuldu! Veriler aktarılıyor...');
+      }
       /* Kullanıcı adını Firebase'e kaydet */
       _fbDb.collection('users').doc(cred.user.uid).set({nickname:nick,created:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
     })
@@ -4375,7 +4688,7 @@ function showRegisterTab(){
 /* ── Export / Import ─────────────────────────────────── */
 function exportData(){
   var data={
-    version:'0.5.4',
+    version:'0.6.1',
     exported:new Date().toISOString(),
     rf_data:localStorage.getItem('rf_data')||'{}',
     rf_entries:localStorage.getItem('rf_entries')||'[]'
