@@ -343,6 +343,14 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 .ex-detail-muscle:last-child{border-bottom:none}
 .ex-muscle-bar{flex:1;height:6px;background:var(--card2);border-radius:3px;overflow:hidden}
 .ex-muscle-fill{height:100%;border-radius:3px;background:var(--accent)}
+/* Anatomik SVG */
+.anatomy-wrap{display:flex;justify-content:center;gap:6px;margin-bottom:10px}
+.anatomy-view{position:relative}
+.anatomy-view svg{display:block}
+.anatomy-label{font-size:8px;font-weight:700;fill:var(--text3);text-anchor:middle;pointer-events:none;letter-spacing:.3px;text-transform:uppercase}
+.anatomy-part{fill:var(--card2);stroke:var(--border);stroke-width:.7;transition:fill .3s ease;cursor:default}
+.anatomy-part:hover{stroke:var(--text2);stroke-width:1}
+.anatomy-title{font-size:9px;font-weight:700;color:var(--text3);text-align:center;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px}
 /* Özel antrenman oluşturucu */
 .cw-ex-row{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--border)}
 .cw-ex-row:last-child{border-bottom:none}
@@ -3580,6 +3588,188 @@ function renderExerciseLibrary(){
   if(inp&&_curSearch)inp.setSelectionRange(inp.value.length,inp.value.length);
 }
 
+/* ══════════════════════════════════════════════════════════
+   🏋️ ANATOMİK KAS HARİTASI (SVG)
+   ══════════════════════════════════════════════════════════ */
+
+/* Kas key → SVG element ID eşleştirmesi */
+var MUSCLE_SVG_MAP={
+  'chest':['svg-chest'],
+  'upper-chest':['svg-chest'],
+  'lower-chest':['svg-chest'],
+  'front-shoulder':['svg-f-delt-l','svg-f-delt-r'],
+  'mid-shoulder':['svg-r-delt-l','svg-r-delt-r'],
+  'rear-shoulder':['svg-r-delt-l','svg-r-delt-r'],
+  'rear-delt':['svg-r-delt-l','svg-r-delt-r'],
+  'biceps':['svg-bicep-l','svg-bicep-r'],
+  'triceps-long':['svg-tricep-l','svg-tricep-r'],
+  'triceps-medial':['svg-tricep-l','svg-tricep-r'],
+  'triceps-lateral':['svg-tricep-l','svg-tricep-r'],
+  'lats':['svg-lat-l','svg-lat-r'],
+  'upper-traps':['svg-traps'],
+  'mid-traps':['svg-traps'],
+  'lower-traps':['svg-traps'],
+  'rhomboids':['svg-lat-l','svg-lat-r'],
+  'erector-spinae':['svg-erector'],
+  'abs-upper':['svg-abs'],
+  'abs-lower':['svg-abs'],
+  'transverse-abs':['svg-abs'],
+  'obliques':['svg-oblique-l','svg-oblique-r'],
+  'quads':['svg-quad-l','svg-quad-r'],
+  'hamstrings':['svg-ham-l','svg-ham-r'],
+  'glutes':['svg-glute-l','svg-glute-r'],
+  'hip-flexors':['svg-quad-l','svg-quad-r'],
+  'adductors':['svg-quad-l','svg-quad-r'],
+  'gastrocnemius':['svg-calf-l','svg-calf-r'],
+  'soleus':['svg-calf-l','svg-calf-r'],
+  'forearm-flexors':['svg-farm-l','svg-farm-r'],
+  'brachioradialis':['svg-farm-l','svg-farm-r'],
+  'rotator-cuff':['svg-r-delt-l','svg-r-delt-r'],
+  'grip':['svg-farm-l','svg-farm-r']
+};
+
+function _getAnatomySvg(){
+  /* ── FRONT VIEW ── */
+  var f='<svg viewBox="0 0 100 215" width="110" height="240" xmlns="http://www.w3.org/2000/svg">';
+  /* Head + neck (outline only) */
+  f+='<circle cx="50" cy="16" r="11" fill="none" stroke="var(--border)" stroke-width="1.2"/>';
+  f+='<rect x="44" y="27" width="12" height="8" rx="3" fill="var(--card2)" stroke="var(--border)" stroke-width=".5"/>';
+  /* Front delts */
+  f+='<ellipse id="svg-f-delt-l" class="anatomy-part" cx="26" cy="42" rx="10" ry="7"><title>Ön Omuz</title></ellipse>';
+  f+='<ellipse id="svg-f-delt-r" class="anatomy-part" cx="74" cy="42" rx="10" ry="7"><title>Ön Omuz</title></ellipse>';
+  /* Chest */
+  f+='<path id="svg-chest" class="anatomy-part" d="M33,46 Q33,42 40,42 L60,42 Q67,42 67,46 L67,60 Q67,64 60,65 L50,66 L40,65 Q33,64 33,60 Z"><title>Göğüs</title></path>';
+  /* Biceps */
+  f+='<rect id="svg-bicep-l" class="anatomy-part" x="12" y="47" width="10" height="28" rx="5"><title>Biceps</title></rect>';
+  f+='<rect id="svg-bicep-r" class="anatomy-part" x="78" y="47" width="10" height="28" rx="5"><title>Biceps</title></rect>';
+  /* Forearms */
+  f+='<rect id="svg-farm-l" class="anatomy-part" x="8" y="77" width="9" height="26" rx="4"><title>Ön Kol</title></rect>';
+  f+='<rect id="svg-farm-r" class="anatomy-part" x="83" y="77" width="9" height="26" rx="4"><title>Ön Kol</title></rect>';
+  /* Abs */
+  f+='<rect id="svg-abs" class="anatomy-part" x="40" y="66" width="20" height="28" rx="3"><title>Karın</title></rect>';
+  /* Abs grid lines (cosmetic) */
+  f+='<line x1="40" y1="73" x2="60" y2="73" stroke="var(--border)" stroke-width=".4"/>';
+  f+='<line x1="40" y1="80" x2="60" y2="80" stroke="var(--border)" stroke-width=".4"/>';
+  f+='<line x1="40" y1="87" x2="60" y2="87" stroke="var(--border)" stroke-width=".4"/>';
+  f+='<line x1="50" y1="66" x2="50" y2="94" stroke="var(--border)" stroke-width=".3"/>';
+  /* Obliques */
+  f+='<rect id="svg-oblique-l" class="anatomy-part" x="33" y="68" width="7" height="24" rx="3"><title>Oblik</title></rect>';
+  f+='<rect id="svg-oblique-r" class="anatomy-part" x="60" y="68" width="7" height="24" rx="3"><title>Oblik</title></rect>';
+  /* Quads */
+  f+='<rect id="svg-quad-l" class="anatomy-part" x="34" y="105" width="14" height="44" rx="6"><title>Quadriceps</title></rect>';
+  f+='<rect id="svg-quad-r" class="anatomy-part" x="52" y="105" width="14" height="44" rx="6"><title>Quadriceps</title></rect>';
+  /* Hip connector (cosmetic) */
+  f+='<rect x="33" y="94" width="34" height="11" rx="4" fill="var(--card2)" stroke="var(--border)" stroke-width=".5"/>';
+  /* Shins (front calf area — shared with calf ID) */
+  f+='<rect id="svg-f-calf-l" class="anatomy-part" x="36" y="153" width="10" height="32" rx="4" style="opacity:.6"><title>Kalf</title></rect>';
+  f+='<rect id="svg-f-calf-r" class="anatomy-part" x="54" y="153" width="10" height="32" rx="4" style="opacity:.6"><title>Kalf</title></rect>';
+  /* Knees (cosmetic) */
+  f+='<circle cx="41" cy="152" r="3.5" fill="var(--card2)" stroke="var(--border)" stroke-width=".5"/>';
+  f+='<circle cx="59" cy="152" r="3.5" fill="var(--card2)" stroke="var(--border)" stroke-width=".5"/>';
+  /* Feet (cosmetic) */
+  f+='<ellipse cx="41" cy="190" rx="5" ry="3" fill="var(--card2)" stroke="var(--border)" stroke-width=".5"/>';
+  f+='<ellipse cx="59" cy="190" rx="5" ry="3" fill="var(--card2)" stroke="var(--border)" stroke-width=".5"/>';
+  /* Hands (cosmetic) */
+  f+='<circle cx="12" cy="106" r="4" fill="var(--card2)" stroke="var(--border)" stroke-width=".5"/>';
+  f+='<circle cx="88" cy="106" r="4" fill="var(--card2)" stroke="var(--border)" stroke-width=".5"/>';
+  f+='</svg>';
+
+  /* ── BACK VIEW ── */
+  var b='<svg viewBox="0 0 100 215" width="110" height="240" xmlns="http://www.w3.org/2000/svg">';
+  /* Head + neck */
+  b+='<circle cx="50" cy="16" r="11" fill="none" stroke="var(--border)" stroke-width="1.2"/>';
+  b+='<rect x="44" y="27" width="12" height="8" rx="3" fill="var(--card2)" stroke="var(--border)" stroke-width=".5"/>';
+  /* Traps */
+  b+='<path id="svg-traps" class="anatomy-part" d="M38,32 Q44,30 50,30 Q56,30 62,32 Q72,36 76,44 L24,44 Q28,36 38,32 Z"><title>Trapez</title></path>';
+  /* Rear delts */
+  b+='<ellipse id="svg-r-delt-l" class="anatomy-part" cx="22" cy="44" rx="8" ry="6"><title>Arka Omuz</title></ellipse>';
+  b+='<ellipse id="svg-r-delt-r" class="anatomy-part" cx="78" cy="44" rx="8" ry="6"><title>Arka Omuz</title></ellipse>';
+  /* Triceps */
+  b+='<rect id="svg-tricep-l" class="anatomy-part" x="10" y="48" width="10" height="28" rx="5"><title>Triceps</title></rect>';
+  b+='<rect id="svg-tricep-r" class="anatomy-part" x="80" y="48" width="10" height="28" rx="5"><title>Triceps</title></rect>';
+  /* Lats */
+  b+='<path id="svg-lat-l" class="anatomy-part" d="M24,46 L38,46 L38,56 Q38,74 34,76 L28,76 Q24,74 24,56 Z"><title>Lat (Sırt)</title></path>';
+  b+='<path id="svg-lat-r" class="anatomy-part" d="M62,46 L76,46 L76,56 Q76,74 72,76 L66,76 Q62,74 62,56 Z"><title>Lat (Sırt)</title></path>';
+  /* Forearms back */
+  b+='<rect x="6" y="78" width="9" height="26" rx="4" fill="var(--card2)" stroke="var(--border)" stroke-width=".5"/>';
+  b+='<rect x="85" y="78" width="9" height="26" rx="4" fill="var(--card2)" stroke="var(--border)" stroke-width=".5"/>';
+  /* Erector spinae */
+  b+='<rect id="svg-erector" class="anatomy-part" x="41" y="58" width="18" height="28" rx="3"><title>Bel (Erektör)</title></rect>';
+  /* Erector line (cosmetic) */
+  b+='<line x1="50" y1="58" x2="50" y2="86" stroke="var(--border)" stroke-width=".3"/>';
+  /* Glutes */
+  b+='<ellipse id="svg-glute-l" class="anatomy-part" cx="40" cy="97" rx="10" ry="9"><title>Gluteus</title></ellipse>';
+  b+='<ellipse id="svg-glute-r" class="anatomy-part" cx="60" cy="97" rx="10" ry="9"><title>Gluteus</title></ellipse>';
+  /* Hamstrings */
+  b+='<rect id="svg-ham-l" class="anatomy-part" x="33" y="110" width="14" height="40" rx="5"><title>Hamstring</title></rect>';
+  b+='<rect id="svg-ham-r" class="anatomy-part" x="53" y="110" width="14" height="40" rx="5"><title>Hamstring</title></rect>';
+  /* Calves */
+  b+='<path id="svg-calf-l" class="anatomy-part" d="M34,154 Q34,152 38,152 L44,152 Q46,152 46,154 L46,178 Q46,184 42,186 L38,186 Q34,184 34,178 Z"><title>Kalf</title></path>';
+  b+='<path id="svg-calf-r" class="anatomy-part" d="M54,154 Q54,152 58,152 L64,152 Q66,152 66,154 L66,178 Q66,184 62,186 L58,186 Q54,184 54,178 Z"><title>Kalf</title></path>';
+  /* Knees (cosmetic) */
+  b+='<circle cx="41" cy="152" r="3.5" fill="var(--card2)" stroke="var(--border)" stroke-width=".5"/>';
+  b+='<circle cx="59" cy="152" r="3.5" fill="var(--card2)" stroke="var(--border)" stroke-width=".5"/>';
+  /* Feet */
+  b+='<ellipse cx="41" cy="192" rx="5" ry="3" fill="var(--card2)" stroke="var(--border)" stroke-width=".5"/>';
+  b+='<ellipse cx="59" cy="192" rx="5" ry="3" fill="var(--card2)" stroke="var(--border)" stroke-width=".5"/>';
+  /* Hands */
+  b+='<circle cx="10" cy="107" r="4" fill="var(--card2)" stroke="var(--border)" stroke-width=".5"/>';
+  b+='<circle cx="90" cy="107" r="4" fill="var(--card2)" stroke="var(--border)" stroke-width=".5"/>';
+  b+='</svg>';
+
+  return {front:f,back:b};
+}
+
+function _anatomyColor(intensity){
+  if(intensity>=8) return 'rgba(230,57,70,0.85)';
+  if(intensity>=5) return 'rgba(230,57,70,0.45)';
+  if(intensity>=1) return 'rgba(230,57,70,0.18)';
+  return null;
+}
+
+function renderBodySvg(containerId,muscles){
+  var el=document.getElementById(containerId);
+  if(!el||!muscles||!Object.keys(muscles).length) return;
+
+  var svg=_getAnatomySvg();
+  var html='<div class="anatomy-wrap">';
+  html+='<div class="anatomy-view"><div class="anatomy-title">ÖN</div>'+svg.front+'</div>';
+  html+='<div class="anatomy-view"><div class="anatomy-title">ARKA</div>'+svg.back+'</div>';
+  html+='</div>';
+  el.innerHTML=html;
+
+  /* Önce en yüksek intensity'yi hesapla (aynı SVG element birden fazla kasla eşleşebilir) */
+  var elIntensity={};
+  Object.keys(muscles).forEach(function(mKey){
+    var val=muscles[mKey];
+    var ids=MUSCLE_SVG_MAP[mKey];
+    if(!ids) return;
+    ids.forEach(function(svgId){
+      if(!elIntensity[svgId]||val>elIntensity[svgId]){
+        elIntensity[svgId]=val;
+      }
+    });
+  });
+
+  /* Front calf — aynı rengi back calf'tan al */
+  if(elIntensity['svg-calf-l']){
+    elIntensity['svg-f-calf-l']=elIntensity['svg-calf-l'];
+    elIntensity['svg-f-calf-r']=elIntensity['svg-calf-r'];
+  }
+
+  /* Renkleri uygula */
+  Object.keys(elIntensity).forEach(function(svgId){
+    var color=_anatomyColor(elIntensity[svgId]);
+    if(!color) return;
+    /* Container içindeki tüm SVG'lerden bul (front + back) */
+    var parts=el.querySelectorAll('#'+svgId);
+    parts.forEach(function(part){
+      part.style.fill=color;
+      part.style.stroke=elIntensity[svgId]>=8?'rgba(230,57,70,0.6)':'rgba(230,57,70,0.3)';
+    });
+  });
+}
+
 /* ── Egzersiz Detay ──────────────────────────────────────── */
 function renderExerciseDetail(exId){
   var el=document.getElementById('workout-main');
@@ -3647,6 +3837,8 @@ function renderExerciseDetail(exId){
   if(ex.muscles&&Object.keys(ex.muscles).length){
     html+='<div class="rc" style="margin-bottom:8px">';
     html+='<div class="rct">💪 Çalışan Kaslar</div>';
+    /* Anatomik harita */
+    html+='<div id="anatomy-map-'+exId+'"></div>';
     var muscles=Object.entries(ex.muscles).sort(function(a,b){return b[1]-a[1];});
     muscles.forEach(function(m){
       var pct=m[1]*10;
@@ -3706,6 +3898,10 @@ function renderExerciseDetail(exId){
   html+='</div>';
 
   el.innerHTML=html;
+  /* Anatomik harita render */
+  if(ex.muscles&&Object.keys(ex.muscles).length){
+    renderBodySvg('anatomy-map-'+exId,ex.muscles);
+  }
 }
 
 /* ══════════════════════════════════════════════════════════
