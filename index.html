@@ -544,11 +544,16 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 @media(max-width:380px){.frow,.gender-grid{grid-template-columns:1fr}.splash-title{font-size:52px}.tb{font-size:9px}.r-stats{gap:10px}}
 </style>
 
-<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="120x120" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="RavenFit">
 <meta name="theme-color" content="#E63946">
 <meta name="description" content="Kişisel fitness analiz ve antrenman takip uygulaması">
 
@@ -3040,6 +3045,7 @@ function toggleSuppUsed(id){
   saveUserSupplements(list);
   renderSuppsUsed();
   renderWaterTracker();
+  setTimeout(checkAndAwardBadges,400);
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -3355,7 +3361,7 @@ function toggleWaterCup(idx){
   s.count=Math.max(0,Math.min(s.count,total));
   saveWaterState(s);
   renderWaterTracker();
-  if(s.count>=total)showToast('🎉 Günlük su hedefini tamamladın!','success');
+  if(s.count>=total){showToast('🎉 Günlük su hedefini tamamladın!','success');setTimeout(checkAndAwardBadges,600);}
 }
 function renderWaterTracker(){
   if(!R.water)return;
@@ -5635,13 +5641,21 @@ function getWorkoutLogs(){
 /* Fallback badge tanımları (badges.json yüklenemezse) */
 var BADGES_FALLBACK=[
   {id:'first_workout',name_tr:'İlk Adım',desc_tr:'İlk antrenmanını tamamladın!',icon:'🎯',condition_type:'workout_count',condition_value:1,branch:'all'},
+  {id:'analysis_done',name_tr:'Kendini Tanı',desc_tr:'Vücut analizini tamamladın!',icon:'🧬',condition_type:'analysis_complete',condition_value:1,branch:'all'},
   {id:'streak_7',name_tr:'Demir İrade',desc_tr:'7 gün üst üste antrenman yaptın!',icon:'🔥',condition_type:'streak',condition_value:7,branch:'all'},
+  {id:'streak_14',name_tr:'Durdurulamaz',desc_tr:'14 gün üst üste antrenman!',icon:'💎',condition_type:'streak',condition_value:14,branch:'all'},
   {id:'streak_30',name_tr:'Efsane',desc_tr:'30 gün üst üste antrenman yaptın!',icon:'⚡',condition_type:'streak',condition_value:30,branch:'all'},
   {id:'workout_10',name_tr:'Çaylak',desc_tr:'10 antrenman tamamladın!',icon:'💪',condition_type:'workout_count',condition_value:10,branch:'all'},
+  {id:'workout_25',name_tr:'Kararlı',desc_tr:'25 antrenman tamamladın!',icon:'🎖️',condition_type:'workout_count',condition_value:25,branch:'all'},
   {id:'workout_50',name_tr:'Veteran',desc_tr:'50 antrenman tamamladın!',icon:'🏆',condition_type:'workout_count',condition_value:50,branch:'all'},
+  {id:'workout_100',name_tr:'Centurion',desc_tr:'100 antrenman! Gerçek bir savaşçısın.',icon:'👑',condition_type:'workout_count',condition_value:100,branch:'all'},
   {id:'first_swim',name_tr:'İlk Dalış',desc_tr:'İlk yüzme antrenmanını tamamladın!',icon:'🏊',condition_type:'workout_count_branch',condition_value:1,branch:'swimming'},
-  {id:'analysis_done',name_tr:'Kendini Tanı',desc_tr:'Vücut analizini tamamladın!',icon:'🧬',condition_type:'analysis_complete',condition_value:1,branch:'all'},
-  {id:'entries_4',name_tr:'Takipçi',desc_tr:'4 haftalık ölçüm kaydın var!',icon:'📊',condition_type:'entries_count',condition_value:4,branch:'all'}
+  {id:'first_posture',name_tr:'Dik Dur',desc_tr:'İlk postür antrenmanını tamamladın!',icon:'🧘',condition_type:'workout_count_branch',condition_value:1,branch:'posture'},
+  {id:'entries_4',name_tr:'Takipçi',desc_tr:'4 haftalık ölçüm kaydın var!',icon:'📊',condition_type:'entries_count',condition_value:4,branch:'all'},
+  {id:'entries_12',name_tr:'Veri Gurusu',desc_tr:'12 haftalık ölçüm takibi!',icon:'📈',condition_type:'entries_count',condition_value:12,branch:'all'},
+  {id:'multi_branch',name_tr:'Çok Yönlü',desc_tr:'2+ branşta aktif antrenman yapıyorsun!',icon:'🌟',condition_type:'branch_active',condition_value:2,branch:'all'},
+  {id:'supp_master',name_tr:'Supplement Ustası',desc_tr:'5+ supplement kullanıyorsun!',icon:'💊',condition_type:'supplement_count',condition_value:5,branch:'all'},
+  {id:'water_champ',name_tr:'Su Şampiyonu',desc_tr:'Günlük su hedefini tamamladın!',icon:'💧',condition_type:'water_complete',condition_value:1,branch:'all'}
 ];
 
 function _getBadgeDefs(){
@@ -5690,6 +5704,23 @@ function checkAndAwardBadges(){
         break;
       case 'entries_count':
         met=entries.length>=badge.condition_value;
+        break;
+      case 'branch_active':
+        /* Kullanıcının kaç farklı branşta antrenman logu var */
+        var activeBranches={};
+        logs.forEach(function(l){
+          var b=l.branch||_getBranchForProgram(l.programId);
+          activeBranches[b]=true;
+        });
+        met=Object.keys(activeBranches).length>=badge.condition_value;
+        break;
+      case 'supplement_count':
+        met=getUserSupplements().length>=badge.condition_value;
+        break;
+      case 'water_complete':
+        var wState=getWaterState();
+        var wTarget=_calcWaterTarget();
+        met=wState.count>=wTarget.cups&&wTarget.cups>0;
         break;
     }
 
