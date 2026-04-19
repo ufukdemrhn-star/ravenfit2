@@ -1334,6 +1334,8 @@ var EXERCISES_DATA=null;
 var WORKOUTS_DATA=null;
 var EXERCISES_SWIM=null;
 var WORKOUTS_SWIM=null;
+var EXERCISES_POST=null;
+var WORKOUTS_POST=null;
 var BADGES_DATA=null;
 
 /* ── BRANŞ SİSTEMİ ───────────────────────────────────────── */
@@ -1342,7 +1344,7 @@ var BRANCH_DEFS=[
   {id:'swimming',  label:'Yüzme',     icon:'🏊', desc:'Havuz antrenmanları & stil çalışmaları'},
   {id:'boxing',    label:'Boks',      icon:'🥊', desc:'Boks teknikleri & kondisyon', coming:true},
   {id:'yoga',      label:'Yoga',      icon:'🧘', desc:'Esneklik, denge ve nefes çalışması', coming:true},
-  {id:'posture',   label:'Postür',    icon:'🦴', desc:'Duruş düzeltme & fizyoterapik egzersizler', coming:true},
+  {id:'posture',   label:'Postür & Hareket', icon:'🧘', desc:'Duruş bozuklukları, ağrı yönetimi ve mobilite çalışmaları'},
   {id:'gymnastics',label:'Jimnastik', icon:'🤸', desc:'Hareketlilik & vücut ağırlığı kontrolü', coming:true}
 ];
 function getUserBranches(){
@@ -1381,6 +1383,8 @@ function loadDataFiles(){
   load(base+'data/workouts-fitness.json', function(d){WORKOUTS_DATA=d;});
   load(base+'data/exercises-swimming.json',function(d){EXERCISES_SWIM=d;});
   load(base+'data/workouts-swimming.json', function(d){WORKOUTS_SWIM=d;});
+  load(base+'data/exercises-posture.json', function(d){EXERCISES_POST=d;});
+  load(base+'data/workouts-posture.json',  function(d){WORKOUTS_POST=d;});
   load(base+'data/badges.json',           function(d){BADGES_DATA=d;});
 }
 
@@ -3412,7 +3416,10 @@ var CATEGORY_TR={
   /* Yüzme kategorileri */
   'technique':'Teknik','drill':'Drill','kick':'Ayak Vuruşu','pull':'Çekiş',
   'endurance':'Dayanıklılık','speed':'Hız','conditioning':'Kondisyon',
-  'dryland':'Kara Antrenmanı'
+  'dryland':'Kara Antrenmanı',
+  /* Postür kategorileri */
+  'lower-back':'Bel Ağrısı','neck':'Boyun','kyphosis':'Kifoz (Kambur)',
+  'scoliosis-support':'Skolyoz Destek','mobility':'Genel Mobilite'
 };
 var EQUIPMENT_TR={
   'barbell':'Halter','dumbbell':'Dumbbell','cable':'Kablo',
@@ -3429,7 +3436,9 @@ var CATEGORY_EMOJI={
   'legs':'🦵','core':'⚡','full-body':'🔥','glutes':'🍑','cardio':'🏃','posture':'🧘',
   /* Yüzme */
   'technique':'🏊','drill':'🔄','kick':'🦶','pull':'💪',
-  'endurance':'🫀','speed':'⚡','conditioning':'🔥','dryland':'🏋️'
+  'endurance':'🫀','speed':'⚡','conditioning':'🔥','dryland':'🏋️',
+  /* Postür */
+  'lower-back':'🔧','neck':'🦴','kyphosis':'🧘','scoliosis-support':'🏥','mobility':'🔄'
 };
 
 /* ── Yüzme stil çevirileri ────────────────────────────────── */
@@ -3454,6 +3463,14 @@ var SWIM_STROKE_FILTERS=[
   {id:'butterfly',label:'Kelebek'},
   {id:'general',label:'Genel'}
 ];
+var POSTURE_CATEGORY_GROUPS=[
+  {id:'all',label:'Tümü'},
+  {id:'lower-back',label:'🔧 Bel Ağrısı'},
+  {id:'neck',label:'🦴 Boyun'},
+  {id:'kyphosis',label:'🧘 Kifoz'},
+  {id:'scoliosis-support',label:'🏥 Skolyoz'},
+  {id:'mobility',label:'🔄 Mobilite'}
+];
 
 /* ── Egzersiz Havuzu Ana Ekranı ──────────────────────────── */
 function renderExerciseLibrary(){
@@ -3466,11 +3483,13 @@ function renderExerciseLibrary(){
   var _curSearch=window._exSearch||'';
   var _curStroke=window._exStroke||'all';
   var isSwim=(branch==='swimming');
+  var isPosture=(branch==='posture');
 
   /* Veri kaynağı */
-  var dataSource=isSwim?EXERCISES_SWIM:EXERCISES_DATA;
+  var dataSource=_getBranchExercises(branch);
   if(!dataSource){
-    el.innerHTML='<div class="rc"><div style="color:var(--text2);font-size:12px;text-align:center;padding:20px 0">'+(isSwim?'Yüzme egzersiz verileri':'Egzersiz verileri')+' yükleniyor...<br>İnterneti kontrol et.</div></div>';
+    var branchLabel=isSwim?'Yüzme egzersiz verileri':isPosture?'Postür egzersiz verileri':'Egzersiz verileri';
+    el.innerHTML='<div class="rc"><div style="color:var(--text2);font-size:12px;text-align:center;padding:20px 0">'+branchLabel+' yükleniyor...<br>İnterneti kontrol et.</div></div>';
     return;
   }
   var exercises=dataSource.exercises||[];
@@ -3513,9 +3532,16 @@ function renderExerciseLibrary(){
   html+='</div>';
 
   /* ── Branş sekmeleri ── */
+  var _tabs=[
+    {id:'fitness',label:'🏋️ Fitness'},
+    {id:'swimming',label:'🏊 Yüzme'},
+    {id:'posture',label:'🧘 Postür'}
+  ];
   html+='<div style="display:flex;background:var(--card2);border-radius:9px;padding:3px;margin-bottom:10px;border:1px solid var(--border)">';
-  html+='<button style="flex:1;padding:8px;border:none;border-radius:6px;font-family:\'Outfit\',sans-serif;font-size:12px;font-weight:600;cursor:pointer;background:'+(!isSwim?'var(--card)':'transparent')+';color:'+(!isSwim?'var(--text)':'var(--text2)')+'" onclick="window._exBranch=\'fitness\';window._exCat=\'all\';window._exStroke=\'all\';renderExerciseLibrary()">🏋️ Fitness</button>';
-  html+='<button style="flex:1;padding:8px;border:none;border-radius:6px;font-family:\'Outfit\',sans-serif;font-size:12px;font-weight:600;cursor:pointer;background:'+(isSwim?'var(--card)':'transparent')+';color:'+(isSwim?'var(--text)':'var(--text2)')+'" onclick="window._exBranch=\'swimming\';window._exCat=\'all\';window._exStroke=\'all\';renderExerciseLibrary()">🏊 Yüzme</button>';
+  _tabs.forEach(function(t){
+    var isSel=(branch===t.id);
+    html+='<button style="flex:1;padding:7px 4px;border:none;border-radius:6px;font-family:\'Outfit\',sans-serif;font-size:11px;font-weight:600;cursor:pointer;background:'+(isSel?'var(--card)':'transparent')+';color:'+(isSel?'var(--text)':'var(--text2)')+'" onclick="window._exBranch=\''+t.id+'\';window._exCat=\'all\';window._exStroke=\'all\';renderExerciseLibrary()">'+t.label+'</button>';
+  });
   html+='</div>';
 
   /* Arama */
@@ -3525,6 +3551,10 @@ function renderExerciseLibrary(){
   html+='<div class="ex-filter-row">';
   if(isSwim){
     SWIM_CATEGORY_GROUPS.forEach(function(g){
+      html+='<div class="ex-chip'+(_curCat===g.id?' sel':'')+'" onclick="window._exCat=\''+g.id+'\';renderExerciseLibrary()">'+g.label+'</div>';
+    });
+  } else if(isPosture){
+    POSTURE_CATEGORY_GROUPS.forEach(function(g){
       html+='<div class="ex-chip'+(_curCat===g.id?' sel':'')+'" onclick="window._exCat=\''+g.id+'\';renderExerciseLibrary()">'+g.label+'</div>';
     });
   } else {
@@ -3560,6 +3590,14 @@ function renderExerciseLibrary(){
         if(e.distance_m) parts.push(e.distance_m+'m');
         parts.push(CATEGORY_TR[e.category]||e.category);
         metaLine=parts.join(' · ');
+      } else if(isPosture){
+        /* Postür: süre + set + kategori */
+        var pparts=[];
+        if(e.duration_sec) pparts.push(e.duration_sec+'sn');
+        if(e.sets&&e.reps) pparts.push(e.sets+'×'+e.reps);
+        if(e.pain_safe) pparts.push('✅ Güvenli');
+        pparts.push(CATEGORY_TR[e.category]||e.category);
+        metaLine=pparts.join(' · ');
       } else {
         /* Fitness: ekipman + kas + zorluk */
         var topMuscle=e.muscles?Object.keys(e.muscles).reduce(function(a,b){return e.muscles[a]>e.muscles[b]?a:b},''):'';
@@ -3777,9 +3815,11 @@ function renderExerciseDetail(exId){
   var ex=_findExercise(exId);
   if(!ex||!ex.id)return;
 
-  /* Bu yüzme egzersizi mi? */
+  /* Bu yüzme veya postür egzersizi mi? */
   var isSwim=false;
+  var isPosture=false;
   if(EXERCISES_SWIM&&EXERCISES_SWIM.exercises.some(function(e){return e.id===exId;})) isSwim=true;
+  if(EXERCISES_POST&&EXERCISES_POST.exercises.some(function(e){return e.id===exId;})) isPosture=true;
 
   var html='<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">'+
     '<button class="btn btn-s" onclick="renderExerciseLibrary()" style="padding:8px 12px;font-size:12px;flex-shrink:0">← Geri</button>'+
@@ -3791,7 +3831,7 @@ function renderExerciseDetail(exId){
     html+='<div style="text-align:center;margin-bottom:14px"><img src="'+ex.gif+'" style="width:100%;max-width:340px;border-radius:14px;border:1px solid var(--border)"></div>';
   } else {
     html+='<div style="background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:32px;text-align:center;margin-bottom:14px;color:var(--text3);font-size:13px">'+
-      (isSwim?'🏊 Hareket animasyonu yakında':'📹 Hareket videosu yakında eklenecek')+'</div>';
+      (isSwim?'🏊 Hareket animasyonu yakında':isPosture?'🧘 Hareket animasyonu yakında':'📹 Hareket videosu yakında eklenecek')+'</div>';
   }
 
   /* Meta badges */
@@ -3822,6 +3862,43 @@ function renderExerciseDetail(exId){
         html+='</div>';
       });
       html+='</div></div>';
+    }
+  }
+
+  /* ── Postür spesifik bilgiler ── */
+  if(isPosture){
+    var postInfo=[];
+    if(ex.duration_sec) postInfo.push({icon:'⏱',label:'Süre',val:ex.duration_sec+' sn'});
+    if(ex.sets&&ex.reps) postInfo.push({icon:'🔄',label:'Set × Tekrar',val:ex.sets+'×'+ex.reps});
+    if(ex.rest_sec) postInfo.push({icon:'💤',label:'Dinlenme',val:ex.rest_sec+' sn'});
+    if(ex.pain_safe) postInfo.push({icon:'✅',label:'Ağrıda Güvenli',val:'Evet'});
+
+    if(postInfo.length){
+      html+='<div class="rc" style="margin-bottom:8px">';
+      html+='<div class="rct">🧘 Egzersiz Bilgileri</div>';
+      html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">';
+      postInfo.forEach(function(info){
+        html+='<div style="background:var(--card2);border-radius:9px;padding:10px;text-align:center">';
+        html+='<div style="font-size:16px;margin-bottom:2px">'+info.icon+'</div>';
+        html+='<div style="font-size:14px;font-weight:700;color:var(--accent)">'+info.val+'</div>';
+        html+='<div style="font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px">'+info.label+'</div>';
+        html+='</div>';
+      });
+      html+='</div></div>';
+    }
+    /* Dikkat notu */
+    if(ex.caution_tr){
+      html+='<div style="background:rgba(255,159,28,.08);border:1px solid rgba(255,159,28,.3);border-radius:11px;padding:10px 14px;margin-bottom:8px">'+
+        '<div style="font-size:12px;color:var(--warn);font-weight:700;margin-bottom:3px">⚠️ Dikkat</div>'+
+        '<div style="font-size:11px;color:var(--text2);line-height:1.5">'+ex.caution_tr+'</div></div>';
+    }
+    /* Hedeflenen durumlar */
+    if(ex.condition_target&&ex.condition_target.length){
+      html+='<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">';
+      ex.condition_target.forEach(function(ct){
+        html+='<span class="badge bb" style="font-size:10px">🎯 '+(CATEGORY_TR[ct]||ct)+'</span>';
+      });
+      html+='</div>';
     }
   }
 
@@ -3916,27 +3993,32 @@ function renderExerciseDetail(exId){
 /* ── YARDIMCI: Branşa göre egzersiz/program verisini getir ─ */
 function _getBranchExercises(branchId){
   if(branchId==='swimming') return EXERCISES_SWIM;
+  if(branchId==='posture') return EXERCISES_POST;
   return EXERCISES_DATA;
 }
 function _getBranchWorkouts(branchId){
   if(branchId==='swimming') return WORKOUTS_SWIM;
+  if(branchId==='posture') return WORKOUTS_POST;
   return WORKOUTS_DATA;
 }
 function _findExercise(exId){
   var ex=null;
   if(EXERCISES_DATA) ex=EXERCISES_DATA.exercises.find(function(e){return e.id===exId;});
   if(!ex&&EXERCISES_SWIM) ex=EXERCISES_SWIM.exercises.find(function(e){return e.id===exId;});
+  if(!ex&&EXERCISES_POST) ex=EXERCISES_POST.exercises.find(function(e){return e.id===exId;});
   return ex||{};
 }
 function _findProgram(progId){
   var prog=null;
   if(WORKOUTS_DATA) prog=WORKOUTS_DATA.workouts.find(function(w){return w.id===progId;});
   if(!prog&&WORKOUTS_SWIM) prog=WORKOUTS_SWIM.workouts.find(function(w){return w.id===progId;});
+  if(!prog&&WORKOUTS_POST) prog=WORKOUTS_POST.workouts.find(function(w){return w.id===progId;});
   if(!prog) prog=getCustomWorkouts().find(function(w){return w.id===progId;});
   return prog;
 }
 function _getBranchForProgram(progId){
   if(WORKOUTS_SWIM&&WORKOUTS_SWIM.workouts.some(function(w){return w.id===progId;})) return 'swimming';
+  if(WORKOUTS_POST&&WORKOUTS_POST.workouts.some(function(w){return w.id===progId;})) return 'posture';
   var custom=getCustomWorkouts().find(function(w){return w.id===progId;});
   if(custom&&custom._branch) return custom._branch;
   return 'fitness';
@@ -4221,6 +4303,28 @@ function renderBranchDetail(branchId){
     html+='<div style="font-size:13px;color:var(--text2);margin-bottom:12px">Henüz bir program seçmedin. Sana uygun programı bul ve başla!</div>';
     html+='<button class="btn btn-p btn-full" onclick="window._browseBranch=\''+branchId+'\';window._browseTab=\'ready\';renderWorkoutBrowse()">📋 Program Seç</button>';
     html+='</div>';
+  }
+
+  /* ── Postür: Özel durum bazlı öneri ── */
+  if(branchId==='posture'&&!prog){
+    var userConds=U.conditions||[];
+    var postRecs=[];
+    if(userConds.indexOf('lower-back')>=0) postRecs.push({prog:'posture-lower-back',label:'Bel Ağrısı Programı',icon:'🔧',reason:'Bel rahatsızlığın var'});
+    if(userConds.indexOf('shoulder-injury')>=0) postRecs.push({prog:'posture-neck-upper',label:'Boyun & Üst Sırt Düzeltme',icon:'🦴',reason:'Omuz rahatsızlığın var'});
+    if(userConds.indexOf('knee-injury')>=0) postRecs.push({prog:'posture-general-mobility',label:'Genel Mobilite',icon:'🔄',reason:'Diz rahatsızlığın için mobilite önemli'});
+    if(!postRecs.length&&userConds.length>0) postRecs.push({prog:'posture-general-mobility',label:'Genel Mobilite',icon:'🔄',reason:'Fiziksel sağlığın için önerilir'});
+    if(postRecs.length){
+      html+='<div style="background:rgba(46,196,182,.06);border:1px solid rgba(46,196,182,.2);border-radius:12px;padding:12px 14px;margin-bottom:8px">';
+      html+='<div style="font-size:12px;font-weight:700;color:var(--success);margin-bottom:8px">💡 Sana Özel Öneriler</div>';
+      postRecs.forEach(function(r){
+        html+='<div style="display:flex;align-items:center;gap:10px;padding:6px 0;cursor:pointer" onclick="selectWorkoutProgram(\''+r.prog+'\',\'posture\')">';
+        html+='<div style="font-size:20px">'+r.icon+'</div>';
+        html+='<div style="flex:1"><div style="font-size:13px;font-weight:600">'+r.label+'</div>';
+        html+='<div style="font-size:10px;color:var(--text2)">'+r.reason+'</div></div>';
+        html+='<span style="color:var(--text3);font-size:16px">›</span></div>';
+      });
+      html+='</div>';
+    }
   }
 
   /* ── Son antrenman özeti (3'lü stat grid) ── */
@@ -4823,6 +4927,7 @@ function _doStartSession(prog){
     var exData=_findExercise(ex.exercise_id);
     var rows=[];
     var isSwim=(_ws.branch==='swimming');
+    var isPost=(_ws.branch==='posture');
     for(var s=0;s<ex.sets;s++){
       if(isSwim){
         /* Yüzme: distance default'u egzersiz verisi veya reps string'inden al */
@@ -4832,6 +4937,14 @@ function _doStartSession(prog){
         rows.push({
           distance:defDist,
           time:prevSet?prevSet.time:'',
+          done:false
+        });
+      } else if(isPost){
+        /* Postür: süre bazlı — duration_sec + tekrar */
+        var defDur=ex.duration_sec||exData.duration_sec||30;
+        rows.push({
+          duration_sec:defDur,
+          reps:prevSet?prevSet.reps:(ex.reps||''),
           done:false
         });
       } else {
@@ -4881,7 +4994,7 @@ function _getPrevSetData(progId,dayIdx,exId){
     var l=logs[i];
     if(l.programId!==progId||l.dayIndex!==dayIdx)continue;
     if(!l.sets)continue;
-    var found=l.sets.find(function(s){return s.exId===exId&&(s.kg||s.distance);});
+    var found=l.sets.find(function(s){return s.exId===exId&&(s.kg||s.distance||s.duration_sec);});
     if(found)return found;
   }
   return null;
@@ -4892,6 +5005,7 @@ function _ws_renderBody(){
   var day=_ws.program.days[_ws.dayIndex];
   var exList=day.exercises;
   var isSwim=(_ws.branch==='swimming');
+  var isPost=(_ws.branch==='posture');
   var html='';
 
   exList.forEach(function(ex,ei){
@@ -4903,10 +5017,14 @@ function _ws_renderBody(){
     /* Meta bilgi satırı */
     var metaParts=[];
     if(isSwim){
-      /* Yüzme: set × mesafe veya reps string'i göster */
       var repStr=ex.reps||ex.distance||'—';
       metaParts.push(ex.sets+'×'+repStr);
       if(exData.stroke) metaParts.push(STROKE_TR[exData.stroke]||exData.stroke);
+    } else if(isPost){
+      var durSec=ex.duration_sec||exData.duration_sec||30;
+      metaParts.push(ex.sets+'×'+durSec+'sn');
+      if(ex.reps) metaParts.push(ex.reps+' tekrar');
+      if(exData.pain_safe) metaParts.push('✅ Güvenli');
     } else {
       metaParts.push(ex.sets+'×'+(ex.reps||'—'));
     }
@@ -4922,19 +5040,30 @@ function _ws_renderBody(){
 
     if(isCurrent||isDone){
       if(isSwim){
-        /* ── Yüzme set kartı: mesafe (m) + pace (dk:sn) ── */
+        /* ── Yüzme set kartı ── */
         html+='<div class="ws-set-header"><span>#</span><span>MESAFE (m)</span><span>PACE (dk:sn)</span><span></span></div>';
         _ws.sets[ei].forEach(function(set,si){
-          /* Mesafe default: egzersizin distance_m alanından veya reps string parse */
           var distPlaceholder='m';
           if(exData.distance_m) distPlaceholder=exData.distance_m;
           else if(ex.reps&&/^\d+m$/.test(ex.reps)) distPlaceholder=ex.reps.replace('m','');
           else if(ex.distance) distPlaceholder=ex.distance;
-
           html+='<div class="ws-set-row">';
           html+='<div class="ws-set-num">'+(si+1)+'</div>';
           html+='<input class="ws-set-input" type="number" inputmode="numeric" placeholder="'+distPlaceholder+'" value="'+(set.distance||'')+'"'+(set.done?' disabled':'')+' onchange="_ws_setVal('+ei+','+si+',\'distance\',this.value)">';
           html+='<input class="ws-set-input" type="text" inputmode="text" placeholder="0:00" value="'+(set.time||'')+'"'+(set.done?' disabled':'')+' onchange="_ws_setVal('+ei+','+si+',\'time\',this.value)">';
+          html+='<button class="ws-set-check'+(set.done?' done':'')+'" onclick="_ws_toggleSet('+ei+','+si+')">'+(set.done?'✓':'○')+'</button>';
+          html+='</div>';
+        });
+      } else if(isPost){
+        /* ── Postür set kartı: SÜRE (sn) + TEKRAR ── */
+        html+='<div class="ws-set-header"><span>#</span><span>SÜRE (sn)</span><span>TEKRAR</span><span></span></div>';
+        _ws.sets[ei].forEach(function(set,si){
+          var durDefault=set.duration_sec||ex.duration_sec||exData.duration_sec||30;
+          var repDefault=ex.reps||'';
+          html+='<div class="ws-set-row">';
+          html+='<div class="ws-set-num">'+(si+1)+'</div>';
+          html+='<div class="ws-set-input" style="display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent);cursor:'+(set.done?'default':'pointer')+';background:'+(set.done?'var(--card2)':'rgba(46,196,182,.08)')+';border-color:'+(set.done?'var(--border)':'var(--success)')+'" '+(set.done?'':'onclick="_wsPostureTimer('+ei+','+si+','+durDefault+')"')+'>'+durDefault+'s'+(set._timerActive?' ⏳':'')+'</div>';
+          html+='<input class="ws-set-input" type="number" inputmode="numeric" placeholder="'+repDefault+'" value="'+(set.reps||'')+'"'+(set.done?' disabled':'')+' onchange="_ws_setVal('+ei+','+si+',\'reps\',this.value)">';
           html+='<button class="ws-set-check'+(set.done?' done':'')+'" onclick="_ws_toggleSet('+ei+','+si+')">'+(set.done?'✓':'○')+'</button>';
           html+='</div>';
         });
@@ -4970,6 +5099,50 @@ function _ws_renderBody(){
 
 function _ws_setVal(ei,si,field,val){
   if(_ws.sets[ei]&&_ws.sets[ei][si])_ws.sets[ei][si][field]=val;
+}
+
+/* ── Postür countdown timer ── */
+var _postureTimerInterval=null;
+function _wsPostureTimer(ei,si,durSec){
+  var set=_ws.sets[ei]&&_ws.sets[ei][si];
+  if(!set||set.done) return;
+  /* Zaten çalışıyorsa durdur */
+  if(set._timerActive){
+    clearInterval(_postureTimerInterval);
+    set._timerActive=false;
+    _ws_renderBody();
+    return;
+  }
+  /* Timer başlat — rest overlay mekanizmasını kullan */
+  set._timerActive=true;
+  _ws_renderBody();
+  var remain=durSec;
+  var overlay=document.getElementById('ws-rest-overlay');
+  var numEl=document.getElementById('ws-rest-num');
+  var nextEl=document.getElementById('ws-rest-next-info');
+  var circle=document.getElementById('ws-rest-circle');
+  var circumference=534;
+  if(overlay) overlay.classList.add('active');
+  if(numEl) numEl.textContent=remain;
+  if(nextEl) nextEl.textContent='Pozisyonu tut!';
+  if(circle) circle.style.strokeDashoffset='0';
+  clearInterval(_postureTimerInterval);
+  _postureTimerInterval=setInterval(function(){
+    remain--;
+    if(numEl) numEl.textContent=remain;
+    if(circle){
+      var progress=1-(remain/durSec);
+      circle.style.strokeDashoffset=(circumference*progress).toFixed(1);
+    }
+    if(remain<=0){
+      clearInterval(_postureTimerInterval);
+      if(overlay) overlay.classList.remove('active');
+      set._timerActive=false;
+      if(navigator.vibrate) navigator.vibrate([100,50,100]);
+      showToast('⏱ Süre doldu! Seti tamamla.','success');
+      _ws_renderBody();
+    }
+  },1000);
 }
 
 function _ws_toggleSet(ei,si){
@@ -5117,8 +5290,9 @@ function _ws_renderReport(){
   ws_skipRest();
 
   var isSwim=(_ws.branch==='swimming');
+  var isPost=(_ws.branch==='posture');
   var elapsedSec=Math.floor((Date.now()-_ws.startTime)/1000);
-  var totalSets=0,doneSets=0,totalReps=0,totalKg=0,totalDistance=0;
+  var totalSets=0,doneSets=0,totalReps=0,totalKg=0,totalDistance=0,totalDurSec=0;
   var muscleHits={};
 
   _ws.sets.forEach(function(exSets,ei){
@@ -5130,6 +5304,9 @@ function _ws_renderReport(){
         doneSets++;
         if(isSwim){
           totalDistance+=parseInt(s.distance)||0;
+        } else if(isPost){
+          totalDurSec+=parseInt(s.duration_sec)||0;
+          totalReps+=parseInt(s.reps)||0;
         } else {
           var reps=parseInt(s.reps)||0;
           var kg=parseFloat(s.kg)||0;
@@ -5147,7 +5324,8 @@ function _ws_renderReport(){
   });
 
   var met=_ws.program.difficulty===3?8:_ws.program.difficulty===2?6:4;
-  if(isSwim) met=met+2; /* yüzme biraz daha yüksek MET */
+  if(isSwim) met=met+2;
+  if(isPost) met=Math.max(3,met-1); /* postür düşük yoğunluklu */
   var weightKg=U.weight||75;
   var hours=elapsedSec/3600;
   var kcal=Math.round(met*weightKg*hours);
@@ -5183,6 +5361,9 @@ function _ws_renderReport(){
   html+='<div class="ws-report-stat"><div class="ws-report-val">'+doneSets+'/'+totalSets+'</div><div class="ws-report-lbl">Set Tamamlandı</div></div>';
   if(isSwim){
     html+='<div class="ws-report-stat"><div class="ws-report-val">'+totalDistance+'m</div><div class="ws-report-lbl">Toplam Mesafe</div></div>';
+  } else if(isPost){
+    var holdMin=Math.floor(totalDurSec/60);
+    html+='<div class="ws-report-stat"><div class="ws-report-val">'+(holdMin>0?holdMin+'dk ':'')+totalDurSec%60+'sn</div><div class="ws-report-lbl">Toplam Tutma</div></div>';
   } else {
     html+='<div class="ws-report-stat"><div class="ws-report-val">'+totalReps+'</div><div class="ws-report-lbl">Toplam Tekrar</div></div>';
   }
@@ -5214,13 +5395,14 @@ function _ws_renderReport(){
   var footer=document.querySelector('.ws-footer');
   if(footer)footer.style.display='none';
 
-  _ws._report={elapsedSec:elapsedSec,kcal:kcal,doneSets:doneSets,totalSets:totalSets,totalReps:totalReps,totalKg:totalKg,totalDistance:totalDistance,muscleHits:muscleHits};
+  _ws._report={elapsedSec:elapsedSec,kcal:kcal,doneSets:doneSets,totalSets:totalSets,totalReps:totalReps,totalKg:totalKg,totalDistance:totalDistance,totalDurSec:totalDurSec,muscleHits:muscleHits};
 }
 
 function _ws_saveAndClose(){
   var logs=getWorkoutLogs();
   var now=new Date();
   var isSwim=(_ws.branch==='swimming');
+  var isPost=(_ws.branch==='posture');
   var entry={
     id:'log_'+now.getTime(),
     programId:_ws.programId,
@@ -5241,6 +5423,8 @@ function _ws_saveAndClose(){
       if(s.done){
         if(isSwim){
           entry.sets.push({exId:ex.exercise_id,distance:s.distance,time:s.time});
+        } else if(isPost){
+          entry.sets.push({exId:ex.exercise_id,duration_sec:s.duration_sec,reps:s.reps});
         } else {
           entry.sets.push({exId:ex.exercise_id,kg:s.kg,reps:s.reps});
         }
@@ -5258,6 +5442,7 @@ function _ws_saveAndClose(){
 function _ws_closeSession(){
   clearInterval(_ws.elapsedInterval);
   clearInterval(_ws.restInterval);
+  clearInterval(_postureTimerInterval);
   ws_skipRest();
   var footer=document.querySelector('.ws-footer');
   if(footer)footer.style.display='flex';
