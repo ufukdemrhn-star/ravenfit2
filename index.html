@@ -3599,18 +3599,19 @@ function renderExerciseLibrary(){
   html+='<div style="font-size:16px;font-weight:700">Egzersiz Havuzu</div>';
   html+='</div>';
 
-  /* ── Branş sekmeleri ── */
-  var _tabs=[
-    {id:'fitness',label:'🏋️ Fitness'},
-    {id:'swimming',label:'🏊 Yüzme'},
-    {id:'posture',label:'🧘 Postür'}
-  ];
-  html+='<div style="display:flex;background:var(--card2);border-radius:9px;padding:3px;margin-bottom:10px;border:1px solid var(--border)">';
-  _tabs.forEach(function(t){
-    var isSel=(branch===t.id);
-    html+='<button style="flex:1;padding:7px 4px;border:none;border-radius:6px;font-family:\'Outfit\',sans-serif;font-size:11px;font-weight:600;cursor:pointer;background:'+(isSel?'var(--card)':'transparent')+';color:'+(isSel?'var(--text)':'var(--text2)')+'" onclick="window._exBranch=\''+t.id+'\';window._exCat=\'all\';window._exStroke=\'all\';renderExerciseLibrary()">'+t.label+'</button>';
-  });
-  html+='</div>';
+  /* ── Branş sekmeleri (sadece aktif branşlar) ── */
+  var allBranchDefs={fitness:{label:'🏋️ Fitness'},swimming:{label:'🏊 Yüzme'},posture:{label:'🧘 Postür'}};
+  var activeBranches=getUserBranches().filter(function(b){return allBranchDefs[b];});
+  /* Eğer sadece 1 branş aktifse sekme gösterme */
+  if(activeBranches.length>1){
+    html+='<div style="display:flex;background:var(--card2);border-radius:9px;padding:3px;margin-bottom:10px;border:1px solid var(--border)">';
+    activeBranches.forEach(function(bId){
+      var isSel=(branch===bId);
+      var lbl=allBranchDefs[bId]?allBranchDefs[bId].label:bId;
+      html+='<button style="flex:1;padding:7px 4px;border:none;border-radius:6px;font-family:\'Outfit\',sans-serif;font-size:11px;font-weight:600;cursor:pointer;background:'+(isSel?'var(--card)':'transparent')+';color:'+(isSel?'var(--text)':'var(--text2)')+'" onclick="window._exBranch=\''+bId+'\';window._exCat=\'all\';window._exStroke=\'all\';renderExerciseLibrary()">'+lbl+'</button>';
+    });
+    html+='</div>';
+  }
 
   /* Arama */
   html+='<input class="ex-search" type="text" placeholder="🔍 Egzersiz ara..." value="'+_curSearch+'" oninput="window._exSearch=this.value;renderExerciseLibrary()">';
@@ -4174,31 +4175,32 @@ function renderWorkoutTools(){
   var el=document.getElementById('workout-main');
   if(!el) return;
   var logs=getWorkoutLogs();
+  var branches=getUserBranches();
 
   var html='<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">';
   html+='<button class="btn btn-s" onclick="renderWorkoutHome()" style="padding:8px 12px;font-size:12px">← Geri</button>';
   html+='<div style="font-size:16px;font-weight:700">🛠️ Araçlar</div></div>';
 
-  /* ── Egzersiz Havuzu (tıklanabilir satır) ── */
-  html+='<div class="rc" style="cursor:pointer;padding:14px" onclick="window._exCat=\'all\';window._exSearch=\'\';renderExerciseLibrary()">';
-  html+='<div style="display:flex;align-items:center;gap:12px">';
-  html+='<div style="font-size:22px">📚</div>';
-  html+='<div style="flex:1"><div style="font-size:14px;font-weight:700">Egzersiz Havuzu</div>';
+  /* ── Egzersiz Havuzu + Antrenman Geçmişi (2 sütun) ── */
   var exCount=0;
-  if(EXERCISES_DATA) exCount+=EXERCISES_DATA.exercises.length;
-  if(EXERCISES_SWIM) exCount+=EXERCISES_SWIM.exercises.length;
-  html+='<div style="font-size:11px;color:var(--text2)">'+(exCount>0?exCount+' egzersiz':'Yükleniyor...')+'</div></div>';
-  html+='<span style="color:var(--text3);font-size:18px">›</span>';
-  html+='</div></div>';
-
-  /* ── Antrenman Geçmişi (tıklanabilir satır) ── */
-  html+='<div class="rc" style="cursor:pointer;padding:14px" onclick="renderWorkoutHistory()">';
-  html+='<div style="display:flex;align-items:center;gap:12px">';
-  html+='<div style="font-size:22px">📋</div>';
-  html+='<div style="flex:1"><div style="font-size:14px;font-weight:700">Antrenman Geçmişi</div>';
-  html+='<div style="font-size:11px;color:var(--text2)">'+logs.length+' kayıt</div></div>';
-  html+='<span style="color:var(--text3);font-size:18px">›</span>';
-  html+='</div></div>';
+  branches.forEach(function(bId){
+    var d=_getBranchExercises(bId);
+    if(d&&d.exercises) exCount+=d.exercises.length;
+  });
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">';
+  /* Egzersiz Havuzu kartı */
+  html+='<div class="wh-card" onclick="window._exCat=\'all\';window._exSearch=\'\';window._exBranch=\''+branches[0]+'\';renderExerciseLibrary()" style="padding:14px 10px;text-align:center">';
+  html+='<div style="font-size:28px;margin-bottom:4px">📚</div>';
+  html+='<div class="wh-card-label" style="font-size:13px">Egzersiz Havuzu</div>';
+  html+='<div style="font-size:10px;color:var(--text2);margin-top:2px">'+(exCount>0?exCount+' egzersiz':'Yükleniyor...')+'</div>';
+  html+='</div>';
+  /* Antrenman Geçmişi kartı */
+  html+='<div class="wh-card" onclick="window._historyBranch=null;renderWorkoutHistory()" style="padding:14px 10px;text-align:center">';
+  html+='<div style="font-size:28px;margin-bottom:4px">📋</div>';
+  html+='<div class="wh-card-label" style="font-size:13px">Antrenman Geçmişi</div>';
+  html+='<div style="font-size:10px;color:var(--text2);margin-top:2px">'+logs.length+' kayıt</div>';
+  html+='</div>';
+  html+='</div>';
 
   /* ── Kronometre (inline) ── */
   html+='<div class="rc">';
@@ -4482,19 +4484,35 @@ function renderWorkoutHistory(){
   if(!el) return;
   var logs=getWorkoutLogs();
   var branchFilter=window._historyBranch||null;
+  var branches=getUserBranches();
 
-  /* Geri butonu — branş filtresi varsa branş detayına, yoksa ana ekrana */
-  var backFn=branchFilter?'window._historyBranch=null;renderBranchDetail(\''+branchFilter+'\')':'renderWorkoutHome()';
+  /* Geri butonu */
+  var backFn='renderWorkoutTools()';
 
   var html='<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">';
   html+='<button class="btn btn-s" onclick="'+backFn+'" style="padding:8px 12px;font-size:12px">← Geri</button>';
   html+='<div style="font-size:16px;font-weight:700">Antrenman Geçmişi</div></div>';
 
+  /* ── Branş filtre butonları ── */
+  var branchIcons={fitness:'🏋️',swimming:'🏊',posture:'🧘'};
+  var branchLabels={fitness:'GYM',swimming:'Yüzme',posture:'Postür'};
+  html+='<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">';
+  /* Tümü butonu */
+  var allSel=!branchFilter;
+  html+='<button onclick="window._historyBranch=null;renderWorkoutHistory()" style="padding:6px 12px;border-radius:8px;border:1.5px solid '+(allSel?'var(--accent)':'var(--border)')+';background:'+(allSel?'rgba(230,57,70,.1)':'var(--card2)')+';color:'+(allSel?'var(--accent)':'var(--text2)')+';font-size:11px;font-weight:600;cursor:pointer;font-family:\'Outfit\',sans-serif">Tümü</button>';
+  branches.forEach(function(bId){
+    var isSel=(branchFilter===bId);
+    var icon=branchIcons[bId]||'💪';
+    var label=branchLabels[bId]||bId;
+    html+='<button onclick="window._historyBranch=\''+bId+'\';renderWorkoutHistory()" style="padding:6px 12px;border-radius:8px;border:1.5px solid '+(isSel?'var(--accent)':'var(--border)')+';background:'+(isSel?'rgba(230,57,70,.1)':'var(--card2)')+';color:'+(isSel?'var(--accent)':'var(--text2)')+';font-size:11px;font-weight:600;cursor:pointer;font-family:\'Outfit\',sans-serif">'+icon+' '+label+'</button>';
+  });
+  html+='</div>';
+
   /* Branş filtresi uygula */
   var filtered=logs;
   if(branchFilter){
     filtered=logs.filter(function(l){
-      return _getBranchForProgram(l.programId)===branchFilter;
+      return _getBranchForProgram(l.programId)===branchFilter||(l.branch===branchFilter);
     });
   }
 
