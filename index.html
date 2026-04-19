@@ -300,6 +300,30 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 .ws-report-stat{background:var(--card2);border-radius:12px;padding:12px;text-align:center}
 .ws-report-val{font-family:'Bebas Neue',cursive;font-size:30px;letter-spacing:1px;color:var(--accent);line-height:1;margin-bottom:3px}
 .ws-report-lbl{font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
+/* Game-like single exercise view */
+.ws-hero-name{font-family:'Bebas Neue',cursive;font-size:28px;letter-spacing:2px;text-align:center;color:var(--text);line-height:1.1;margin-bottom:4px}
+.ws-hero-meta{font-size:11px;color:var(--text2);text-align:center;margin-bottom:12px}
+.ws-video-area{background:var(--card2);border:1px solid var(--border);border-radius:16px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;margin-bottom:14px;overflow:hidden;position:relative}
+.ws-video-area img{width:100%;height:100%;object-fit:cover;border-radius:16px}
+.ws-po-info{background:rgba(46,196,182,.06);border:1px solid rgba(46,196,182,.2);border-radius:10px;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.ws-set-dots{display:flex;justify-content:center;gap:6px;margin-bottom:10px}
+.ws-set-dot{width:10px;height:10px;border-radius:50%;border:2px solid var(--border);background:none;transition:all .2s}
+.ws-set-dot.active{border-color:var(--accent);background:var(--accent);transform:scale(1.2)}
+.ws-set-dot.done{border-color:var(--success);background:var(--success)}
+.ws-set-current{background:var(--card);border:2px solid var(--accent);border-radius:16px;padding:16px;margin-bottom:12px}
+.ws-set-label{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;text-align:center;margin-bottom:10px}
+.ws-input-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.ws-input-group{text-align:center}
+.ws-input-label{font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.ws-input-big{background:var(--card2);border:2px solid var(--border);border-radius:12px;padding:12px 8px;color:var(--text);font-family:'Bebas Neue',cursive;font-size:28px;text-align:center;width:100%;outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none;letter-spacing:1px}
+.ws-input-big:focus{border-color:var(--accent);background:var(--card)}
+.ws-complete-btn{width:100%;padding:14px;border-radius:12px;border:none;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all .15s}
+.ws-nav-footer{display:flex;gap:10px;align-items:center;justify-content:center;padding:6px 0}
+.ws-nav-btn{background:var(--card2);border:1.5px solid var(--border);border-radius:12px;padding:12px 20px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all .15s;flex:1;text-align:center}
+.ws-nav-btn:active{background:var(--card);border-color:var(--accent)}
+.ws-nav-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;flex:2}
+.ws-nav-btn.primary:active{opacity:.85}
+.ws-nav-btn[disabled]{opacity:.3;pointer-events:none}
 /* ── ANTRENMAN ANA EKRANI GRID ───────────────────────────  */
 .wh-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .wh-full{grid-column:1/-1}
@@ -1285,9 +1309,10 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
     <div class="warmup-title" id="warmup-title">ISINMA</div>
     <div style="font-size:13px;color:var(--text2);margin-bottom:8px" id="warmup-desc">Antrenman öncesi 5-10 dk ısınma yapman sakatlık riskini azaltır.</div>
     <div class="warmup-list" id="warmup-list"></div>
-    <div style="display:flex;gap:8px;margin-top:14px">
-      <button class="btn btn-s" onclick="closeWarmup(true)" style="flex:1">Geç</button>
-      <button class="btn btn-p" onclick="closeWarmup(false)" style="flex:2" id="warmup-ok-btn">Anladım, Başla ▶</button>
+    <div style="display:flex;gap:8px;margin-top:14px;align-items:stretch">
+      <button class="btn btn-s" onclick="closeWarmup(true)" style="flex:1;font-size:11px;padding:10px 0">Geç</button>
+      <button class="btn btn-s" onclick="showToast('🚧 Isınma rehberi yapım aşamasında!','warn')" style="flex:1;font-size:11px;padding:10px 0;border-color:var(--warn);color:var(--warn)">🔥 Isın</button>
+      <button class="btn btn-p" onclick="closeWarmup(false)" style="flex:2;font-size:14px;padding:14px 0;font-weight:700" id="warmup-ok-btn">▶ Başlat</button>
     </div>
   </div>
 </div>
@@ -5002,6 +5027,7 @@ function _doStartSession(prog){
   _ws.program=prog;
   _ws.dayIndex=nextDayIdx;
   _ws.exIndex=0;
+  _ws.setIndex=0;
   _ws.finished=false;
   _ws.startTime=Date.now();
   /* Branş bilgisini sakla */
@@ -5047,6 +5073,9 @@ function _doStartSession(prog){
   document.getElementById('ws-prog-name').textContent=prog.name_tr;
   document.getElementById('ws-day-name').textContent=day.name;
   document.getElementById('ws-screen').classList.add('active');
+  /* Footer gizle — navigasyon artık body içinde */
+  var footer=document.querySelector('.ws-footer');
+  if(footer) footer.style.display='none';
   _ws.elapsedInterval=setInterval(_ws_updateElapsed,1000);
   _ws_updateElapsed();
   _ws_renderBody();
@@ -5063,6 +5092,7 @@ var _ws = {
   program: null,
   dayIndex: 0,
   exIndex: 0,
+  setIndex: 0,     /* Aktif set indeksi (tek hareket görünümü için) */
   sets: [],
   startTime: 0,
   elapsedInterval: null,
@@ -5086,105 +5116,150 @@ function _getPrevSetData(progId,dayIdx,exId){
   return null;
 }
 
-/* ── Ekranı render et — branş destekli ────────────────────── */
+/* ── Ekranı render et — tek hareket görünümü (game-like) ── */
 function _ws_renderBody(){
   var day=_ws.program.days[_ws.dayIndex];
   var exList=day.exercises;
   var isSwim=(_ws.branch==='swimming');
   var isPost=(_ws.branch==='posture');
+  var ei=_ws.exIndex;
+  var ex=exList[ei];
+  var exData=_findExercise(ex.exercise_id);
+  var sets=_ws.sets[ei];
+  var totalExercises=exList.length;
+
+  /* Mevcut setin sınırlarını kontrol et */
+  if(_ws.setIndex>=sets.length) _ws.setIndex=sets.length-1;
+  if(_ws.setIndex<0) _ws.setIndex=0;
+  var si=_ws.setIndex;
+  var set=sets[si];
+
   var html='';
 
-  exList.forEach(function(ex,ei){
-    var exData=_findExercise(ex.exercise_id);
-    var isDone=_ws.sets[ei].every(function(s){return s.done;});
-    var isCurrent=ei===_ws.exIndex;
-    var cls='ws-ex-card'+(isCurrent?' current':isDone?' done-card':'');
+  /* ── Egzersiz ilerleme göstergesi ── */
+  html+='<div style="display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:8px">';
+  for(var xi=0;xi<totalExercises;xi++){
+    var exDone=_ws.sets[xi].every(function(s){return s.done;});
+    var exCur=xi===ei;
+    html+='<div style="width:'+(exCur?'20px':'8px')+';height:4px;border-radius:2px;background:'+(exDone?'var(--success)':exCur?'var(--accent)':'var(--border)')+';transition:all .2s"></div>';
+  }
+  html+='</div>';
 
-    /* Meta bilgi satırı */
-    var metaParts=[];
-    if(isSwim){
-      var repStr=ex.reps||ex.distance||'—';
-      metaParts.push(ex.sets+'×'+repStr);
-      if(exData.stroke) metaParts.push(STROKE_TR[exData.stroke]||exData.stroke);
-    } else if(isPost){
-      var durSec=ex.duration_sec||exData.duration_sec||30;
-      metaParts.push(ex.sets+'×'+durSec+'sn');
-      if(ex.reps) metaParts.push(ex.reps+' tekrar');
-      if(exData.pain_safe) metaParts.push('✅ Güvenli');
-    } else {
-      metaParts.push(ex.sets+'×'+(ex.reps||'—'));
-    }
-    if(ex.rest_sec) metaParts.push('⏱ '+ex.rest_sec+'s');
-    if(exData.equipment&&exData.equipment.length) metaParts.push(EQUIPMENT_TR[exData.equipment[0]]||exData.equipment[0]);
+  /* ── Büyük egzersiz adı ── */
+  html+='<div class="ws-hero-name">'+(exData.name_tr||ex.exercise_id)+'</div>';
 
-    html+='<div class="'+cls+'" id="ws-ex-'+ei+'">';
-    html+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">';
-    html+='<div class="ws-ex-name">'+(exData.name_tr||ex.exercise_id)+'</div>';
-    if(isDone) html+='<span style="color:var(--success);font-size:14px;margin-left:auto">✓</span>';
+  /* ── Meta bilgi ── */
+  var metaParts=[];
+  metaParts.push('Egzersiz '+(ei+1)+'/'+totalExercises);
+  if(isSwim&&exData.stroke) metaParts.push(STROKE_TR[exData.stroke]||exData.stroke);
+  if(ex.rest_sec) metaParts.push('Dinlenme: '+ex.rest_sec+'s');
+  if(exData.equipment&&exData.equipment.length) metaParts.push(EQUIPMENT_TR[exData.equipment[0]]||exData.equipment[0]);
+  html+='<div class="ws-hero-meta">'+metaParts.join(' · ')+'</div>';
+
+  /* ── Video / GIF alanı ── */
+  if(exData.gif){
+    html+='<div class="ws-video-area"><img src="'+exData.gif+'" alt="'+exData.name_tr+'"></div>';
+  } else {
+    html+='<div class="ws-video-area">';
+    html+='<div style="font-size:32px;opacity:.4">🎬</div>';
+    html+='<div style="font-size:11px;color:var(--text3)">Hareket videosu yakında eklenecek</div>';
     html+='</div>';
-    html+='<div class="ws-ex-meta">'+metaParts.join(' · ')+'</div>';
+  }
 
-    if(isCurrent||isDone){
-      if(isSwim){
-        /* ── Yüzme set kartı ── */
-        html+='<div class="ws-set-header"><span>#</span><span>MESAFE (m)</span><span>PACE (dk:sn)</span><span></span></div>';
-        _ws.sets[ei].forEach(function(set,si){
-          var distPlaceholder='m';
-          if(exData.distance_m) distPlaceholder=exData.distance_m;
-          else if(ex.reps&&/^\d+m$/.test(ex.reps)) distPlaceholder=ex.reps.replace('m','');
-          else if(ex.distance) distPlaceholder=ex.distance;
-          html+='<div class="ws-set-row">';
-          html+='<div class="ws-set-num">'+(si+1)+'</div>';
-          html+='<input class="ws-set-input" type="number" inputmode="numeric" placeholder="'+distPlaceholder+'" value="'+(set.distance||'')+'"'+(set.done?' disabled':'')+' onchange="_ws_setVal('+ei+','+si+',\'distance\',this.value)">';
-          html+='<input class="ws-set-input" type="text" inputmode="text" placeholder="0:00" value="'+(set.time||'')+'"'+(set.done?' disabled':'')+' onchange="_ws_setVal('+ei+','+si+',\'time\',this.value)">';
-          html+='<button class="ws-set-check'+(set.done?' done':'')+'" onclick="_ws_toggleSet('+ei+','+si+')">'+(set.done?'✓':'○')+'</button>';
-          html+='</div>';
-        });
-      } else if(isPost){
-        /* ── Postür set kartı: SÜRE (sn) + TEKRAR ── */
-        html+='<div class="ws-set-header"><span>#</span><span>SÜRE (sn)</span><span>TEKRAR</span><span></span></div>';
-        _ws.sets[ei].forEach(function(set,si){
-          var durDefault=set.duration_sec||ex.duration_sec||exData.duration_sec||30;
-          var repDefault=ex.reps||'';
-          html+='<div class="ws-set-row">';
-          html+='<div class="ws-set-num">'+(si+1)+'</div>';
-          html+='<div class="ws-set-input" style="display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent);cursor:'+(set.done?'default':'pointer')+';background:'+(set.done?'var(--card2)':'rgba(46,196,182,.08)')+';border-color:'+(set.done?'var(--border)':'var(--success)')+'" '+(set.done?'':'onclick="_wsPostureTimer('+ei+','+si+','+durDefault+')"')+'>'+durDefault+'s'+(set._timerActive?' ⏳':'')+'</div>';
-          html+='<input class="ws-set-input" type="number" inputmode="numeric" placeholder="'+repDefault+'" value="'+(set.reps||'')+'"'+(set.done?' disabled':'')+' onchange="_ws_setVal('+ei+','+si+',\'reps\',this.value)">';
-          html+='<button class="ws-set-check'+(set.done?' done':'')+'" onclick="_ws_toggleSet('+ei+','+si+')">'+(set.done?'✓':'○')+'</button>';
-          html+='</div>';
-        });
-      } else {
-        /* ── GYM set kartı: kg + tekrar ── */
-        html+='<div class="ws-set-header"><span>#</span><span>KG</span><span>TEKRAR</span><span></span></div>';
-        _ws.sets[ei].forEach(function(set,si){
-          html+='<div class="ws-set-row">';
-          html+='<div class="ws-set-num">'+(si+1)+'</div>';
-          var poHint=_ws_getPoHint(_ws.programId,_ws.dayIndex,ex.exercise_id,si,set.kg,set.reps);
-          var kgPlaceholder=poHint&&poHint._prevKg?poHint._prevKg:'kg';
-          var repPlaceholder=poHint&&poHint._prevReps?poHint._prevReps:'tekrar';
-          html+='<input class="ws-set-input" type="number" inputmode="decimal" placeholder="'+kgPlaceholder+'" value="'+(set.kg||'')+'"'+(set.done?' disabled':'')+' onchange="_ws_setVal('+ei+','+si+',\'kg\',this.value)">';
-          html+='<input class="ws-set-input" type="number" inputmode="numeric" placeholder="'+repPlaceholder+'" value="'+(set.reps||'')+'"'+(set.done?' disabled':'')+' onchange="_ws_setVal('+ei+','+si+',\'reps\',this.value)">';
-          html+='<button class="ws-set-check'+(set.done?' done':'')+'" onclick="_ws_toggleSet('+ei+','+si+')">'+(set.done?'✓':'○')+'</button>';
-          html+='</div>';
-          if(set.done&&poHint&&poHint.msg){
-            html+='<div style="padding:0 0 4px 28px">'+
-              '<span class="po-badge po-'+poHint.type+'">'+(poHint.type==='up'?'↑ ':'')+poHint.msg+'</span></div>';
-          }
-        });
-      }
+  /* ── Önceki antrenman PO bilgisi ── */
+  var poHint=null;
+  if(!isSwim&&!isPost){
+    poHint=_ws_getPoHint(_ws.programId,_ws.dayIndex,ex.exercise_id,si,set.kg,set.reps);
+  }
+  if(poHint&&(poHint._prevKg||poHint._prevReps)){
+    html+='<div class="ws-po-info">';
+    html+='<div style="font-size:16px">📊</div>';
+    html+='<div style="flex:1">';
+    html+='<div style="font-size:10px;color:var(--text3);margin-bottom:1px">Önceki Antrenman</div>';
+    html+='<div style="font-size:13px;font-weight:700;color:var(--success)">'+(poHint._prevKg||'—')+' kg × '+(poHint._prevReps||'—')+' tekrar</div>';
+    html+='</div>';
+    if(set.done&&poHint.msg){
+      html+='<span class="po-badge po-'+poHint.type+'" style="font-size:11px">'+(poHint.type==='up'?'↑ ':'')+poHint.msg+'</span>';
     }
     html+='</div>';
+  }
+
+  /* ── Set noktaları ── */
+  html+='<div class="ws-set-dots">';
+  sets.forEach(function(s,di){
+    var cls='ws-set-dot';
+    if(s.done) cls+=' done';
+    else if(di===si) cls+=' active';
+    html+='<div class="'+cls+'" onclick="_ws_goToSet('+di+')"></div>';
   });
+  html+='</div>';
+
+  /* ── Aktif set kartı ── */
+  html+='<div class="ws-set-current">';
+  html+='<div class="ws-set-label">SET '+(si+1)+' / '+sets.length+'</div>';
+
+  if(isSwim){
+    /* Yüzme: mesafe + pace */
+    var distPh=exData.distance_m||'m';
+    html+='<div class="ws-input-row">';
+    html+='<div class="ws-input-group"><div class="ws-input-label">Mesafe (m)</div>';
+    html+='<input class="ws-input-big" type="number" inputmode="numeric" placeholder="'+distPh+'" value="'+(set.distance||'')+'"'+(set.done?' disabled':'')+' onchange="_ws_setVal('+ei+','+si+',\'distance\',this.value)"></div>';
+    html+='<div class="ws-input-group"><div class="ws-input-label">Pace (dk:sn)</div>';
+    html+='<input class="ws-input-big" type="text" inputmode="text" placeholder="0:00" value="'+(set.time||'')+'"'+(set.done?' disabled':'')+' onchange="_ws_setVal('+ei+','+si+',\'time\',this.value)" style="font-size:24px"></div>';
+    html+='</div>';
+  } else if(isPost){
+    /* Postür: süre + tekrar */
+    var durDef=set.duration_sec||ex.duration_sec||exData.duration_sec||30;
+    html+='<div class="ws-input-row">';
+    html+='<div class="ws-input-group"><div class="ws-input-label">Süre</div>';
+    html+='<div class="ws-input-big" style="cursor:'+(set.done?'default':'pointer')+';color:var(--accent);background:'+(set.done?'var(--card2)':'rgba(46,196,182,.08)')+'" '+(set.done?'':'onclick="_wsPostureTimer('+ei+','+si+','+durDef+')"')+'>'+durDef+'s</div></div>';
+    html+='<div class="ws-input-group"><div class="ws-input-label">Tekrar</div>';
+    html+='<input class="ws-input-big" type="number" inputmode="numeric" placeholder="'+(ex.reps||'')+'" value="'+(set.reps||'')+'"'+(set.done?' disabled':'')+' onchange="_ws_setVal('+ei+','+si+',\'reps\',this.value)"></div>';
+    html+='</div>';
+  } else {
+    /* GYM: kg + tekrar */
+    var kgPh=poHint&&poHint._prevKg?poHint._prevKg:'kg';
+    var repPh=poHint&&poHint._prevReps?poHint._prevReps:'tekrar';
+    html+='<div class="ws-input-row">';
+    html+='<div class="ws-input-group"><div class="ws-input-label">Ağırlık (KG)</div>';
+    html+='<input class="ws-input-big" type="number" inputmode="decimal" placeholder="'+kgPh+'" value="'+(set.kg||'')+'"'+(set.done?' disabled':'')+' onchange="_ws_setVal('+ei+','+si+',\'kg\',this.value)"></div>';
+    html+='<div class="ws-input-group"><div class="ws-input-label">Tekrar</div>';
+    html+='<input class="ws-input-big" type="number" inputmode="numeric" placeholder="'+repPh+'" value="'+(set.reps||'')+'"'+(set.done?' disabled':'')+' onchange="_ws_setVal('+ei+','+si+',\'reps\',this.value)"></div>';
+    html+='</div>';
+  }
+
+  /* Set tamamla butonu */
+  if(set.done){
+    html+='<button class="ws-complete-btn" style="background:var(--success);color:#fff" onclick="_ws_toggleSet('+ei+','+si+')">✓ Tamamlandı — Geri Al</button>';
+  } else {
+    html+='<button class="ws-complete-btn" style="background:var(--accent);color:#fff" onclick="_ws_toggleSet('+ei+','+si+')">✅ Seti Tamamla</button>';
+  }
+  html+='</div>';
+
+  /* ── Alt navigasyon (oyun benzeri) ── */
+  html+='<div class="ws-nav-footer">';
+  var allExDone=sets.every(function(s){return s.done;});
+  var isLastEx=(ei>=totalExercises-1);
+  html+='<button class="ws-nav-btn" onclick="ws_prevExercise()" '+(ei===0?'disabled':'')+'>← Önceki</button>';
+  if(isLastEx&&allExDone){
+    html+='<button class="ws-nav-btn primary" onclick="ws_nextExercise()">✅ Bitir</button>';
+  } else {
+    html+='<button class="ws-nav-btn primary" onclick="ws_nextExercise()" '+(isLastEx?'':'')+'>'+(isLastEx?'Bitir →':'Sonraki →')+'</button>';
+  }
+  html+='</div>';
 
   document.getElementById('ws-body').innerHTML=html;
-  setTimeout(function(){
-    var card=document.getElementById('ws-ex-'+_ws.exIndex);
-    if(card)card.scrollIntoView({behavior:'smooth',block:'start'});
-  },100);
+  window.scrollTo(0,0);
 }
 
 function _ws_setVal(ei,si,field,val){
   if(_ws.sets[ei]&&_ws.sets[ei][si])_ws.sets[ei][si][field]=val;
+}
+
+/* ── Set navigasyonu ── */
+function _ws_goToSet(si){
+  _ws.setIndex=si;
+  _ws_renderBody();
 }
 
 /* ── Postür countdown timer ── */
@@ -5241,20 +5316,18 @@ function _ws_toggleSet(ei,si){
     var restSec=ex.rest_sec||60;
     var allDone=_ws.sets[ei].every(function(s){return s.done;});
     if(!allDone){
+      /* Sonraki tamamlanmamış sete git */
       var nextSi=si+1;
+      while(nextSi<_ws.sets[ei].length&&_ws.sets[ei][nextSi].done) nextSi++;
+      if(nextSi<_ws.sets[ei].length) _ws.setIndex=nextSi;
       var nextInfo='Set '+(nextSi+1)+' / '+_ws.sets[ei].length;
       _ws_startRest(restSec,nextInfo);
     } else {
+      /* Tüm setler bitti */
       var nextEx=_ws.program.days[_ws.dayIndex].exercises[ei+1];
       if(nextEx){
         var nextExData=_findExercise(nextEx.exercise_id);
         _ws_startRest(restSec,'Sıradaki: '+(nextExData.name_tr||nextEx.exercise_id));
-      }
-      if(ei===_ws.exIndex){
-        var nextIdx=ei+1;
-        if(nextIdx<_ws.program.days[_ws.dayIndex].exercises.length){
-          _ws.exIndex=nextIdx;
-        }
       }
     }
   }
@@ -5270,33 +5343,25 @@ function ws_nextExercise(){
     return;
   }
   _ws.exIndex++;
+  _ws.setIndex=0;
   _ws_renderBody();
   _ws_updateProgress();
 }
 function ws_prevExercise(){
   if(_ws.exIndex<=0)return;
   _ws.exIndex--;
+  _ws.setIndex=0;
   _ws_renderBody();
   _ws_updateProgress();
 }
 
 /* ── Progress ────────────────────────────────────────────── */
 function _ws_updateProgress(){
-  var total=_ws.program.days[_ws.dayIndex].exercises.length;
   var doneSets=0,totalSets=0;
   _ws.sets.forEach(function(ex){ex.forEach(function(s){totalSets++;if(s.done)doneSets++;});});
   var pct=totalSets>0?Math.round(doneSets/totalSets*100):0;
   var fill=document.getElementById('ws-prog-fill');
   if(fill)fill.style.width=pct+'%';
-
-  var btnNext=document.getElementById('ws-btn-next');
-  var btnPrev=document.getElementById('ws-btn-prev');
-  if(btnPrev)btnPrev.style.opacity=_ws.exIndex===0?'0.3':'1';
-  if(btnNext){
-    var isLast=_ws.exIndex>=total-1;
-    var allCurrentDone=_ws.sets[_ws.exIndex]&&_ws.sets[_ws.exIndex].every(function(s){return s.done;});
-    btnNext.textContent=isLast?(allCurrentDone?'✅ Antrenmanı Bitir':'Antrenmanı Bitir'):'Sonraki Egzersiz →';
-  }
 }
 
 /* ── Elapsed timer ───────────────────────────────────────── */
