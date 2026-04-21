@@ -541,6 +541,42 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 .badge-cell-name{font-size:9px;font-weight:700;color:var(--text2);text-align:center;line-height:1.2}
 .badge-cell-date{font-size:8px;color:var(--text3)}
 
+/* ── HESAPLAYICILAR ─────────────────────────────────── */
+.calc-overlay{position:fixed;inset:0;background:var(--bg);z-index:800;display:none;flex-direction:column;overflow:hidden}
+.calc-overlay.active{display:flex}
+.calc-header{background:var(--hbg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.calc-header-title{flex:1;font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:2px;line-height:1}
+.calc-header-sub{font-size:10px;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.calc-close{background:none;border:none;color:var(--text2);cursor:pointer;padding:4px 8px;font-size:22px}
+.calc-body{flex:1;overflow-y:auto;padding:18px}
+.calc-grid-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:14px}
+.calc-label{font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.calc-input{background:var(--card2);border:2px solid var(--border);border-radius:12px;padding:14px 12px;color:var(--text);font-family:'Bebas Neue',cursive;font-size:32px;letter-spacing:1px;text-align:center;width:100%;outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none}
+.calc-input:focus{border-color:var(--accent);background:var(--card)}
+.calc-result{background:var(--card2);border-radius:14px;padding:16px;margin-bottom:10px;text-align:center}
+.calc-result-val{font-family:'Bebas Neue',cursive;font-size:44px;letter-spacing:2px;color:var(--accent);line-height:1}
+.calc-result-unit{font-size:13px;color:var(--text2);margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:1px}
+.calc-result-sub{font-size:11px;color:var(--text3);margin-top:6px}
+.calc-btn-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
+.calc-btn-grid.three{grid-template-columns:repeat(3,1fr)}
+.calc-btn-grid.two{grid-template-columns:repeat(2,1fr)}
+.calc-btn{background:var(--card2);border:1.5px solid var(--border);border-radius:10px;padding:10px 4px;color:var(--text2);font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all .15s;text-align:center}
+.calc-btn:active,.calc-btn.sel{background:var(--accent);border-color:var(--accent);color:#fff}
+.calc-formula-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px}
+.calc-formula-cell{background:var(--card2);border-radius:10px;padding:10px;text-align:center}
+.calc-formula-val{font-family:'Bebas Neue',cursive;font-size:22px;color:var(--text);line-height:1}
+.calc-formula-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
+.calc-percentage-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}
+.calc-percentage-row:last-child{border-bottom:none}
+.calc-pct-pct{font-weight:700;color:var(--accent);width:50px}
+.calc-pct-val{font-family:'Bebas Neue',cursive;font-size:18px;color:var(--text)}
+.calc-pct-range{font-size:10px;color:var(--text2)}
+.calc-tool-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:16px 10px;cursor:pointer;text-align:center;-webkit-tap-highlight-color:transparent;transition:all .18s}
+.calc-tool-card:active{border-color:var(--accent);transform:scale(.97)}
+.calc-tool-icon{font-size:30px;line-height:1;margin-bottom:4px}
+.calc-tool-label{font-family:'Bebas Neue',cursive;font-size:14px;letter-spacing:1px;color:var(--text);line-height:1.1}
+.calc-tool-sub{font-size:9px;color:var(--text3);margin-top:2px}
+
 @media(max-width:380px){.frow,.gender-grid{grid-template-columns:1fr}.splash-title{font-size:52px}.tb{font-size:9px}.r-stats{gap:10px}}
 </style>
 
@@ -1144,6 +1180,25 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
         <div class="tdot" data-t="light"   style="background:#E8E4DC;border:2px solid #C4BFB6" onclick="setTheme('light')" title="Light"></div>
       </div>
     </div>
+    <!-- Birim sistemi -->
+    <div class="sdw-theme-row">
+      <div class="sdw-theme-lbl">⚖️ Ağırlık Birimi</div>
+      <div style="display:flex;background:var(--card2);border-radius:9px;padding:3px;border:1px solid var(--border)">
+        <button data-unit-btn="kg" onclick="setUnit('kg')" style="flex:1;padding:9px;border:none;border-radius:6px;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;cursor:pointer;background:transparent;color:var(--text2)">KG (Metrik)</button>
+        <button data-unit-btn="lb" onclick="setUnit('lb')" style="flex:1;padding:9px;border:none;border-radius:6px;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;cursor:pointer;background:transparent;color:var(--text2)">LB (İngiliz)</button>
+      </div>
+    </div>
+    <!-- Seviye -->
+    <div class="sdw-theme-row">
+      <div class="sdw-theme-lbl">🎚️ Antrenman Seviyesi</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+        <button data-level-btn="auto" onclick="setUserLevelMode('auto');refreshLevelButtons()" style="padding:8px 4px;border:1.5px solid var(--border);border-radius:8px;background:var(--card2);color:var(--text2);font-family:'Outfit',sans-serif;font-size:11px;font-weight:600;cursor:pointer">🤖 Otomatik</button>
+        <button data-level-btn="beginner" onclick="setUserLevelMode('beginner');refreshLevelButtons()" style="padding:8px 4px;border:1.5px solid var(--border);border-radius:8px;background:var(--card2);color:var(--text2);font-family:'Outfit',sans-serif;font-size:11px;font-weight:600;cursor:pointer">🌱 Yeni Başlayan</button>
+        <button data-level-btn="intermediate" onclick="setUserLevelMode('intermediate');refreshLevelButtons()" style="padding:8px 4px;border:1.5px solid var(--border);border-radius:8px;background:var(--card2);color:var(--text2);font-family:'Outfit',sans-serif;font-size:11px;font-weight:600;cursor:pointer">💪 Orta Seviye</button>
+        <button data-level-btn="advanced" onclick="setUserLevelMode('advanced');refreshLevelButtons()" style="padding:8px 4px;border:1.5px solid var(--border);border-radius:8px;background:var(--card2);color:var(--text2);font-family:'Outfit',sans-serif;font-size:11px;font-weight:600;cursor:pointer">🔥 İleri Seviye</button>
+      </div>
+      <div id="sdw-level-auto-info" style="margin-top:6px;font-size:10px;color:var(--text3)">—</div>
+    </div>
     <div class="sdw-sep"></div>
     <button class="sdw-item" onclick="startWizard();closeSettingsDrawer()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
@@ -1307,6 +1362,18 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
   </div>
 </div>
 
+<!-- ══ HESAPLAYICI OVERLAY ═══════════════════════════════════ -->
+<div class="calc-overlay" id="calc-overlay">
+  <div class="calc-header">
+    <button class="calc-close" onclick="closeCalculator()">✕</button>
+    <div>
+      <div class="calc-header-sub" id="calc-header-sub">HESAPLAYICI</div>
+      <div class="calc-header-title" id="calc-header-title">—</div>
+    </div>
+  </div>
+  <div class="calc-body" id="calc-body"></div>
+</div>
+
 <!-- ══ ISINMA / SOĞUMA OVERLAY ══════════════════════════════ -->
 <div class="warmup-overlay" id="warmup-overlay">
   <div class="warmup-card">
@@ -1332,6 +1399,57 @@ function showToast(msg,type){var t=document.getElementById('rf-toast');if(!t)ret
 function showConfirm(title,body,cb,okLabel){_rfConfirmCb=cb||null;document.getElementById('rf-confirm-title').textContent=title||'Emin misin?';document.getElementById('rf-confirm-body').textContent=body||'';document.getElementById('rf-confirm-ok').textContent=okLabel||'Evet';document.getElementById('rf-confirm-overlay').classList.add('active');}
 function rfConfirmOk(){document.getElementById('rf-confirm-overlay').classList.remove('active');if(typeof _rfConfirmCb==='function')_rfConfirmCb();_rfConfirmCb=null;}
 function rfConfirmCancel(){document.getElementById('rf-confirm-overlay').classList.remove('active');_rfConfirmCb=null;}
+
+/* ══════════════════════════════════════════════════════════
+   ⚖️ BİRİM SİSTEMİ (kg / lb)
+   ══════════════════════════════════════════════════════════ */
+function getUnit(){return localStorage.getItem('rf_unit')||'kg';}
+function setUnit(u){
+  localStorage.setItem('rf_unit',u);
+  saveToFirebase();
+  /* Anlık gösterim güncelleme */
+  document.querySelectorAll('[data-unit-btn]').forEach(function(b){
+    b.classList.toggle('sel',b.dataset.unitBtn===u);
+  });
+  /* Açık hesaplayıcı varsa yeniden render */
+  if(_activeCalc) renderCalculator(_activeCalc);
+  showToast('⚖️ Birim: '+u.toUpperCase(),'success');
+}
+function kgToUnit(kg){
+  if(kg==null||kg==='')return '';
+  return getUnit()==='lb'?(kg*2.20462).toFixed(1):parseFloat(kg).toFixed(1);
+}
+function unitToKg(val){
+  if(val==null||val==='')return null;
+  var v=parseFloat(val);if(isNaN(v))return null;
+  return getUnit()==='lb'?v/2.20462:v;
+}
+function unitLabel(){return getUnit().toUpperCase();}
+
+/* ══════════════════════════════════════════════════════════
+   🎚️ KULLANICI SEVİYE SİSTEMİ (otomatik + manuel override)
+   ══════════════════════════════════════════════════════════ */
+function getUserLevelMode(){return localStorage.getItem('rf_level_mode')||'auto';}
+function setUserLevelMode(m){
+  localStorage.setItem('rf_level_mode',m);
+  saveToFirebase();
+}
+function getUserLevel(){
+  var mode=getUserLevelMode();
+  if(mode==='beginner') return 'beginner';
+  if(mode==='intermediate') return 'intermediate';
+  if(mode==='advanced') return 'advanced';
+  /* Otomatik hesapla */
+  var logs=getWorkoutLogs();
+  if(logs.length>=50) return 'advanced';
+  if(logs.length>=10) return 'intermediate';
+  return 'beginner';
+}
+function getUserLevelLabel(){
+  var l=getUserLevel();
+  var map={beginner:'🌱 Yeni Başlayan',intermediate:'💪 Orta Seviye',advanced:'🔥 İleri Seviye'};
+  return map[l]||'—';
+}
 
 var step=0, U={}, R={}, A={}, BT={}, selST=null, selGL=null, _editingEntryIdx=null;
 var CONDITIONS_DATA=null;
@@ -2416,10 +2534,35 @@ function setAvatarInitials(nick){
 function openSettingsDrawer(){
   document.getElementById('settings-drawer').classList.add('open');
   document.getElementById('sdw-overlay').classList.add('open');
+  /* Birim + seviye butonlarını sync et */
+  var unit=getUnit();
+  document.querySelectorAll('[data-unit-btn]').forEach(function(b){
+    var isSel=b.dataset.unitBtn===unit;
+    b.style.background=isSel?'var(--accent)':'transparent';
+    b.style.color=isSel?'#fff':'var(--text2)';
+  });
+  refreshLevelButtons();
 }
 function closeSettingsDrawer(){
   document.getElementById('settings-drawer').classList.remove('open');
   document.getElementById('sdw-overlay').classList.remove('open');
+}
+function refreshLevelButtons(){
+  var mode=getUserLevelMode();
+  document.querySelectorAll('[data-level-btn]').forEach(function(b){
+    var isSel=b.dataset.levelBtn===mode;
+    b.style.background=isSel?'var(--accent)':'var(--card2)';
+    b.style.color=isSel?'#fff':'var(--text2)';
+    b.style.borderColor=isSel?'var(--accent)':'var(--border)';
+  });
+  var info=document.getElementById('sdw-level-auto-info');
+  if(info){
+    if(mode==='auto'){
+      info.textContent='🤖 Şu anki seviyen otomatik: '+getUserLevelLabel()+' ('+getWorkoutLogs().length+' antrenman kaydı)';
+    } else {
+      info.textContent='✋ Manuel olarak ayarladın: '+getUserLevelLabel();
+    }
+  }
 }
 
 function drawSvgChart(cId,entries,key,label,cssVar){
@@ -4260,6 +4403,21 @@ function renderWorkoutTools(){
   html+='<button class="btn btn-s" style="padding:5px 10px;font-size:10px" onclick="_toolsResetSets()">Sıfırla</button>';
   html+='</div></div>';
 
+  /* ── 🧮 HESAPLAYICILAR ── */
+  html+='<div class="rc">';
+  html+='<div class="rct">🧮 Hesaplayıcılar</div>';
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px">';
+  html+='<div class="calc-tool-card" onclick="openCalculator(\'1rm\')"><div class="calc-tool-icon">💪</div><div class="calc-tool-label">1RM</div><div class="calc-tool-sub">Max Tahmini</div></div>';
+  html+='<div class="calc-tool-card" onclick="openCalculator(\'working-set\')"><div class="calc-tool-icon">⚙️</div><div class="calc-tool-label">Çalışma Seti</div><div class="calc-tool-sub">%1RM × Rep</div></div>';
+  html+='<div class="calc-tool-card" onclick="openCalculator(\'sleep\')"><div class="calc-tool-icon">😴</div><div class="calc-tool-label">Uyku</div><div class="calc-tool-sub">REM Döngüsü</div></div>';
+  html+='</div>';
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">';
+  html+='<div class="calc-tool-card" style="opacity:.5;pointer-events:none" onclick="showToast(\'🚧 Yakında!\')"><div class="calc-tool-icon">🎯</div><div class="calc-tool-label">PR Denemesi</div><div class="calc-tool-sub">Yakında</div></div>';
+  html+='<div class="calc-tool-card" style="opacity:.5;pointer-events:none" onclick="showToast(\'🚧 Yakında!\')"><div class="calc-tool-icon">🏋️</div><div class="calc-tool-label">Plaka Yükle</div><div class="calc-tool-sub">Yakında</div></div>';
+  html+='</div>';
+  html+='<div style="margin-top:10px;font-size:10px;color:var(--text3);text-align:center">Seviyen: <strong>'+getUserLevelLabel()+'</strong> · Birim: <strong>'+unitLabel()+'</strong></div>';
+  html+='</div>';
+
   el.innerHTML=html;
 
   /* Sync: eğer krono daha önce çalışıyorsa display'ı güncelle */
@@ -4360,6 +4518,394 @@ function _toolsResetSets(){
   var gsc=document.getElementById('set-count');
   if(gsc) gsc.textContent='0';
   _toolsSkipRest();
+}
+
+/* ══════════════════════════════════════════════════════════
+   🧮 HESAPLAYICILAR SİSTEMİ
+   ══════════════════════════════════════════════════════════ */
+var _activeCalc=null;
+var _calcState={};
+
+function openCalculator(id){
+  _activeCalc=id;
+  _calcState={};
+  var names={
+    '1rm':{title:'1RM TAHMİNİ',sub:'MAX KALDIRIŞ',icon:'💪'},
+    'working-set':{title:'ÇALIŞMA SETİ',sub:'HEDEF % × REP',icon:'⚙️'},
+    'sleep':{title:'UYKU DÖNGÜSÜ',sub:'REM OPTİMİZASYON',icon:'😴'}
+  };
+  var info=names[id]||{title:id.toUpperCase(),sub:'HESAPLAYICI',icon:'🧮'};
+  document.getElementById('calc-header-title').textContent=info.icon+' '+info.title;
+  document.getElementById('calc-header-sub').textContent=info.sub;
+  document.getElementById('calc-overlay').classList.add('active');
+  renderCalculator(id);
+}
+
+function closeCalculator(){
+  _activeCalc=null;
+  document.getElementById('calc-overlay').classList.remove('active');
+}
+
+function renderCalculator(id){
+  var body=document.getElementById('calc-body');
+  if(!body) return;
+  if(id==='1rm') body.innerHTML=_calc1RM();
+  else if(id==='working-set') body.innerHTML=_calcWorkingSet();
+  else if(id==='sleep') body.innerHTML=_calcSleep();
+  else body.innerHTML='<div style="text-align:center;color:var(--text2);padding:40px">🚧 Yapım aşamasında</div>';
+}
+
+/* ── 1RM Formülleri ── */
+function _formulaEpley(kg,reps){return kg*(1+reps/30);}
+function _formulaBrzycki(kg,reps){return reps<37?kg*36/(37-reps):kg*(1+reps/30);}
+function _formulaLombardi(kg,reps){return kg*Math.pow(reps,0.10);}
+
+/* ── Kullanıcının en iyi setini log'lardan bul ── */
+function _findBestSet(){
+  var logs=getWorkoutLogs();
+  var bestEstimated=0;
+  var bestKg=0,bestReps=0,bestExId=null,bestExName='';
+  logs.forEach(function(l){
+    if(!l.sets)return;
+    l.sets.forEach(function(s){
+      if(!s.kg||!s.reps)return;
+      var kg=parseFloat(s.kg),reps=parseInt(s.reps);
+      if(!kg||!reps||reps>12)return; /* 1RM formülleri 12+ rep için geçersiz */
+      var est=_formulaEpley(kg,reps);
+      if(est>bestEstimated){
+        bestEstimated=est;
+        bestKg=kg;bestReps=reps;bestExId=s.exId;
+        var ex=_findExercise(s.exId);
+        bestExName=ex.name_tr||s.exId;
+      }
+    });
+  });
+  return bestEstimated>0?{kg:bestKg,reps:bestReps,exId:bestExId,exName:bestExName,estimated:bestEstimated}:null;
+}
+
+/* ══ 1. 1RM HESAPLAYICI ══════════════════════════════════ */
+function _calc1RM(){
+  var kgVal=_calcState.kg||'';
+  var repVal=_calcState.reps||'';
+  var html='';
+
+  /* Input kartı */
+  html+='<div class="calc-grid-card">';
+  html+='<div class="calc-label">Kaldırdığın Yük ('+unitLabel()+')</div>';
+  html+='<input class="calc-input" type="number" inputmode="decimal" step="0.5" placeholder="—" value="'+kgVal+'" oninput="_calcState.kg=this.value;_calc1RMUpdate()" id="calc-1rm-kg">';
+  html+='<div style="height:10px"></div>';
+  html+='<div class="calc-label">Tekrar Sayısı (1-12 arası)</div>';
+  html+='<input class="calc-input" type="number" inputmode="numeric" min="1" max="12" placeholder="—" value="'+repVal+'" oninput="_calcState.reps=this.value;_calc1RMUpdate()" id="calc-1rm-reps">';
+  html+='<button class="btn btn-s btn-full" onclick="_calc1RMAutoFill()" style="margin-top:12px;font-size:12px">📊 Son Antrenmandan Al</button>';
+  html+='</div>';
+
+  /* Sonuç */
+  html+='<div id="calc-1rm-result"></div>';
+
+  /* Açıklama */
+  html+='<div class="calc-grid-card" style="background:var(--card2)">';
+  html+='<div style="font-size:11px;color:var(--text2);line-height:1.5">';
+  html+='💡 <strong>1RM nedir?</strong> Bir egzersizi 1 tekrar yapabileceğin maksimum ağırlık.<br>';
+  html+='Örnek: 80 kg × 8 tekrar yaptıysan, tahmini 1RM\'in ~101 kg.<br><br>';
+  html+='⚠️ Bu sadece tahmindir. Gerçek 1RM denemesi için ısınma yapıp kademeli artır.';
+  html+='</div></div>';
+
+  setTimeout(_calc1RMUpdate,30);
+  return html;
+}
+
+function _calc1RMUpdate(){
+  var kg=parseFloat(_calcState.kg)||0;
+  var reps=parseInt(_calcState.reps)||0;
+  var el=document.getElementById('calc-1rm-result');
+  if(!el) return;
+  if(!kg||!reps||reps<1||reps>12){
+    el.innerHTML='<div class="calc-result" style="opacity:.5"><div class="calc-result-val">—</div><div class="calc-result-unit">'+unitLabel()+'</div><div class="calc-result-sub">Yük ve tekrar gir (1-12 rep)</div></div>';
+    return;
+  }
+  /* Kullanıcı zaten kendi biriminde girdi — formüllere direkt ver */
+  var ep=_formulaEpley(kg,reps);
+  var br=_formulaBrzycki(kg,reps);
+  var lo=_formulaLombardi(kg,reps);
+  var avg=(ep+br+lo)/3;
+
+  var html='<div class="calc-result">';
+  html+='<div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">TAHMİNİ 1RM</div>';
+  html+='<div class="calc-result-val">'+avg.toFixed(1)+'</div>';
+  html+='<div class="calc-result-unit">'+unitLabel()+'</div>';
+  html+='<div class="calc-result-sub">3 formül ortalaması</div>';
+  html+='</div>';
+
+  /* 3 formül detay */
+  html+='<div class="calc-formula-grid">';
+  html+='<div class="calc-formula-cell"><div class="calc-formula-val">'+ep.toFixed(1)+'</div><div class="calc-formula-lbl">Epley</div></div>';
+  html+='<div class="calc-formula-cell"><div class="calc-formula-val">'+br.toFixed(1)+'</div><div class="calc-formula-lbl">Brzycki</div></div>';
+  html+='<div class="calc-formula-cell"><div class="calc-formula-val">'+lo.toFixed(1)+'</div><div class="calc-formula-lbl">Lombardi</div></div>';
+  html+='</div>';
+
+  /* Yüzdelik dağılım */
+  html+='<div class="calc-grid-card" style="margin-top:12px"><div class="calc-label">% 1RM dağılımı</div>';
+  var pcts=[95,90,85,80,75,70,65,60,50];
+  var repMap={95:'1-2',90:'3-4',85:'5-6',80:'7-8',75:'9-10',70:'10-12',65:'12-15',60:'15-18',50:'20+'};
+  pcts.forEach(function(p){
+    var v=(avg*p/100);
+    html+='<div class="calc-percentage-row">';
+    html+='<span class="calc-pct-pct">%'+p+'</span>';
+    html+='<span class="calc-pct-val">'+v.toFixed(1)+' '+unitLabel()+'</span>';
+    html+='<span class="calc-pct-range">'+repMap[p]+' rep</span>';
+    html+='</div>';
+  });
+  html+='</div>';
+
+  el.innerHTML=html;
+}
+
+function _calc1RMAutoFill(){
+  var best=_findBestSet();
+  if(!best){
+    showToast('📭 Henüz antrenman kaydın yok','warn');
+    return;
+  }
+  /* Kullanıcının birimine çevir */
+  var displayKg=getUnit()==='lb'?(best.kg*2.20462).toFixed(1):best.kg.toFixed(1);
+  _calcState.kg=displayKg;
+  _calcState.reps=best.reps;
+  var kgInp=document.getElementById('calc-1rm-kg');
+  var repInp=document.getElementById('calc-1rm-reps');
+  if(kgInp) kgInp.value=displayKg;
+  if(repInp) repInp.value=best.reps;
+  showToast('✅ '+best.exName+' seti yüklendi ('+displayKg+' '+unitLabel()+' × '+best.reps+')','success');
+  _calc1RMUpdate();
+}
+
+/* ══ 2. ÇALIŞMA SETİ HESAPLAYICI ══════════════════════════ */
+function _calcWorkingSet(){
+  var rm=_calcState.rm||'';
+  var goal=_calcState.goal||'hypertrophy';
+  var html='';
+
+  html+='<div class="calc-grid-card">';
+  html+='<div class="calc-label">1RM Ağırlığın ('+unitLabel()+')</div>';
+  html+='<input class="calc-input" type="number" inputmode="decimal" step="0.5" placeholder="—" value="'+rm+'" oninput="_calcState.rm=this.value;_calcWorkingSetUpdate()" id="calc-ws-rm">';
+  html+='<button class="btn btn-s btn-full" onclick="_calcWSFromBest()" style="margin-top:10px;font-size:12px">📊 Son Antrenmandan Hesapla</button>';
+  html+='</div>';
+
+  /* Hedef seçimi */
+  html+='<div class="calc-grid-card">';
+  html+='<div class="calc-label">Hedefin ne?</div>';
+  html+='<div class="calc-btn-grid three">';
+  var goals=[
+    {id:'strength',lbl:'💪 Güç',desc:'85-95% × 3-5'},
+    {id:'hypertrophy',lbl:'🔥 Kas',desc:'70-85% × 6-12'},
+    {id:'endurance',lbl:'🏃 Day.',desc:'50-70% × 12-20'}
+  ];
+  goals.forEach(function(g){
+    var sel=goal===g.id?' sel':'';
+    html+='<div class="calc-btn'+sel+'" onclick="_calcState.goal=\''+g.id+'\';_calcWorkingSetUpdate()"><div>'+g.lbl+'</div><div style="font-size:8px;margin-top:2px">'+g.desc+'</div></div>';
+  });
+  html+='</div></div>';
+
+  html+='<div id="calc-ws-result"></div>';
+
+  html+='<div class="calc-grid-card" style="background:var(--card2)">';
+  html+='<div style="font-size:11px;color:var(--text2);line-height:1.5">';
+  html+='💡 <strong>Çalışma seti:</strong> 1RM\'inin yüzdesine göre hedef rep aralığında yapılan gerçek antrenman setleri.<br><br>';
+  html+='<strong>Güç:</strong> Ağır yük, az rep — maksimal kuvvet için.<br>';
+  html+='<strong>Kas:</strong> Orta yük, orta rep — hipertrofi için (en popüler).<br>';
+  html+='<strong>Dayanıklılık:</strong> Hafif yük, çok rep — kas dayanıklılığı için.';
+  html+='</div></div>';
+
+  setTimeout(_calcWorkingSetUpdate,30);
+  return html;
+}
+
+function _calcWorkingSetUpdate(){
+  var rm=parseFloat(_calcState.rm)||0;
+  var goal=_calcState.goal||'hypertrophy';
+  var el=document.getElementById('calc-ws-result');
+  if(!el) return;
+  if(!rm){
+    el.innerHTML='<div class="calc-result" style="opacity:.5"><div class="calc-result-val">—</div><div class="calc-result-unit">Seti hesaplamak için 1RM gir</div></div>';
+    return;
+  }
+
+  /* Hedef aralıkları */
+  var ranges={
+    strength:{pcts:[95,90,85],reps:['1-2','3-4','5-6'],sets:'4-6 set',rest:'3-5 dk'},
+    hypertrophy:{pcts:[80,75,70],reps:['6-8','8-10','10-12'],sets:'3-4 set',rest:'60-90 sn'},
+    endurance:{pcts:[65,60,50],reps:['12-15','15-18','20+'],sets:'2-3 set',rest:'30-60 sn'}
+  };
+  var goalNames={strength:'💪 Güç',hypertrophy:'🔥 Kas Gelişimi',endurance:'🏃 Dayanıklılık'};
+  var r=ranges[goal];
+
+  var html='<div class="calc-result">';
+  html+='<div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">'+goalNames[goal]+' İÇİN</div>';
+  var midKg=rm*r.pcts[1]/100;
+  html+='<div class="calc-result-val">'+midKg.toFixed(1)+'</div>';
+  html+='<div class="calc-result-unit">'+unitLabel()+' × '+r.reps[1]+' rep</div>';
+  html+='<div class="calc-result-sub">🎯 '+r.sets+' · 💤 '+r.rest+' dinlenme</div>';
+  html+='</div>';
+
+  /* Alternatifler */
+  html+='<div class="calc-grid-card"><div class="calc-label">Alternatif Set Önerileri</div>';
+  r.pcts.forEach(function(p,i){
+    var v=rm*p/100;
+    html+='<div class="calc-percentage-row">';
+    html+='<span class="calc-pct-pct">%'+p+'</span>';
+    html+='<span class="calc-pct-val">'+v.toFixed(1)+' '+unitLabel()+'</span>';
+    html+='<span class="calc-pct-range">'+r.reps[i]+' rep</span>';
+    html+='</div>';
+  });
+  html+='</div>';
+
+  /* Haftalık hacim önerisi */
+  var level=getUserLevel();
+  var weekSetMap={
+    strength:{beginner:'8-12',intermediate:'12-16',advanced:'16-20'},
+    hypertrophy:{beginner:'10-15',intermediate:'15-20',advanced:'20-25'},
+    endurance:{beginner:'12-16',intermediate:'16-22',advanced:'22-28'}
+  };
+  var wSets=weekSetMap[goal][level];
+  html+='<div class="calc-grid-card" style="background:rgba(46,196,182,.06);border-color:rgba(46,196,182,.2)">';
+  html+='<div style="font-size:11px;color:var(--text2);line-height:1.5">';
+  html+='<strong style="color:var(--success)">📊 Seviyene göre öneri:</strong> '+getUserLevelLabel()+'<br>';
+  html+='Bu kas grubu için <strong>haftada '+wSets+' set</strong> toplam hacim hedefle.';
+  html+='</div></div>';
+
+  el.innerHTML=html;
+}
+
+function _calcWSFromBest(){
+  var best=_findBestSet();
+  if(!best){
+    showToast('📭 Henüz antrenman kaydın yok','warn');
+    return;
+  }
+  var rmKg=_formulaEpley(best.kg,best.reps);
+  var displayRM=getUnit()==='lb'?(rmKg*2.20462).toFixed(1):rmKg.toFixed(1);
+  _calcState.rm=displayRM;
+  var inp=document.getElementById('calc-ws-rm');
+  if(inp) inp.value=displayRM;
+  showToast('✅ 1RM tahminin: '+displayRM+' '+unitLabel()+' ('+best.exName+')','success');
+  _calcWorkingSetUpdate();
+}
+
+/* ══ 3. UYKU HESAPLAYICI ════════════════════════════════ */
+function _calcSleep(){
+  var mode=_calcState.sleepMode||'wake'; /* wake = kalkış saati, bed = yatış saati */
+  var wakeHour=_calcState.wakeHour||'07:00';
+  var bedHour=_calcState.bedHour||'23:00';
+  var html='';
+
+  /* Mod seçimi */
+  html+='<div class="calc-grid-card">';
+  html+='<div class="calc-label">Hangisini biliyorsun?</div>';
+  html+='<div class="calc-btn-grid two">';
+  html+='<div class="calc-btn'+(mode==='wake'?' sel':'')+'" onclick="_calcState.sleepMode=\'wake\';_calcSleepRender()">⏰ Kalkış Saatim</div>';
+  html+='<div class="calc-btn'+(mode==='bed'?' sel':'')+'" onclick="_calcState.sleepMode=\'bed\';_calcSleepRender()">🛏️ Yatış Saatim</div>';
+  html+='</div>';
+  html+='</div>';
+
+  /* Input */
+  html+='<div class="calc-grid-card">';
+  if(mode==='wake'){
+    html+='<div class="calc-label">Saat kaçta kalkmak istiyorsun?</div>';
+    html+='<input class="calc-input" type="time" value="'+wakeHour+'" oninput="_calcState.wakeHour=this.value;_calcSleepUpdate()" id="calc-sleep-time">';
+  } else {
+    html+='<div class="calc-label">Saat kaçta yatacaksın?</div>';
+    html+='<input class="calc-input" type="time" value="'+bedHour+'" oninput="_calcState.bedHour=this.value;_calcSleepUpdate()" id="calc-sleep-time">';
+  }
+  html+='</div>';
+
+  html+='<div id="calc-sleep-result"></div>';
+
+  html+='<div class="calc-grid-card" style="background:var(--card2)">';
+  html+='<div style="font-size:11px;color:var(--text2);line-height:1.5">';
+  html+='💡 <strong>REM döngüsü:</strong> Uyku ~90 dakikalık döngüler halinde gelir. Derin uyku ve REM evreleri bu döngü sonunda olur.<br><br>';
+  html+='<strong>✅ Bir döngünün sonunda uyanırsan</strong> kendini zinde hissedersin.<br>';
+  html+='<strong>❌ Döngünün ortasında uyanırsan</strong> yorgun uyanırsın.<br><br>';
+  html+='Ortalama insan yatağa girdikten 14 dk sonra uykuya dalar.';
+  html+='</div></div>';
+
+  setTimeout(_calcSleepUpdate,30);
+  return html;
+}
+
+function _calcSleepRender(){
+  document.getElementById('calc-body').innerHTML=_calcSleep();
+}
+
+function _calcSleepUpdate(){
+  var mode=_calcState.sleepMode||'wake';
+  var el=document.getElementById('calc-sleep-result');
+  if(!el) return;
+  var FALL_ASLEEP_MIN=14;
+  var CYCLE_MIN=90;
+
+  function parseTime(s){
+    var p=(s||'').split(':');
+    if(p.length!==2)return null;
+    return {h:parseInt(p[0])||0,m:parseInt(p[1])||0};
+  }
+  function addMin(t,delta){
+    var total=t.h*60+t.m+delta;
+    while(total<0) total+=1440;
+    total=total%1440;
+    return {h:Math.floor(total/60),m:total%60};
+  }
+  function fmtTime(t){
+    return (t.h<10?'0':'')+t.h+':'+(t.m<10?'0':'')+t.m;
+  }
+
+  var times=[];
+  var targetLabel='';
+  var cycles=[6,5,4]; /* Optimal → zor → minimum */
+
+  if(mode==='wake'){
+    var wake=parseTime(_calcState.wakeHour||'07:00');
+    if(!wake){el.innerHTML='';return;}
+    targetLabel='Saat '+fmtTime(wake)+' kalkacaksın → şu saatlerde YAT:';
+    cycles.forEach(function(c){
+      var t=addMin(wake,-(c*CYCLE_MIN+FALL_ASLEEP_MIN));
+      times.push({time:t,cycles:c,sleep:c*1.5});
+    });
+  } else {
+    var bed=parseTime(_calcState.bedHour||'23:00');
+    if(!bed){el.innerHTML='';return;}
+    targetLabel='Saat '+fmtTime(bed)+' yatacaksın → şu saatlerde UYAN:';
+    cycles.forEach(function(c){
+      var t=addMin(bed,(c*CYCLE_MIN+FALL_ASLEEP_MIN));
+      times.push({time:t,cycles:c,sleep:c*1.5});
+    });
+  }
+
+  var html='<div class="calc-result" style="padding:14px 16px">';
+  html+='<div style="font-size:11px;color:var(--text2);margin-bottom:8px">'+targetLabel+'</div>';
+  times.forEach(function(tt,i){
+    var tag=i===0?'✨ Optimal':i===1?'👍 İyi':'⚠️ Minimum';
+    var col=i===0?'var(--success)':i===1?'var(--accent)':'var(--warn)';
+    html+='<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:'+(i===times.length-1?'none':'1px solid var(--border)')+'">';
+    html+='<div style="flex:1;text-align:left">';
+    html+='<div style="font-family:\'Bebas Neue\',cursive;font-size:30px;letter-spacing:2px;color:'+col+';line-height:1">'+fmtTime(tt.time)+'</div>';
+    html+='<div style="font-size:9px;color:var(--text3);margin-top:2px">'+tt.cycles+' döngü · '+tt.sleep+' saat uyku</div>';
+    html+='</div>';
+    html+='<div style="font-size:10px;color:'+col+';font-weight:700">'+tag+'</div>';
+    html+='</div>';
+  });
+  html+='</div>';
+
+  /* Yaş bazlı öneri */
+  var age=U.age||25;
+  var recHours='7-9';
+  if(age<18) recHours='8-10';
+  else if(age>=65) recHours='7-8';
+  html+='<div class="calc-grid-card" style="background:rgba(46,196,182,.06);border-color:rgba(46,196,182,.2)">';
+  html+='<div style="font-size:11px;color:var(--text2);line-height:1.5">';
+  html+='<strong style="color:var(--success)">📊 Sana özel:</strong> '+age+' yaşında için önerilen uyku <strong>'+recHours+' saat</strong>.<br>';
+  html+='Antrenman günü +0.5 saat fazla uyumak kas onarımı için idealdir.';
+  html+='</div></div>';
+
+  el.innerHTML=html;
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -6094,6 +6640,12 @@ function onUserLoggedIn(user){
           localStorage.setItem('rf_theme',d.rf_theme);
           applyTheme(d.rf_theme);
         }
+        if(d.rf_unit){
+          try{ localStorage.setItem('rf_unit',d.rf_unit); }catch(e){}
+        }
+        if(d.rf_level_mode){
+          try{ localStorage.setItem('rf_level_mode',d.rf_level_mode); }catch(e){}
+        }
       }
       /* MİGRASYON: Firebase'de veri yok ama localStorage'da var → yükle */
       if(!fbHasData){
@@ -6148,6 +6700,8 @@ function saveToFirebase(){
     var suppsUsedStr=localStorage.getItem('rf_supplements_used')||'[]';
     var badgesStr=localStorage.getItem('rf_badges')||'[]';
     var themeStr=localStorage.getItem('rf_theme')||'dark';
+    var unitStr=localStorage.getItem('rf_unit')||'kg';
+    var levelModeStr=localStorage.getItem('rf_level_mode')||'auto';
     _fbDb.collection('users').doc(_fbUser.uid).set({
       rf_data:dataStr,
       rf_entries:entriesStr,
@@ -6157,6 +6711,8 @@ function saveToFirebase(){
       rf_supplements_used:suppsUsedStr,
       rf_badges:badgesStr,
       rf_theme:themeStr,
+      rf_unit:unitStr,
+      rf_level_mode:levelModeStr,
       updated:firebase.firestore.FieldValue.serverTimestamp()
     },{merge:true})
     .then(function(){/* ok */})
