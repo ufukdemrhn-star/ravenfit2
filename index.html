@@ -4362,13 +4362,11 @@ function renderWorkoutTools(){
     if(d&&d.exercises) exCount+=d.exercises.length;
   });
   html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">';
-  /* Egzersiz Havuzu kartı */
   html+='<div class="wh-card" onclick="window._exCat=\'all\';window._exSearch=\'\';window._exBranch=\''+branches[0]+'\';renderExerciseLibrary()" style="padding:14px 10px;text-align:center">';
   html+='<div style="font-size:28px;margin-bottom:4px">📚</div>';
   html+='<div class="wh-card-label" style="font-size:13px">Egzersiz Havuzu</div>';
   html+='<div style="font-size:10px;color:var(--text2);margin-top:2px">'+(exCount>0?exCount+' egzersiz':'Yükleniyor...')+'</div>';
   html+='</div>';
-  /* Antrenman Geçmişi kartı */
   html+='<div class="wh-card" onclick="window._historyBranch=null;renderWorkoutHistory()" style="padding:14px 10px;text-align:center">';
   html+='<div style="font-size:28px;margin-bottom:4px">📋</div>';
   html+='<div class="wh-card-label" style="font-size:13px">Antrenman Geçmişi</div>';
@@ -4376,58 +4374,93 @@ function renderWorkoutTools(){
   html+='</div>';
   html+='</div>';
 
-  /* ── Kronometre (inline) ── */
-  html+='<div class="rc">';
-  html+='<div class="rct">⏱️ Kronometre</div>';
-  html+='<div class="chrono-display" id="tools-chrono-display">00:00.00</div>';
-  html+='<div class="chrono-btn-row">';
-  html+='<button class="btn btn-p" id="tools-chrono-toggle" onclick="_toolsChronoToggle()" style="min-width:100px">▶ Başlat</button>';
-  html+='<button class="btn btn-s" onclick="_toolsChronoReset()">↺ Sıfırla</button>';
-  html+='</div></div>';
-
-  /* ── Set & Dinlenme Sayacı (inline) ── */
-  html+='<div class="rc">';
-  html+='<div class="rct">💪 Set & Dinlenme Sayacı</div>';
-  html+='<div style="font-size:11px;color:var(--text2);margin-bottom:8px">Dinlenme Süresi</div>';
-  html+='<div class="rest-adj">';
-  html+='<button class="rest-adj-btn" onclick="adjustRestTime(-15)">−</button>';
-  html+='<div class="rest-adj-val" id="tools-rest-time-val">'+_restTime+'s</div>';
-  html+='<button class="rest-adj-btn" onclick="adjustRestTime(15)">+</button>';
+  /* ── Kronometre + Set Sayacı (2 sütun buton) ── */
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">';
+  html+='<div class="wh-card" onclick="openToolOverlay(\'chrono\')" style="padding:14px 10px;text-align:center">';
+  html+='<div style="font-size:28px;margin-bottom:4px">⏱️</div>';
+  html+='<div class="wh-card-label" style="font-size:13px">Kronometre</div>';
+  html+='<div style="font-size:10px;color:var(--text2);margin-top:2px" id="tools-chrono-preview">'+(_chronoMs>0||_chronoRunning?'Aktif':'Hazır')+'</div>';
   html+='</div>';
-  html+='<div class="rest-display" id="tools-rest-display">—</div>';
-  html+='<div class="chrono-btn-row">';
-  html+='<button class="btn btn-p btn-full" id="tools-btn-set-done" onclick="_toolsSetDone()">✅ Seti Bitir</button>';
+  html+='<div class="wh-card" onclick="openToolOverlay(\'set-counter\')" style="padding:14px 10px;text-align:center">';
+  html+='<div style="font-size:28px;margin-bottom:4px">💪</div>';
+  html+='<div class="wh-card-label" style="font-size:13px">Set Sayacı</div>';
+  html+='<div style="font-size:10px;color:var(--text2);margin-top:2px">'+_setCount+' set · '+_restTime+'s dinlenme</div>';
   html+='</div>';
-  html+='<div class="set-info">';
-  html+='<div class="set-count-display">Tamamlanan: <span class="set-count-num" id="tools-set-count">'+_setCount+'</span> set</div>';
-  html+='<button class="btn btn-s" style="padding:5px 10px;font-size:10px" onclick="_toolsResetSets()">Sıfırla</button>';
-  html+='</div></div>';
+  html+='</div>';
 
-  /* ── 🧮 HESAPLAYICILAR ── */
+  /* ── 🧮 HESAPLAYICILAR (2×2 grid, plaka kaldırıldı) ── */
   html+='<div class="rc">';
   html+='<div class="rct">🧮 Hesaplayıcılar</div>';
-  html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px">';
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">';
   html+='<div class="calc-tool-card" onclick="openCalculator(\'1rm\')"><div class="calc-tool-icon">💪</div><div class="calc-tool-label">1RM</div><div class="calc-tool-sub">Max Tahmini</div></div>';
   html+='<div class="calc-tool-card" onclick="openCalculator(\'working-set\')"><div class="calc-tool-icon">⚙️</div><div class="calc-tool-label">Çalışma Seti</div><div class="calc-tool-sub">%1RM × Rep</div></div>';
+  html+='<div class="calc-tool-card" onclick="openCalculator(\'pr\')"><div class="calc-tool-icon">🎯</div><div class="calc-tool-label">PR Denemesi</div><div class="calc-tool-sub">Rekor Kırma</div></div>';
   html+='<div class="calc-tool-card" onclick="openCalculator(\'sleep\')"><div class="calc-tool-icon">😴</div><div class="calc-tool-label">Uyku</div><div class="calc-tool-sub">REM Döngüsü</div></div>';
-  html+='</div>';
-  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">';
-  html+='<div class="calc-tool-card" style="opacity:.5;pointer-events:none" onclick="showToast(\'🚧 Yakında!\')"><div class="calc-tool-icon">🎯</div><div class="calc-tool-label">PR Denemesi</div><div class="calc-tool-sub">Yakında</div></div>';
-  html+='<div class="calc-tool-card" style="opacity:.5;pointer-events:none" onclick="showToast(\'🚧 Yakında!\')"><div class="calc-tool-icon">🏋️</div><div class="calc-tool-label">Plaka Yükle</div><div class="calc-tool-sub">Yakında</div></div>';
   html+='</div>';
   html+='<div style="margin-top:10px;font-size:10px;color:var(--text3);text-align:center">Seviyen: <strong>'+getUserLevelLabel()+'</strong> · Birim: <strong>'+unitLabel()+'</strong></div>';
   html+='</div>';
 
   el.innerHTML=html;
+}
 
-  /* Sync: eğer krono daha önce çalışıyorsa display'ı güncelle */
-  if(_chronoRunning){
-    document.getElementById('tools-chrono-toggle').innerHTML='⏸ Durdur';
-    _toolsChronoUpdate();
-  } else if(_chronoMs>0){
-    document.getElementById('tools-chrono-toggle').innerHTML='▶ Devam';
-    var ms=_chronoMs; var s=Math.floor(ms/1000); var m=Math.floor(s/60); var cs=Math.floor((ms%1000)/10); s=s%60;
-    document.getElementById('tools-chrono-display').textContent=pad2(m)+':'+pad2(s)+'.'+pad2(cs);
+/* ══════════════════════════════════════════════════════════
+   🔧 ARAÇLAR OVERLAY (Kronometre + Set Sayacı)
+   ══════════════════════════════════════════════════════════ */
+function openToolOverlay(kind){
+  var title, sub, body;
+  if(kind==='chrono'){
+    title='KRONOMETRE';
+    sub='ZAMAN ÖLÇÜMÜ';
+    body='<div class="calc-grid-card" style="text-align:center;padding:30px 16px">';
+    body+='<div class="chrono-display" id="tools-chrono-display" style="font-size:56px">00:00.00</div>';
+    body+='<div class="chrono-btn-row" style="margin-top:20px;justify-content:center">';
+    body+='<button class="btn btn-p" id="tools-chrono-toggle" onclick="_toolsChronoToggle()" style="min-width:110px">▶ Başlat</button>';
+    body+='<button class="btn btn-s" onclick="_toolsChronoReset()">↺ Sıfırla</button>';
+    body+='</div></div>';
+    body+='<div class="calc-grid-card" style="background:var(--card2)">';
+    body+='<div style="font-size:11px;color:var(--text2);line-height:1.5">⏱️ <strong>Kronometre</strong> antrenman sürelerini, kardiyo ölçümlerini veya genel zamanlamaları takip etmen için. Sayfadan çıksan bile durumunu korur — saniye ve yüz milisaniye hassasiyetinde çalışır.</div></div>';
+  } else {
+    title='SET SAYACI';
+    sub='DİNLENME & SET TAKİBİ';
+    body='<div class="calc-grid-card">';
+    body+='<div class="calc-label">Dinlenme Süresi (saniye)</div>';
+    body+='<div class="rest-adj" style="margin:10px 0">';
+    body+='<button class="rest-adj-btn" onclick="adjustRestTime(-15)">−</button>';
+    body+='<div class="rest-adj-val" id="tools-rest-time-val">'+_restTime+'s</div>';
+    body+='<button class="rest-adj-btn" onclick="adjustRestTime(15)">+</button>';
+    body+='</div>';
+    body+='<div class="rest-display" id="tools-rest-display" style="font-size:32px;padding:14px">—</div>';
+    body+='<button class="btn btn-p btn-full" id="tools-btn-set-done" onclick="_toolsSetDone()" style="margin-top:10px">✅ Seti Bitir</button>';
+    body+='</div>';
+    body+='<div class="calc-grid-card">';
+    body+='<div style="display:flex;align-items:center;justify-content:space-between">';
+    body+='<div>';
+    body+='<div class="calc-label">Tamamlanan Set</div>';
+    body+='<div style="font-family:\'Bebas Neue\',cursive;font-size:48px;letter-spacing:2px;color:var(--accent);line-height:1" id="tools-set-count">'+_setCount+'</div>';
+    body+='</div>';
+    body+='<button class="btn btn-s" onclick="_toolsResetSets()">Sıfırla</button>';
+    body+='</div></div>';
+    body+='<div class="calc-grid-card" style="background:var(--card2)">';
+    body+='<div style="font-size:11px;color:var(--text2);line-height:1.5">💪 <strong>Set & Dinlenme Sayacı:</strong> Her seti bitirdiğinde butona bas — otomatik dinlenme geri sayımı başlar ve set sayısı artar. Antrenmanın boyunca takip etmeni sağlar.</div></div>';
+  }
+  document.getElementById('calc-header-title').textContent='🔧 '+title;
+  document.getElementById('calc-header-sub').textContent=sub;
+  document.getElementById('calc-body').innerHTML=body;
+  document.getElementById('calc-overlay').classList.add('active');
+  _activeCalc='tool-'+kind;
+
+  /* Sync chrono display if running */
+  if(kind==='chrono'){
+    if(_chronoRunning){
+      var btn=document.getElementById('tools-chrono-toggle');
+      if(btn) btn.innerHTML='⏸ Durdur';
+      _toolsChronoUpdate();
+    } else if(_chronoMs>0){
+      var btn=document.getElementById('tools-chrono-toggle');
+      if(btn) btn.innerHTML='▶ Devam';
+      var ms=_chronoMs; var s=Math.floor(ms/1000); var m=Math.floor(s/60); var cs=Math.floor((ms%1000)/10); s=s%60;
+      document.getElementById('tools-chrono-display').textContent=pad2(m)+':'+pad2(s)+'.'+pad2(cs);
+    }
   }
 }
 
@@ -4532,7 +4565,8 @@ function openCalculator(id){
   var names={
     '1rm':{title:'1RM TAHMİNİ',sub:'MAX KALDIRIŞ',icon:'💪'},
     'working-set':{title:'ÇALIŞMA SETİ',sub:'HEDEF % × REP',icon:'⚙️'},
-    'sleep':{title:'UYKU DÖNGÜSÜ',sub:'REM OPTİMİZASYON',icon:'😴'}
+    'sleep':{title:'UYKU DÖNGÜSÜ',sub:'REM OPTİMİZASYON',icon:'😴'},
+    'pr':{title:'REKOR DENEMESİ',sub:'PR ATTEMPT',icon:'🎯'}
   };
   var info=names[id]||{title:id.toUpperCase(),sub:'HESAPLAYICI',icon:'🧮'};
   document.getElementById('calc-header-title').textContent=info.icon+' '+info.title;
@@ -4542,8 +4576,22 @@ function openCalculator(id){
 }
 
 function closeCalculator(){
+  var wasActive=_activeCalc;
   _activeCalc=null;
   document.getElementById('calc-overlay').classList.remove('active');
+  /* PR timer cleanup */
+  if(_pr && _pr._restTimer){
+    clearInterval(_pr._restTimer);
+    _pr._restTimer=null;
+  }
+  /* Araçlar sayfası aktifse refresh (preview güncellensin) */
+  if(document.getElementById('workout-main')){
+    var wm=document.getElementById('workout-main');
+    /* Sadece araçlar sayfasındaysa */
+    if(wm.innerHTML.indexOf('🛠️ Araçlar')>=0){
+      renderWorkoutTools();
+    }
+  }
 }
 
 function renderCalculator(id){
@@ -4552,6 +4600,7 @@ function renderCalculator(id){
   if(id==='1rm') body.innerHTML=_calc1RM();
   else if(id==='working-set') body.innerHTML=_calcWorkingSet();
   else if(id==='sleep') body.innerHTML=_calcSleep();
+  else if(id==='pr') _renderPR();
   else body.innerHTML='<div style="text-align:center;color:var(--text2);padding:40px">🚧 Yapım aşamasında</div>';
 }
 
@@ -4559,6 +4608,7 @@ function renderCalculator(id){
 function _formulaEpley(kg,reps){return kg*(1+reps/30);}
 function _formulaBrzycki(kg,reps){return reps<37?kg*36/(37-reps):kg*(1+reps/30);}
 function _formulaLombardi(kg,reps){return kg*Math.pow(reps,0.10);}
+function _formulaWathen(kg,reps){return (100*kg)/(48.8+53.8*Math.exp(-0.075*reps));}
 
 /* ── Kullanıcının en iyi setini log'lardan bul ── */
 function _findBestSet(){
@@ -4571,7 +4621,7 @@ function _findBestSet(){
       if(!s.kg||!s.reps)return;
       var kg=parseFloat(s.kg),reps=parseInt(s.reps);
       if(!kg||!reps||reps>12)return; /* 1RM formülleri 12+ rep için geçersiz */
-      var est=_formulaEpley(kg,reps);
+      var est=_formulaWathen(kg,reps);
       if(est>bestEstimated){
         bestEstimated=est;
         bestKg=kg;bestReps=reps;bestExId=s.exId;
@@ -4602,13 +4652,22 @@ function _calc1RM(){
   /* Sonuç */
   html+='<div id="calc-1rm-result"></div>';
 
-  /* Açıklama */
+  /* Açıklama — formül bilgileri */
   html+='<div class="calc-grid-card" style="background:var(--card2)">';
-  html+='<div style="font-size:11px;color:var(--text2);line-height:1.5">';
+  html+='<div style="font-size:11px;color:var(--text2);line-height:1.55">';
   html+='💡 <strong>1RM nedir?</strong> Bir egzersizi 1 tekrar yapabileceğin maksimum ağırlık.<br>';
   html+='Örnek: 80 kg × 8 tekrar yaptıysan, tahmini 1RM\'in ~101 kg.<br><br>';
   html+='⚠️ Bu sadece tahmindir. Gerçek 1RM denemesi için ısınma yapıp kademeli artır.';
-  html+='</div></div>';
+  html+='</div>';
+  /* Formül açıklamaları */
+  html+='<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">';
+  html+='<div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:6px">📐 Kullanılan Formüller</div>';
+  html+='<div style="font-size:10px;color:var(--text2);line-height:1.6">';
+  html+='<strong style="color:var(--accent)">Wathen</strong> — En hassas formül, RavenFit\'in ana hesabı. Geniş tekrar aralığında tutarlı sonuç verir.<br>';
+  html+='<strong>Epley</strong> — En yaygın kullanılan. Düşük-orta tekrarlarda Wathen\'a çok yakın. <em>1RM = kg × (1 + rep/30)</em><br>';
+  html+='<strong>Brzycki</strong> — Düşük tekrarlarda (1-5) daha hassas. <em>1RM = kg × 36 / (37 - rep)</em><br>';
+  html+='<strong>Lombardi</strong> — Eski ama hâlâ kullanılan kuvvet formülü. <em>1RM = kg × rep^0.10</em>';
+  html+='</div></div></div>';
 
   setTimeout(_calc1RMUpdate,30);
   return html;
@@ -4623,32 +4682,33 @@ function _calc1RMUpdate(){
     el.innerHTML='<div class="calc-result" style="opacity:.5"><div class="calc-result-val">—</div><div class="calc-result-unit">'+unitLabel()+'</div><div class="calc-result-sub">Yük ve tekrar gir (1-12 rep)</div></div>';
     return;
   }
-  /* Kullanıcı zaten kendi biriminde girdi — formüllere direkt ver */
+  /* Ana: Wathen (en hassas). Diğerleri referans. */
+  var wa=_formulaWathen(kg,reps);
   var ep=_formulaEpley(kg,reps);
   var br=_formulaBrzycki(kg,reps);
   var lo=_formulaLombardi(kg,reps);
-  var avg=(ep+br+lo)/3;
 
   var html='<div class="calc-result">';
   html+='<div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">TAHMİNİ 1RM</div>';
-  html+='<div class="calc-result-val">'+avg.toFixed(1)+'</div>';
+  html+='<div class="calc-result-val">'+wa.toFixed(2)+'</div>';
   html+='<div class="calc-result-unit">'+unitLabel()+'</div>';
-  html+='<div class="calc-result-sub">3 formül ortalaması</div>';
+  html+='<div class="calc-result-sub">Wathen formülü (ana hesap)</div>';
   html+='</div>';
 
-  /* 3 formül detay */
-  html+='<div class="calc-formula-grid">';
-  html+='<div class="calc-formula-cell"><div class="calc-formula-val">'+ep.toFixed(1)+'</div><div class="calc-formula-lbl">Epley</div></div>';
-  html+='<div class="calc-formula-cell"><div class="calc-formula-val">'+br.toFixed(1)+'</div><div class="calc-formula-lbl">Brzycki</div></div>';
-  html+='<div class="calc-formula-cell"><div class="calc-formula-val">'+lo.toFixed(1)+'</div><div class="calc-formula-lbl">Lombardi</div></div>';
+  /* 4 formül karşılaştırma — 2×2 grid */
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">';
+  html+='<div class="calc-formula-cell" style="border:1.5px solid var(--accent)"><div class="calc-formula-val" style="color:var(--accent)">'+wa.toFixed(2)+'</div><div class="calc-formula-lbl">Wathen ★</div></div>';
+  html+='<div class="calc-formula-cell"><div class="calc-formula-val">'+ep.toFixed(2)+'</div><div class="calc-formula-lbl">Epley</div></div>';
+  html+='<div class="calc-formula-cell"><div class="calc-formula-val">'+br.toFixed(2)+'</div><div class="calc-formula-lbl">Brzycki</div></div>';
+  html+='<div class="calc-formula-cell"><div class="calc-formula-val">'+lo.toFixed(2)+'</div><div class="calc-formula-lbl">Lombardi</div></div>';
   html+='</div>';
 
-  /* Yüzdelik dağılım */
+  /* Yüzdelik dağılım (Wathen bazlı) */
   html+='<div class="calc-grid-card" style="margin-top:12px"><div class="calc-label">% 1RM dağılımı</div>';
   var pcts=[95,90,85,80,75,70,65,60,50];
   var repMap={95:'1-2',90:'3-4',85:'5-6',80:'7-8',75:'9-10',70:'10-12',65:'12-15',60:'15-18',50:'20+'};
   pcts.forEach(function(p){
-    var v=(avg*p/100);
+    var v=(wa*p/100);
     html+='<div class="calc-percentage-row">';
     html+='<span class="calc-pct-pct">%'+p+'</span>';
     html+='<span class="calc-pct-val">'+v.toFixed(1)+' '+unitLabel()+'</span>';
@@ -4680,97 +4740,234 @@ function _calc1RMAutoFill(){
 
 /* ══ 2. ÇALIŞMA SETİ HESAPLAYICI ══════════════════════════ */
 function _calcWorkingSet(){
-  var rm=_calcState.rm||'';
-  var goal=_calcState.goal||'hypertrophy';
+  var targetKg=_calcState.wsTarget||'';
+  var sets=_calcState.wsSets||3;
+  var reps=_calcState.wsReps||'';
+  var diff=_calcState.wsDiff||'medium';
+  var fixed=_calcState.wsFixed===true;
   var html='';
 
+  /* Input kartı — Hedef, set, rep */
   html+='<div class="calc-grid-card">';
-  html+='<div class="calc-label">1RM Ağırlığın ('+unitLabel()+')</div>';
-  html+='<input class="calc-input" type="number" inputmode="decimal" step="0.5" placeholder="—" value="'+rm+'" oninput="_calcState.rm=this.value;_calcWorkingSetUpdate()" id="calc-ws-rm">';
-  html+='<button class="btn btn-s btn-full" onclick="_calcWSFromBest()" style="margin-top:10px;font-size:12px">📊 Son Antrenmandan Hesapla</button>';
+  html+='<div class="calc-label">Hedef Ağırlık ('+unitLabel()+')</div>';
+  html+='<input class="calc-input" type="number" inputmode="decimal" step="0.5" placeholder="—" value="'+targetKg+'" oninput="_calcState.wsTarget=this.value;_calcWorkingSetUpdate()" id="calc-ws-target">';
+  html+='<button class="btn btn-s btn-full" onclick="_calcWSFromBest()" style="margin-top:10px;font-size:12px">📊 Son Antrenmandan Al</button>';
   html+='</div>';
 
-  /* Hedef seçimi */
+  /* Set + Rep */
   html+='<div class="calc-grid-card">';
-  html+='<div class="calc-label">Hedefin ne?</div>';
-  html+='<div class="calc-btn-grid three">';
-  var goals=[
-    {id:'strength',lbl:'💪 Güç',desc:'85-95% × 3-5'},
-    {id:'hypertrophy',lbl:'🔥 Kas',desc:'70-85% × 6-12'},
-    {id:'endurance',lbl:'🏃 Day.',desc:'50-70% × 12-20'}
-  ];
-  goals.forEach(function(g){
-    var sel=goal===g.id?' sel':'';
-    html+='<div class="calc-btn'+sel+'" onclick="_calcState.goal=\''+g.id+'\';_calcWorkingSetUpdate()"><div>'+g.lbl+'</div><div style="font-size:8px;margin-top:2px">'+g.desc+'</div></div>';
-  });
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">';
+  html+='<div><div class="calc-label">Set Sayısı (1-5)</div>';
+  html+='<input class="calc-input" type="number" inputmode="numeric" min="1" max="5" value="'+sets+'" oninput="_calcState.wsSets=this.value;_calcWorkingSetUpdate()" style="font-size:24px;padding:10px"></div>';
+  html+='<div><div class="calc-label">Tekrar Sayısı (1-10)</div>';
+  html+='<input class="calc-input" type="number" inputmode="numeric" min="1" max="10" value="'+reps+'" placeholder="—" oninput="_calcState.wsReps=this.value;_calcWorkingSetUpdate()" style="font-size:24px;padding:10px"></div>';
   html+='</div></div>';
 
+  /* Zorluk seçimi */
+  html+='<div class="calc-grid-card">';
+  html+='<div class="calc-label">Zorluk</div>';
+  html+='<div class="calc-btn-grid three">';
+  var diffs=[
+    {id:'easy',lbl:'😌 Kolay',desc:'%70-75'},
+    {id:'medium',lbl:'💪 Orta',desc:'%75-80'},
+    {id:'hard',lbl:'🔥 Zor',desc:'%80-85'}
+  ];
+  diffs.forEach(function(d){
+    var sel=diff===d.id?' sel':'';
+    html+='<div class="calc-btn'+sel+'" onclick="_calcState.wsDiff=\''+d.id+'\';_calcWorkingSetRerender()"><div>'+d.lbl+'</div><div style="font-size:8px;margin-top:2px">'+d.desc+'</div></div>';
+  });
+  html+='</div>';
+  /* Sabit ağırlık toggle */
+  html+='<div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding:10px 12px;background:var(--card2);border-radius:10px;cursor:pointer" onclick="_calcState.wsFixed=!_calcState.wsFixed;_calcWorkingSetRerender()">';
+  html+='<div>';
+  html+='<div style="font-size:12px;font-weight:700;color:var(--text)">Sabit Ağırlık</div>';
+  html+='<div style="font-size:10px;color:var(--text2);margin-top:2px">Açık: tüm setler aynı kg · Kapalı: piramit artış</div>';
+  html+='</div>';
+  html+='<div style="width:46px;height:26px;border-radius:13px;background:'+(fixed?'var(--accent)':'var(--border)')+';position:relative;flex-shrink:0;transition:background .2s">';
+  html+='<div style="position:absolute;top:3px;left:'+(fixed?'23px':'3px')+';width:20px;height:20px;border-radius:50%;background:#fff;transition:left .2s"></div>';
+  html+='</div></div>';
+  html+='</div>';
+
+  /* Sonuç */
   html+='<div id="calc-ws-result"></div>';
 
   html+='<div class="calc-grid-card" style="background:var(--card2)">';
-  html+='<div style="font-size:11px;color:var(--text2);line-height:1.5">';
-  html+='💡 <strong>Çalışma seti:</strong> 1RM\'inin yüzdesine göre hedef rep aralığında yapılan gerçek antrenman setleri.<br><br>';
-  html+='<strong>Güç:</strong> Ağır yük, az rep — maksimal kuvvet için.<br>';
-  html+='<strong>Kas:</strong> Orta yük, orta rep — hipertrofi için (en popüler).<br>';
-  html+='<strong>Dayanıklılık:</strong> Hafif yük, çok rep — kas dayanıklılığı için.';
+  html+='<div style="font-size:11px;color:var(--text2);line-height:1.55">';
+  html+='💡 <strong>Çalışma seti hesaplayıcı:</strong> Hedeflediğin ağırlık için zorluğa göre gerçek çalışma ağırlığını hesaplar.<br><br>';
+  html+='<strong>Sabit:</strong> Tüm setler tek ağırlıkta — güç/kütle için klasik yöntem.<br>';
+  html+='<strong>Piramit:</strong> Her sette +2.5 '+unitLabel()+' artış — warm-up içeren doğal progresyon.<br><br>';
+  html+='<strong>Çalışma hacmi</strong> = toplam kg × rep (kas gelişimi için anahtar metrik).';
   html+='</div></div>';
 
   setTimeout(_calcWorkingSetUpdate,30);
   return html;
 }
 
+function _calcWorkingSetRerender(){
+  document.getElementById('calc-body').innerHTML=_calcWorkingSet();
+}
+
 function _calcWorkingSetUpdate(){
-  var rm=parseFloat(_calcState.rm)||0;
-  var goal=_calcState.goal||'hypertrophy';
+  var target=parseFloat(_calcState.wsTarget)||0;
+  var sets=parseInt(_calcState.wsSets)||3;
+  var reps=parseInt(_calcState.wsReps)||0;
+  var diff=_calcState.wsDiff||'medium';
+  var fixed=_calcState.wsFixed===true;
   var el=document.getElementById('calc-ws-result');
   if(!el) return;
-  if(!rm){
-    el.innerHTML='<div class="calc-result" style="opacity:.5"><div class="calc-result-val">—</div><div class="calc-result-unit">Seti hesaplamak için 1RM gir</div></div>';
+
+  /* Sınırlar: Ağırsağlam ile aynı */
+  if(sets<1||sets>5){
+    el.innerHTML='<div class="calc-result" style="opacity:.5"><div class="calc-result-val">—</div><div class="calc-result-unit">Set sayısı 1-5 arası olmalı</div></div>';
+    return;
+  }
+  if(reps<1||reps>10){
+    el.innerHTML='<div class="calc-result" style="opacity:.5"><div class="calc-result-val">—</div><div class="calc-result-unit">Tekrar sayısı 1-10 arası olmalı</div></div>';
+    return;
+  }
+  if(!target||!reps){
+    el.innerHTML='<div class="calc-result" style="opacity:.5"><div class="calc-result-val">—</div><div class="calc-result-unit">Hedef + set + rep gir</div></div>';
     return;
   }
 
-  /* Hedef aralıkları */
-  var ranges={
-    strength:{pcts:[95,90,85],reps:['1-2','3-4','5-6'],sets:'4-6 set',rest:'3-5 dk'},
-    hypertrophy:{pcts:[80,75,70],reps:['6-8','8-10','10-12'],sets:'3-4 set',rest:'60-90 sn'},
-    endurance:{pcts:[65,60,50],reps:['12-15','15-18','20+'],sets:'2-3 set',rest:'30-60 sn'}
-  };
-  var goalNames={strength:'💪 Güç',hypertrophy:'🔥 Kas Gelişimi',endurance:'🏃 Dayanıklılık'};
-  var r=ranges[goal];
+  function round25(x){return Math.round(x/2.5)*2.5;}
 
+  /* ══ BAŞLANGIÇ % TABLOSU ══════════════════════════════
+     30 test verisinden çıkarıldı — zorluk × rep × set kombinasyonu */
+  var base;
+  if(diff==='easy'){
+    if(reps===2) base=77.5;
+    else if(reps===3||reps===4) base=75;
+    else if(reps===5) base=72.5;
+    else if(reps===6) base=70;
+    else if(reps===7||reps===8) base=67.5;
+    else base=65;
+  } else if(diff==='medium'){
+    if(reps===2) base=80;
+    else if(reps===3) base=77.5;
+    else if(reps===4) base=75;
+    else if(reps===5){
+      if(sets===2) base=77.5;
+      else if(sets===3) base=75;
+      else if(sets>=5) base=70;
+      else base=72.5;
+    }
+    else if(reps===6) base=70;
+    else if(reps===7||reps===8) base=70;
+    else if(reps===9||reps===10) base=65;
+    else base=60;
+  } else { /* hard */
+    if(reps===2) base=82.5;
+    else if(reps===3) base=80;
+    else if(reps===4) base=77.5;
+    else if(reps===5) base=75;
+    else if(reps===6) base=72.5;
+    else if(reps===7||reps===8) base=70;
+    else base=65;
+  }
+
+  var start=round25(target*base/100);
+
+  /* ══ ARTIŞ PATTERN ══════════════════════════════════════ */
+  var weights=[];
+
+  /* Düşük rep (2-4) → genelde LINEAR */
+  if(reps<=4){
+    if(diff==='easy' && reps===4 && sets===3){
+      /* Test 22 istisnası: easy 3×4 */
+      weights=[start, start, start+2.5];
+    } else {
+      for(var i=0;i<sets;i++) weights.push(start+i*2.5);
+    }
+  }
+  /* Hard zorluk (rep 5+) → LINEAR */
+  else if(diff==='hard'){
+    for(var i=0;i<sets;i++) weights.push(start+i*2.5);
+  }
+  /* Medium 3×5 — 1RM'e göre */
+  else if(diff==='medium' && sets===3 && reps===5){
+    if(target>=120){
+      for(var i=0;i<sets;i++) weights.push(start+i*2.5); /* linear */
+    } else {
+      weights=[start, start, start+2.5]; /* stair */
+    }
+  }
+  /* Easy 3×5 — 1RM'e göre */
+  else if(diff==='easy' && sets===3 && reps===5){
+    if(target>=150){
+      for(var i=0;i<sets;i++) weights.push(start+i*2.5); /* linear */
+    } else {
+      weights=[start, start+2.5, start+2.5]; /* modified stair */
+    }
+  }
+  /* Medium 5×5 özel pattern */
+  else if(diff==='medium' && sets===5 && reps===5){
+    weights=[start, start, start+2.5, start+5, start+5];
+  }
+  /* Medium 4×6 özel pattern */
+  else if(diff==='medium' && sets===4 && reps===6){
+    weights=[start, start+2.5, start+2.5, start+5];
+  }
+  /* Medium 4×10 özel pattern */
+  else if(diff==='medium' && sets===4 && reps===10){
+    weights=[start, start, start+2.5, start+2.5];
+  }
+  /* Medium 2×5 */
+  else if(diff==='medium' && sets===2 && reps===5){
+    weights=[start, start+2.5];
+  }
+  /* Default: her 2 sette +2.5kg (stair-step) */
+  else {
+    for(var i=0;i<sets;i++) weights.push(start+Math.floor(i/2)*2.5);
+  }
+
+  /* ══ SABİT MOD ══ Piramit max'ını tüm setlere */
+  if(fixed){
+    var maxW=Math.max.apply(null,weights);
+    weights=[];
+    for(var i=0;i<sets;i++) weights.push(maxW);
+  }
+
+  /* ══ DİNLENME ══════════════════════════════════════════
+     Rep ≤4 (güç odaklı) → uzun dinlenme
+     Rep 5+ (kas odaklı) → kısa dinlenme */
+  var rest;
+  if(reps<=4){
+    if(diff==='easy') rest=5;
+    else if(diff==='medium') rest=8;
+    else rest=10;
+  } else {
+    if(diff==='easy') rest=2;
+    else if(diff==='medium') rest=3;
+    else rest=5;
+  }
+
+  /* Hacim */
+  var volume=weights.reduce(function(a,w){return a+w*reps;},0);
+
+  var diffLabel={easy:'😌 Kolay',medium:'💪 Orta',hard:'🔥 Zor'}[diff];
   var html='<div class="calc-result">';
-  html+='<div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">'+goalNames[goal]+' İÇİN</div>';
-  var midKg=rm*r.pcts[1]/100;
-  html+='<div class="calc-result-val">'+midKg.toFixed(1)+'</div>';
-  html+='<div class="calc-result-unit">'+unitLabel()+' × '+r.reps[1]+' rep</div>';
-  html+='<div class="calc-result-sub">🎯 '+r.sets+' · 💤 '+r.rest+' dinlenme</div>';
+  html+='<div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">'+diffLabel+' · '+(fixed?'SABİT':'PİRAMİT')+'</div>';
+  html+='<div class="calc-result-val">'+volume+'</div>';
+  html+='<div class="calc-result-unit">birim toplam hacim</div>';
+  html+='<div class="calc-result-sub">💤 '+rest+' dk dinlenme</div>';
   html+='</div>';
 
-  /* Alternatifler */
-  html+='<div class="calc-grid-card"><div class="calc-label">Alternatif Set Önerileri</div>';
-  r.pcts.forEach(function(p,i){
-    var v=rm*p/100;
+  /* Set listesi */
+  html+='<div class="calc-grid-card"><div class="calc-label">Set Planı</div>';
+  weights.forEach(function(w,i){
+    var pct=Math.round(w/target*100);
     html+='<div class="calc-percentage-row">';
-    html+='<span class="calc-pct-pct">%'+p+'</span>';
-    html+='<span class="calc-pct-val">'+v.toFixed(1)+' '+unitLabel()+'</span>';
-    html+='<span class="calc-pct-range">'+r.reps[i]+' rep</span>';
+    html+='<span class="calc-pct-pct">Set '+(i+1)+'</span>';
+    html+='<span class="calc-pct-val">'+w+' '+unitLabel()+' × '+reps+'</span>';
+    html+='<span class="calc-pct-range">%'+pct+'</span>';
     html+='</div>';
   });
+  html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0 2px;border-top:1px solid var(--border);margin-top:4px">';
+  html+='<span style="font-size:11px;font-weight:700;color:var(--text)">Toplam Hacim</span>';
+  html+='<span style="font-family:\'Bebas Neue\',cursive;font-size:22px;color:var(--accent)">'+volume+'</span>';
   html+='</div>';
-
-  /* Haftalık hacim önerisi */
-  var level=getUserLevel();
-  var weekSetMap={
-    strength:{beginner:'8-12',intermediate:'12-16',advanced:'16-20'},
-    hypertrophy:{beginner:'10-15',intermediate:'15-20',advanced:'20-25'},
-    endurance:{beginner:'12-16',intermediate:'16-22',advanced:'22-28'}
-  };
-  var wSets=weekSetMap[goal][level];
-  html+='<div class="calc-grid-card" style="background:rgba(46,196,182,.06);border-color:rgba(46,196,182,.2)">';
-  html+='<div style="font-size:11px;color:var(--text2);line-height:1.5">';
-  html+='<strong style="color:var(--success)">📊 Seviyene göre öneri:</strong> '+getUserLevelLabel()+'<br>';
-  html+='Bu kas grubu için <strong>haftada '+wSets+' set</strong> toplam hacim hedefle.';
-  html+='</div></div>';
+  html+='</div>';
 
   el.innerHTML=html;
 }
@@ -4781,10 +4978,10 @@ function _calcWSFromBest(){
     showToast('📭 Henüz antrenman kaydın yok','warn');
     return;
   }
-  var rmKg=_formulaEpley(best.kg,best.reps);
+  var rmKg=_formulaWathen(best.kg,best.reps);
   var displayRM=getUnit()==='lb'?(rmKg*2.20462).toFixed(1):rmKg.toFixed(1);
-  _calcState.rm=displayRM;
-  var inp=document.getElementById('calc-ws-rm');
+  _calcState.wsTarget=displayRM;
+  var inp=document.getElementById('calc-ws-target');
   if(inp) inp.value=displayRM;
   showToast('✅ 1RM tahminin: '+displayRM+' '+unitLabel()+' ('+best.exName+')','success');
   _calcWorkingSetUpdate();
@@ -4792,21 +4989,25 @@ function _calcWSFromBest(){
 
 /* ══ 3. UYKU HESAPLAYICI ════════════════════════════════ */
 function _calcSleep(){
-  var mode=_calcState.sleepMode||'wake'; /* wake = kalkış saati, bed = yatış saati */
+  var mode=_calcState.sleepMode||'wake';
   var wakeHour=_calcState.wakeHour||'07:00';
   var bedHour=_calcState.bedHour||'23:00';
+  var fmt24=_calcState.sleep24==='0'?false:(_calcState.sleep24!==false);
+  if(typeof _calcState.sleep24==='undefined') fmt24=true;
+  var includeFall=_calcState.sleepFall!==false; /* default true */
+  var isWorkoutDay=_calcState.sleepWorkout===true;
   var html='';
 
-  /* Mod seçimi */
+  /* Mod seçimi — başlıkla */
   html+='<div class="calc-grid-card">';
-  html+='<div class="calc-label">Hangisini biliyorsun?</div>';
+  html+='<div class="calc-label">Hangisine göre hesaplanacak?</div>';
   html+='<div class="calc-btn-grid two">';
-  html+='<div class="calc-btn'+(mode==='wake'?' sel':'')+'" onclick="_calcState.sleepMode=\'wake\';_calcSleepRender()">⏰ Kalkış Saatim</div>';
-  html+='<div class="calc-btn'+(mode==='bed'?' sel':'')+'" onclick="_calcState.sleepMode=\'bed\';_calcSleepRender()">🛏️ Yatış Saatim</div>';
+  html+='<div class="calc-btn'+(mode==='wake'?' sel':'')+'" onclick="_calcState.sleepMode=\'wake\';_calcSleepRerender()">⏰ Kalkış Saatime Göre</div>';
+  html+='<div class="calc-btn'+(mode==='bed'?' sel':'')+'" onclick="_calcState.sleepMode=\'bed\';_calcSleepRerender()">🛏️ Yatış Saatime Göre</div>';
   html+='</div>';
   html+='</div>';
 
-  /* Input */
+  /* Saat input */
   html+='<div class="calc-grid-card">';
   if(mode==='wake'){
     html+='<div class="calc-label">Saat kaçta kalkmak istiyorsun?</div>';
@@ -4817,21 +5018,44 @@ function _calcSleep(){
   }
   html+='</div>';
 
+  /* 3 Toggle seçeneği */
+  html+='<div class="calc-grid-card"><div class="calc-label">Ayarlar</div>';
+
+  /* Toggle 1: 24h format */
+  html+=_sleepToggle('sleep24',fmt24,'🕐 24 Saat Biçimi','Kapalı: 12 saat AM/PM biçimi');
+  /* Toggle 2: Fall asleep */
+  html+=_sleepToggle('sleepFall',includeFall,'⏱️ Uykuya Dalma Süresi','Uykuya dalma için +15 dk ekler');
+  /* Toggle 3: Workout day */
+  html+=_sleepToggle('sleepWorkout',isWorkoutDay,'💪 Bugün Antrenman Yaptın mı?','Açık: +0.5 saat önerilir');
+
+  html+='</div>';
+
   html+='<div id="calc-sleep-result"></div>';
 
   html+='<div class="calc-grid-card" style="background:var(--card2)">';
-  html+='<div style="font-size:11px;color:var(--text2);line-height:1.5">';
+  html+='<div style="font-size:11px;color:var(--text2);line-height:1.55">';
   html+='💡 <strong>REM döngüsü:</strong> Uyku ~90 dakikalık döngüler halinde gelir. Derin uyku ve REM evreleri bu döngü sonunda olur.<br><br>';
   html+='<strong>✅ Bir döngünün sonunda uyanırsan</strong> kendini zinde hissedersin.<br>';
   html+='<strong>❌ Döngünün ortasında uyanırsan</strong> yorgun uyanırsın.<br><br>';
-  html+='Ortalama insan yatağa girdikten 14 dk sonra uykuya dalar.';
+  html+='Önerilen uyku süreleri: <strong>6h</strong> (4 döngü), <strong>7.5h</strong> (5 döngü), <strong>9h</strong> (6 döngü), <strong>10.5h</strong> (7 döngü)';
   html+='</div></div>';
 
   setTimeout(_calcSleepUpdate,30);
   return html;
 }
 
-function _calcSleepRender(){
+function _sleepToggle(key,val,title,sub){
+  return '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;margin-bottom:8px;background:var(--card2);border-radius:10px;cursor:pointer" onclick="_calcState.'+key+'='+(!val)+';_calcSleepRerender()">'+
+    '<div>'+
+    '<div style="font-size:12px;font-weight:700;color:var(--text)">'+title+'</div>'+
+    '<div style="font-size:10px;color:var(--text2);margin-top:2px">'+sub+'</div>'+
+    '</div>'+
+    '<div style="width:46px;height:26px;border-radius:13px;background:'+(val?'var(--accent)':'var(--border)')+';position:relative;flex-shrink:0;transition:background .2s">'+
+    '<div style="position:absolute;top:3px;left:'+(val?'23px':'3px')+';width:20px;height:20px;border-radius:50%;background:#fff;transition:left .2s"></div>'+
+    '</div></div>';
+}
+
+function _calcSleepRerender(){
   document.getElementById('calc-body').innerHTML=_calcSleep();
 }
 
@@ -4839,7 +5063,12 @@ function _calcSleepUpdate(){
   var mode=_calcState.sleepMode||'wake';
   var el=document.getElementById('calc-sleep-result');
   if(!el) return;
-  var FALL_ASLEEP_MIN=14;
+  var fmt24=_calcState.sleep24!==false;
+  if(typeof _calcState.sleep24==='undefined') fmt24=true;
+  var includeFall=_calcState.sleepFall!==false;
+  var isWorkoutDay=_calcState.sleepWorkout===true;
+
+  var FALL_ASLEEP_MIN=includeFall?15:0;
   var CYCLE_MIN=90;
 
   function parseTime(s){
@@ -4854,47 +5083,72 @@ function _calcSleepUpdate(){
     return {h:Math.floor(total/60),m:total%60};
   }
   function fmtTime(t){
-    return (t.h<10?'0':'')+t.h+':'+(t.m<10?'0':'')+t.m;
+    if(fmt24){
+      return (t.h<10?'0':'')+t.h+':'+(t.m<10?'0':'')+t.m;
+    } else {
+      var h12=t.h%12; if(h12===0)h12=12;
+      var suffix=t.h<12?'AM':'PM';
+      return h12+':'+(t.m<10?'0':'')+t.m+' '+suffix;
+    }
   }
+
+  /* 4 uyku süresi: 6h, 7.5h, 9h, 10.5h = 4, 5, 6, 7 döngü */
+  /* Antrenman günüyse +0.5h = 7, 8, 9.5, 11 saat — döngü mantığıyla devam edelim ama +0.5 ekle */
+  var sleepOptions=[
+    {cycles:4,hours:6},
+    {cycles:5,hours:7.5},
+    {cycles:6,hours:9},
+    {cycles:7,hours:10.5}
+  ];
 
   var times=[];
   var targetLabel='';
-  var cycles=[6,5,4]; /* Optimal → zor → minimum */
 
   if(mode==='wake'){
     var wake=parseTime(_calcState.wakeHour||'07:00');
     if(!wake){el.innerHTML='';return;}
     targetLabel='Saat '+fmtTime(wake)+' kalkacaksın → şu saatlerde YAT:';
-    cycles.forEach(function(c){
-      var t=addMin(wake,-(c*CYCLE_MIN+FALL_ASLEEP_MIN));
-      times.push({time:t,cycles:c,sleep:c*1.5});
+    sleepOptions.forEach(function(opt){
+      var totalMin=opt.cycles*CYCLE_MIN+FALL_ASLEEP_MIN;
+      if(isWorkoutDay) totalMin+=30;
+      var t=addMin(wake,-totalMin);
+      times.push({time:t,cycles:opt.cycles,sleep:opt.hours+(isWorkoutDay?0.5:0)});
     });
   } else {
     var bed=parseTime(_calcState.bedHour||'23:00');
     if(!bed){el.innerHTML='';return;}
     targetLabel='Saat '+fmtTime(bed)+' yatacaksın → şu saatlerde UYAN:';
-    cycles.forEach(function(c){
-      var t=addMin(bed,(c*CYCLE_MIN+FALL_ASLEEP_MIN));
-      times.push({time:t,cycles:c,sleep:c*1.5});
+    sleepOptions.forEach(function(opt){
+      var totalMin=opt.cycles*CYCLE_MIN+FALL_ASLEEP_MIN;
+      if(isWorkoutDay) totalMin+=30;
+      var t=addMin(bed,totalMin);
+      times.push({time:t,cycles:opt.cycles,sleep:opt.hours+(isWorkoutDay?0.5:0)});
     });
+  }
+
+  /* Tag'ler: 4 döngü = minimum, 5 = iyi, 6 = optimal (antrenman günüyse 7 = optimal) */
+  var optimalIdx=isWorkoutDay?2:1; /* 7.5h veya 9h */
+  var tags=['⚠️ Minimum','👍 İyi','✨ Optimal','💤 Uzun'];
+  var colors=['var(--warn)','var(--info)','var(--success)','var(--text2)'];
+  if(isWorkoutDay){
+    tags=['⚠️ Minimum','👍 İyi','💪 Optimal','💤 Uzun'];
   }
 
   var html='<div class="calc-result" style="padding:14px 16px">';
   html+='<div style="font-size:11px;color:var(--text2);margin-bottom:8px">'+targetLabel+'</div>';
   times.forEach(function(tt,i){
-    var tag=i===0?'✨ Optimal':i===1?'👍 İyi':'⚠️ Minimum';
-    var col=i===0?'var(--success)':i===1?'var(--accent)':'var(--warn)';
-    html+='<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:'+(i===times.length-1?'none':'1px solid var(--border)')+'">';
+    var isLast=i===times.length-1;
+    html+='<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:'+(isLast?'none':'1px solid var(--border)')+'">';
     html+='<div style="flex:1;text-align:left">';
-    html+='<div style="font-family:\'Bebas Neue\',cursive;font-size:30px;letter-spacing:2px;color:'+col+';line-height:1">'+fmtTime(tt.time)+'</div>';
+    html+='<div style="font-family:\'Bebas Neue\',cursive;font-size:30px;letter-spacing:2px;color:'+colors[i]+';line-height:1">'+fmtTime(tt.time)+'</div>';
     html+='<div style="font-size:9px;color:var(--text3);margin-top:2px">'+tt.cycles+' döngü · '+tt.sleep+' saat uyku</div>';
     html+='</div>';
-    html+='<div style="font-size:10px;color:'+col+';font-weight:700">'+tag+'</div>';
+    html+='<div style="font-size:10px;color:'+colors[i]+';font-weight:700">'+tags[i]+'</div>';
     html+='</div>';
   });
   html+='</div>';
 
-  /* Yaş bazlı öneri */
+  /* Bilgi kutusu */
   var age=U.age||25;
   var recHours='7-9';
   if(age<18) recHours='8-10';
@@ -4902,11 +5156,876 @@ function _calcSleepUpdate(){
   html+='<div class="calc-grid-card" style="background:rgba(46,196,182,.06);border-color:rgba(46,196,182,.2)">';
   html+='<div style="font-size:11px;color:var(--text2);line-height:1.5">';
   html+='<strong style="color:var(--success)">📊 Sana özel:</strong> '+age+' yaşında için önerilen uyku <strong>'+recHours+' saat</strong>.<br>';
-  html+='Antrenman günü +0.5 saat fazla uyumak kas onarımı için idealdir.';
+  if(isWorkoutDay){
+    html+='💪 <strong>Antrenman günü</strong> aktif — her seçenek +30 dk uzatıldı.';
+  } else {
+    html+='💤 Antrenman yaptığın gün için "💪 Bugün Antrenman Yaptın mı?" toggle\'ını aç, +30 dk ekleyelim.';
+  }
   html+='</div></div>';
 
   el.innerHTML=html;
 }
+
+/* Eski isim uyumu */
+function _calcSleepRender(){_calcSleepRerender();}
+
+
+/* ══════════════════════════════════════════════════════════
+   🎯 PR DENEMESİ (REKOR DENEMESİ) — Tam Sistem
+   ══════════════════════════════════════════════════════════ */
+
+var _pr={
+  screen:'setup',     /* setup → warmup → warmup-rest → warmup-feel → attempt → attempt-rest → attempt-feel → result */
+  target:0,            /* hedef kg */
+  exercise:'squat',    /* squat / bench / deadlift */
+  bar:20,              /* 20 = olimpik, 10 = yarı olimpik */
+  plates:{},           /* {25:0, 20:0, 15:0, 10:0, 5:0, 2.5:0, 1.25:0} */
+  warmupIdx:0,         /* 0..4 (5 ısınma) */
+  warmupSets:[],       /* [{kg, reps, rest, variants:[...], variantIdx:0}, ...] */
+  warmupFeel:null,     /* son ısınma hissi (kötü/normal/iyi) */
+  attemptIdx:0,        /* 0..2 (3 deneme) */
+  attempts:[],         /* [{kg, feel, success}] */
+  history:[],          /* tümü log için */
+  restSeconds:0,       /* dinlenme süresi */
+  _restTimer:null,
+  _feelValue:0.5       /* slider: 0..1 */
+};
+
+/* Plaka renkleri (IPF standard) */
+var PLATE_COLORS={
+  25:'#d62828',    /* kırmızı */
+  20:'#1d4e89',    /* mavi */
+  15:'#f4b942',    /* sarı */
+  10:'#2f9e44',    /* yeşil */
+  5:'#e9ecef',     /* beyaz */
+  2.5:'#adb5bd',   /* gri */
+  1.25:'#6c757d'   /* koyu gri */
+};
+
+/* Plaka preset yükle/kaydet */
+function _prLoadPlates(){
+  var saved=localStorage.getItem('rf_pr_plates');
+  if(saved){try{return JSON.parse(saved);}catch(e){}}
+  return {25:0,20:0,15:0,10:0,5:0,2.5:0,1.25:0};
+}
+function _prSavePlates(){
+  try{localStorage.setItem('rf_pr_plates',JSON.stringify(_pr.plates));}catch(e){}
+}
+
+/* Egzersiz adı */
+function _prExerciseName(e){
+  return {squat:'🦵 Squat',bench:'💪 Bench Press',deadlift:'🏋️ Deadlift'}[e]||e;
+}
+
+/* Ana render — her ekranı yönlendirir */
+function _renderPR(){
+  var body=document.getElementById('calc-body');
+  if(!body) return;
+  if(_pr.screen==='setup') body.innerHTML=_prSetup();
+  else if(_pr.screen==='warmup') body.innerHTML=_prWarmupSet();
+  else if(_pr.screen==='warmup-active') body.innerHTML=_prWarmupActive();
+  else if(_pr.screen==='warmup-rest') body.innerHTML=_prWarmupRest();
+  else if(_pr.screen==='warmup-feel') body.innerHTML=_prFeelSlider('warmup');
+  else if(_pr.screen==='attempt') body.innerHTML=_prAttempt();
+  else if(_pr.screen==='attempt-active') body.innerHTML=_prAttemptActive();
+  else if(_pr.screen==='attempt-rest') body.innerHTML=_prAttemptRest();
+  else if(_pr.screen==='attempt-feel') body.innerHTML=_prFeelSlider('attempt');
+  else if(_pr.screen==='result') body.innerHTML=_prResult();
+}
+
+/* ══ SETUP EKRANI ═══════════════════════════════════════════ */
+function _prSetup(){
+  if(!_pr.plates||Object.keys(_pr.plates).length===0){
+    _pr.plates=_prLoadPlates();
+  }
+  var html='';
+
+  /* Hedef kg */
+  html+='<div class="calc-grid-card">';
+  html+='<div class="calc-label">İstenen Maksimum ('+unitLabel()+')</div>';
+  html+='<input class="calc-input" type="number" inputmode="decimal" step="2.5" placeholder="—" value="'+(_pr.target||'')+'" oninput="_pr.target=parseFloat(this.value)||0" id="pr-target">';
+  html+='</div>';
+
+  /* Egzersiz seç */
+  html+='<div class="calc-grid-card">';
+  html+='<div class="calc-label">Egzersiz</div>';
+  html+='<div class="calc-btn-grid three">';
+  var exs=[{id:'squat',lbl:'🦵 Squat'},{id:'bench',lbl:'💪 Bench'},{id:'deadlift',lbl:'🏋️ Deadlift'}];
+  exs.forEach(function(e){
+    html+='<div class="calc-btn'+(_pr.exercise===e.id?' sel':'')+'" onclick="_pr.exercise=\''+e.id+'\';_renderPR()">'+e.lbl+'</div>';
+  });
+  html+='</div></div>';
+
+  /* Bar seç */
+  html+='<div class="calc-grid-card">';
+  html+='<div class="calc-label">Mevcut Bar</div>';
+  html+='<div class="calc-btn-grid two">';
+  html+='<div class="calc-btn'+(_pr.bar===20?' sel':'')+'" onclick="_pr.bar=20;_renderPR()">Olimpik (20 '+unitLabel()+')</div>';
+  html+='<div class="calc-btn'+(_pr.bar===10?' sel':'')+'" onclick="_pr.bar=10;_renderPR()">Yarı Olimpik (10 '+unitLabel()+')</div>';
+  html+='</div></div>';
+
+  /* Plakalar */
+  html+='<div class="calc-grid-card">';
+  html+='<div class="calc-label">Mevcut Plakalar (çift olarak)</div>';
+  var plateRows=[25,20,15,10,5,2.5,1.25];
+  plateRows.forEach(function(p){
+    var max=(p>=20)?10:1;   /* 20 ve 25 max 10 çift, diğerleri max 1 çift */
+    var count=_pr.plates[p]||0;
+    html+='<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">';
+    /* Renkli plaka ikonu */
+    html+='<div style="width:34px;height:34px;border-radius:50%;background:'+PLATE_COLORS[p]+';flex-shrink:0;border:2px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center"><div style="width:8px;height:8px;border-radius:50%;background:#000"></div></div>';
+    html+='<div style="flex:1;font-family:\'Bebas Neue\',cursive;font-size:18px;letter-spacing:1px">'+p+' '+unitLabel()+'</div>';
+    /* -/+ kontroller */
+    html+='<div style="display:flex;align-items:center;gap:10px">';
+    html+='<button class="calc-btn" style="padding:6px 12px;min-width:36px" onclick="_prAdjustPlate('+p+',-1)" '+(count<=0?'disabled style="opacity:.3"':'')+'>−</button>';
+    html+='<div style="font-family:\'Bebas Neue\',cursive;font-size:22px;min-width:28px;text-align:center">'+count+'</div>';
+    html+='<button class="calc-btn" style="padding:6px 12px;min-width:36px" onclick="_prAdjustPlate('+p+',1)" '+(count>=max?'disabled style="opacity:.3"':'')+'>+</button>';
+    html+='</div></div>';
+  });
+  html+='</div>';
+
+  /* Başla butonu */
+  var canStart=_pr.target>0 && _prTotalPlatesKg() >= (_pr.target-_pr.bar)/2;
+  html+='<button class="btn btn-full" onclick="_prStart()" style="margin-top:10px;'+(canStart?'':'opacity:.5;pointer-events:none')+'">Başla</button>';
+  if(!canStart && _pr.target>0){
+    html+='<div style="text-align:center;font-size:11px;color:var(--warn);margin-top:8px">⚠️ Yeterli plaka yok. Hedefe ulaşmak için daha fazla plaka ekle.</div>';
+  }
+
+  return html;
+}
+
+function _prAdjustPlate(p,delta){
+  var max=(p>=20)?10:1;
+  var c=(_pr.plates[p]||0)+delta;
+  if(c<0) c=0;
+  if(c>max) c=max;
+  _pr.plates[p]=c;
+  _prSavePlates();
+  _renderPR();
+}
+
+/* Plakalardan toplam mümkün olan kg (her taraf için) */
+function _prTotalPlatesKg(){
+  var total=0;
+  Object.keys(_pr.plates).forEach(function(p){
+    total+=parseFloat(p)*(_pr.plates[p]||0);
+  });
+  return total;
+}
+
+function _prStart(){
+  if(!_pr.target){showToast('⚠️ Hedef ağırlık gir','warn');return;}
+  /* Isınma setlerini hesapla */
+  _pr.warmupSets=_prCalcWarmups(_pr.target,_pr.bar);
+  _pr.warmupIdx=0;
+  _pr.attemptIdx=0;
+  _pr.attempts=[];
+  _pr.history=[];
+  _pr.screen='warmup';
+  _renderPR();
+}
+
+/* ══ ISINMA HESABI ══════════════════════════════════════════ */
+function _prCalcWarmups(target,bar){
+  function round25(x){return Math.round(x/2.5)*2.5;}
+  /* 5 ısınma: %25, %40, %65, %75, %85 */
+  var pcts=[0.25, 0.40, 0.65, 0.75, 0.85];
+  var repsList=[10, 5, 3, 2, 1];
+  var restList=[2, 2, 3, 3, 3];  /* dk */
+  var sets=[];
+  for(var i=0;i<5;i++){
+    var kg=round25(target*pcts[i]);
+    if(kg<bar) kg=bar; /* en azından bar kadar */
+    var variants=_prCalcPlateVariants(kg,bar);
+    sets.push({kg:kg, reps:repsList[i], rest:restList[i], variants:variants, variantIdx:0, skipped:false});
+  }
+  return sets;
+}
+
+/* ══ PLAKA VARYANTLARI ══════════════════════════════════════
+   Hedef kg için farklı plaka kombinasyonları üret.
+   Her varyant: {25:x, 20:x, 15:x, 10:x, 5:x, 2.5:x, 1.25:x}
+   Her bir değer "tek tarafa kaç adet" */
+function _prCalcPlateVariants(targetKg,bar){
+  var perSide=(targetKg-bar)/2;
+  if(perSide<=0) return [{25:0,20:0,15:0,10:0,5:0,2.5:0,1.25:0,total:targetKg}];
+  if(perSide%1.25!==0) return []; /* tam sayı değil, yüklenemez */
+
+  var plates=[25,20,15,10,5,2.5,1.25];
+  var results=[];
+  var seen={};
+
+  /* Rekürsif DFS ile tüm kombinasyonları üret */
+  function search(idx, remaining, current){
+    if(results.length>=8) return; /* max 8 varyant */
+    if(remaining===0){
+      var key=plates.map(function(p){return current[p]||0}).join(',');
+      if(seen[key]) return;
+      seen[key]=true;
+      var copy={};
+      plates.forEach(function(p){copy[p]=current[p]||0;});
+      copy.total=targetKg;
+      results.push(copy);
+      return;
+    }
+    if(idx>=plates.length || remaining<0) return;
+
+    var p=plates[idx];
+    var maxAvail=_pr.plates[p]||0; /* kullanıcının her taraf için kullanabileceği miktar */
+    var maxFit=Math.floor(remaining/p);
+    var maxUse=Math.min(maxAvail,maxFit);
+
+    /* Büyükten küçüğe dene */
+    for(var count=maxUse;count>=0;count--){
+      if(count>0) current[p]=count;
+      else delete current[p];
+      search(idx+1, remaining-count*p, current);
+    }
+    delete current[p];
+  }
+
+  search(0, perSide, {});
+
+  /* Varyantları sırala: daha az plaka kullananı üstte */
+  results.sort(function(a,b){
+    var aCount=plates.reduce(function(s,p){return s+(a[p]||0);},0);
+    var bCount=plates.reduce(function(s,p){return s+(b[p]||0);},0);
+    return aCount-bCount;
+  });
+
+  return results;
+}
+
+/* Varyantı metin olarak formatla: "2×25 + 1×15" gibi */
+function _prFormatVariant(v){
+  var plates=[25,20,15,10,5,2.5,1.25];
+  var parts=[];
+  plates.forEach(function(p){
+    var c=v[p]||0;
+    if(c>0) parts.push(c+'×'+p+unitLabel());
+  });
+  return parts.length?parts.join(' + '):'(sadece bar)';
+}
+
+/* ══ ISINMA EKRANLARI ═══════════════════════════════════════ */
+function _prWarmupSet(){
+  var set=_pr.warmupSets[_pr.warmupIdx];
+  if(!set) return '<div style="padding:40px;text-align:center">Hata</div>';
+  var variant=set.variants[set.variantIdx]||{};
+  var html='';
+
+  html+='<div style="padding:20px 0;min-height:200px">';
+  html+='<div style="font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:1px">'+(_pr.warmupIdx+1)+'. Isınma · '+_prExerciseName(_pr.exercise)+'</div>';
+  html+='<div style="font-family:\'Bebas Neue\',cursive;font-size:56px;letter-spacing:2px;line-height:1;margin-top:8px">'+set.kg+' '+unitLabel()+' × '+set.reps+'</div>';
+  html+='</div>';
+
+  /* Plaka görseli + varyant */
+  html+=_prRenderBarbell(set.kg, variant, set.variants.length>1, function(){return '_prChangeVariant';});
+
+  /* Butonlar */
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px">';
+  html+='<button class="btn btn-s" style="background:var(--card2);color:var(--text)" onclick="_prWarmupBack()">← Geri Dön</button>';
+  html+='<button class="btn btn-s" style="background:var(--card2);color:var(--text)" onclick="_prWarmupSkip()">Seti Atla →</button>';
+  html+='</div>';
+  html+='<button class="btn btn-full" onclick="_prWarmupBeginSet()" style="margin-top:10px">Sete Başla</button>';
+
+  return html;
+}
+
+/* Plaka görseli render — SVG ile */
+function _prRenderBarbell(kg, variant, showVariantBtn){
+  var plates=[25,20,15,10,5,2.5,1.25];
+  var leftPlates=[];
+  plates.forEach(function(p){
+    var c=variant[p]||0;
+    for(var i=0;i<c;i++) leftPlates.push(p);
+  });
+  /* sağ taraf ters sırada */
+  var rightPlates=leftPlates.slice().reverse();
+
+  var html='<div style="position:relative;padding:20px 0">';
+  html+='<div style="display:flex;align-items:center;justify-content:center;gap:0;min-height:80px">';
+  html+='<div style="font-size:10px;color:var(--text3);margin-right:4px">'+_pr.bar+'kg</div>';
+  /* Sol plakalar */
+  leftPlates.forEach(function(p){
+    var size=Math.min(60, 30+p*1.2);
+    html+='<div style="width:14px;height:'+size+'px;background:'+PLATE_COLORS[p]+';border-radius:2px;border:1px solid rgba(255,255,255,.1);margin-right:1px"></div>';
+  });
+  /* Bar */
+  html+='<div style="width:60px;height:8px;background:linear-gradient(to bottom, #999, #ccc, #999);border-radius:2px;margin:0 4px"></div>';
+  /* Sağ plakalar */
+  rightPlates.forEach(function(p){
+    var size=Math.min(60, 30+p*1.2);
+    html+='<div style="width:14px;height:'+size+'px;background:'+PLATE_COLORS[p]+';border-radius:2px;border:1px solid rgba(255,255,255,.1);margin-left:1px"></div>';
+  });
+  html+='</div>';
+
+  /* Plaka listesi (yazılı) */
+  html+='<div style="text-align:center;margin-top:10px;font-size:11px;color:var(--text2)">Her tarafa: <strong style="color:var(--text)">'+_prFormatVariant(variant)+'</strong></div>';
+
+  /* Varyant navigasyonu */
+  if(showVariantBtn){
+    html+='<div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:12px">';
+    html+='<button class="calc-btn" style="padding:6px 12px;min-width:40px" onclick="_prChangeVariant(-1)">‹</button>';
+    html+='<span style="font-size:11px;color:var(--text2)">Varyant '+(_pr.warmupSets[_pr.warmupIdx]?(_pr.warmupSets[_pr.warmupIdx].variantIdx+1):(_pr.attempts[_pr.attemptIdx]?(_pr.attempts[_pr.attemptIdx].variantIdx+1):1))+' / '+(_pr.warmupSets[_pr.warmupIdx]?_pr.warmupSets[_pr.warmupIdx].variants.length:1)+'</span>';
+    html+='<button class="calc-btn" style="padding:6px 12px;min-width:40px" onclick="_prChangeVariant(1)">›</button>';
+    html+='</div>';
+  }
+  html+='</div>';
+  return html;
+}
+
+function _prChangeVariant(delta){
+  var set=_pr.warmupSets[_pr.warmupIdx];
+  if(!set) return;
+  var len=set.variants.length;
+  var newIdx=(set.variantIdx+delta+len)%len;
+  set.variantIdx=newIdx;
+  _renderPR();
+}
+
+function _prWarmupBack(){
+  if(_pr.warmupIdx>0){
+    _pr.warmupIdx--;
+    _renderPR();
+  } else {
+    _pr.screen='setup';
+    _renderPR();
+  }
+}
+
+function _prWarmupSkip(){
+  _pr.warmupSets[_pr.warmupIdx].skipped=true;
+  _prWarmupNext();
+}
+
+function _prWarmupBeginSet(){
+  /* Set aktif ekranı - kullanıcı set yaparken */
+  _pr.screen='warmup-active';
+  _renderPR();
+}
+
+/* Bu ekranı ekleyelim — set yapma ekranı */
+function _prWarmupActive(){
+  var set=_pr.warmupSets[_pr.warmupIdx];
+  var html='';
+  html+='<div style="text-align:center;padding:60px 20px">';
+  html+='<div style="font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:2px">'+(_pr.warmupIdx+1)+'. ISINMA AKTİF</div>';
+  html+='<div style="font-family:\'Bebas Neue\',cursive;font-size:72px;letter-spacing:3px;margin-top:20px;color:var(--accent)">'+set.kg+' '+unitLabel()+'</div>';
+  html+='<div style="font-family:\'Bebas Neue\',cursive;font-size:32px;letter-spacing:2px;color:var(--text2)">× '+set.reps+' TEKRAR</div>';
+  html+='</div>';
+  html+='<button class="btn btn-full" onclick="_prWarmupFinishSet()">Seti Bitir</button>';
+  html+='<button class="btn btn-full" style="margin-top:10px;background:var(--card2);color:var(--text2)" onclick="_prWarmupCancel()">Geri Dön</button>';
+  return html;
+}
+
+function _prWarmupCancel(){
+  _pr.screen='warmup';
+  _renderPR();
+}
+
+function _prWarmupFinishSet(){
+  /* Son ısınma mı? (5. ısınma) → hissettirme sorusu */
+  if(_pr.warmupIdx===4){
+    /* 5. ısınma bitti → feeling slider */
+    _pr.screen='warmup-feel';
+    _pr._feelValue=0.5; /* default: normal */
+    _renderPR();
+  } else {
+    /* Ara ısınma → dinlenme */
+    _pr.history.push({type:'warmup',idx:_pr.warmupIdx,kg:_pr.warmupSets[_pr.warmupIdx].kg,reps:_pr.warmupSets[_pr.warmupIdx].reps});
+    _pr.screen='warmup-rest';
+    _prStartRest(_pr.warmupSets[_pr.warmupIdx].rest*60);
+    _renderPR();
+  }
+}
+
+function _prWarmupNext(){
+  _pr.warmupIdx++;
+  if(_pr.warmupIdx>=5){
+    _pr.screen='attempt';
+    _pr.attempts=[{idx:0,kg:_prCalcAttemptKg(0,null)}];
+    _pr.attemptIdx=0;
+  } else {
+    _pr.screen='warmup';
+  }
+  _renderPR();
+}
+
+/* ══ DİNLENME EKRANI (Bekleme) ══════════════════════════════ */
+function _prStartRest(seconds){
+  _pr.restSeconds=seconds;
+  if(_pr._restTimer) clearInterval(_pr._restTimer);
+  _pr._restTimer=setInterval(function(){
+    _pr.restSeconds--;
+    if(_pr.restSeconds<=0){
+      clearInterval(_pr._restTimer);
+      _pr._restTimer=null;
+      _prRestEnd();
+      return;
+    }
+    var el=document.getElementById('pr-rest-clock');
+    if(el){
+      var m=Math.floor(_pr.restSeconds/60);
+      var s=_pr.restSeconds%60;
+      el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+    }
+    /* Ring */
+    var ring=document.getElementById('pr-rest-ring');
+    if(ring){
+      var totalSec=(_pr.screen==='warmup-rest'?_pr.warmupSets[_pr.warmupIdx].rest:5)*60;
+      var pct=(_pr.restSeconds/totalSec)*100;
+      ring.style.background='conic-gradient(var(--accent) '+pct+'%, rgba(255,255,255,.1) '+pct+'%)';
+    }
+  },1000);
+}
+
+function _prRestEnd(){
+  if(_pr.screen==='warmup-rest'){
+    _prWarmupNext();
+  } else if(_pr.screen==='attempt-rest'){
+    _pr.screen='attempt';
+    _renderPR();
+  }
+}
+
+function _prSkipRest(){
+  if(_pr._restTimer) clearInterval(_pr._restTimer);
+  _pr._restTimer=null;
+  _prRestEnd();
+}
+
+function _prWarmupRest(){
+  var set=_pr.warmupSets[_pr.warmupIdx];
+  var rest=set.rest*60;
+  if(!_pr.restSeconds) _pr.restSeconds=rest;
+  var next=_pr.warmupSets[_pr.warmupIdx+1];
+  var nextVariant=next?next.variants[next.variantIdx]:null;
+  var m=Math.floor(_pr.restSeconds/60), s=_pr.restSeconds%60;
+  var pct=(_pr.restSeconds/rest)*100;
+
+  var html='<div style="text-align:center;padding:20px 0">';
+  /* Ring timer */
+  html+='<div style="display:flex;justify-content:center;margin-bottom:30px">';
+  html+='<div id="pr-rest-ring" style="width:220px;height:220px;border-radius:50%;background:conic-gradient(var(--accent) '+pct+'%, rgba(255,255,255,.1) '+pct+'%);display:flex;align-items:center;justify-content:center">';
+  html+='<div style="width:180px;height:180px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center">';
+  html+='<div id="pr-rest-clock" style="font-family:\'Bebas Neue\',cursive;font-size:48px;letter-spacing:3px;color:var(--text2)">'+(m<10?'0':'')+m+':'+(s<10?'0':'')+s+'</div>';
+  html+='</div></div></div>';
+
+  /* Sonraki set önizleme */
+  if(next){
+    html+='<div style="text-align:left;padding:0 4px">';
+    html+='<div style="font-size:11px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:1px">Sonraki: '+(_pr.warmupIdx+2)+'. Isınma</div>';
+    html+='<div style="font-family:\'Bebas Neue\',cursive;font-size:32px;letter-spacing:1px;margin-top:4px">'+next.kg+' '+unitLabel()+' × '+next.reps+'</div>';
+    html+='</div>';
+    html+=_prRenderBarbell(next.kg, nextVariant, next.variants.length>1);
+  }
+
+  html+='</div>';
+  html+='<button class="btn btn-full" onclick="_prSkipRest()">Dinlenmeyi Bitir</button>';
+  return html;
+}
+
+/* ══ HISSETTIRME SLIDER ═════════════════════════════════════ */
+function _prFeelSlider(context){
+  /* context: 'warmup' (3-kademe) veya 'attempt' (4-kademe) */
+  var levels, labels, colors;
+  if(context==='warmup'){
+    levels=3;
+    labels=['Kötü hissettirdi','Normaldi','İyi hissettirdi'];
+    colors=['#ff9f1c','#4cc9f0','#06d6a0'];
+  } else {
+    levels=4;
+    labels=['Başarısız','Kötü hissettirdi','Normaldi','İyi hissettirdi'];
+    colors=['#e63946','#ff9f1c','#4cc9f0','#06d6a0'];
+  }
+
+  var v=_pr._feelValue;
+  var selIdx=Math.min(levels-1, Math.floor(v*levels));
+  var html='';
+
+  html+='<div style="padding:80px 0 40px;text-align:center">';
+  html+='<div style="font-family:\'Bebas Neue\',cursive;font-size:28px;letter-spacing:2px;line-height:1.2">BU SET<br>NASIL HİSSETTİRDİ?</div>';
+  html+='</div>';
+
+  /* Slider — native range input */
+  html+='<div style="padding:20px 4px">';
+  html+='<input type="range" min="0" max="'+(levels-1)+'" step="1" value="'+selIdx+'" oninput="_prFeelSliderUpdate(this.value,'+levels+')" id="pr-feel-slider" style="width:100%;accent-color:'+colors[selIdx]+';height:8px">';
+
+  /* Seçili etiket */
+  html+='<div id="pr-feel-label" style="text-align:center;margin-top:30px;font-size:18px;font-weight:700;color:'+colors[selIdx]+';letter-spacing:1px">'+labels[selIdx]+'</div>';
+  html+='</div>';
+
+  /* Seç butonu */
+  html+='<button class="btn btn-full" onclick="_prFeelSelect(\''+context+'\')" style="margin-top:40px">Seç</button>';
+
+  return html;
+}
+
+function _prFeelSliderUpdate(val,levels){
+  var idx=parseInt(val);
+  var labels, colors;
+  if(levels===3){
+    labels=['Kötü hissettirdi','Normaldi','İyi hissettirdi'];
+    colors=['#ff9f1c','#4cc9f0','#06d6a0'];
+  } else {
+    labels=['Başarısız','Kötü hissettirdi','Normaldi','İyi hissettirdi'];
+    colors=['#e63946','#ff9f1c','#4cc9f0','#06d6a0'];
+  }
+  _pr._feelValue=idx/(levels-1);
+  var lbl=document.getElementById('pr-feel-label');
+  var sld=document.getElementById('pr-feel-slider');
+  if(lbl){
+    lbl.textContent=labels[idx];
+    lbl.style.color=colors[idx];
+  }
+  if(sld) sld.style.accentColor=colors[idx];
+}
+
+function _prFeelSelect(context){
+  var levels=context==='warmup'?3:4;
+  var idx=Math.round(_pr._feelValue*(levels-1));
+  var feels=context==='warmup'?['bad','normal','good']:['fail','bad','normal','good'];
+  var feel=feels[idx];
+
+  if(context==='warmup'){
+    _pr.warmupFeel=feel;
+    _pr.history.push({type:'warmup',idx:4,kg:_pr.warmupSets[4].kg,reps:_pr.warmupSets[4].reps,feel:feel});
+    /* 5. ısınma sonrası her zaman denemelere geç */
+    _pr.screen='warmup-rest';
+    _pr.restSeconds=0;
+    _prStartRest(3*60); /* 3 dk dinlenme */
+    /* Dinlenme bitince attempt'a geçecek */
+    /* Next attempt hazırla */
+    _pr.attempts=[{idx:0,kg:_prCalcAttemptKg(0,null)}];
+    _pr.attemptIdx=0;
+    /* rest ekranında next=attempt olsun */
+    _renderPR();
+  } else {
+    /* Attempt feel */
+    var att=_pr.attempts[_pr.attemptIdx];
+    att.feel=feel;
+    att.success=(feel!=='fail');
+    _pr.history.push({type:'attempt',idx:_pr.attemptIdx,kg:att.kg,feel:feel,success:att.success});
+
+    if(_pr.attemptIdx>=2){
+      /* 3. deneme bitti → sonuç */
+      _pr.screen='result';
+      _renderPR();
+      return;
+    }
+
+    /* Sonraki deneme hazırla */
+    _pr.attemptIdx++;
+    var nextKg=_prCalcAttemptKg(_pr.attemptIdx, feel);
+    _pr.attempts.push({idx:_pr.attemptIdx,kg:nextKg});
+    _pr.screen='attempt-rest';
+    _pr.restSeconds=0;
+    _prStartRest(5*60); /* 5 dk dinlenme */
+    _renderPR();
+  }
+}
+
+/* ══ DENEME KG HESABI ════════════════════════════════════════
+   Senin örneklerden çözüldü:
+   target=200 squat:
+     1. deneme = 185 (%92.5)
+     2. deneme (ilk kötü)      = 190 (ilk + 2.5)
+     2. deneme (ilk normal)    = 192.5 (ilk + 2.5*?)  ama örnek yok
+     2. deneme (ilk iyi)       = 195 (ilk + 10, daha agresif)
+     3. deneme (2. iyi)        = 200 (hedef)
+     3. deneme (2. başarısız)  = 195 (aynı)
+     3. deneme (2. kötü)       = 197.5 (+2.5)
+*/
+function _prCalcAttemptKg(idx, prevFeel){
+  function round25(x){return Math.round(x/2.5)*2.5;}
+  var t=_pr.target;
+
+  if(idx===0){
+    /* İlk deneme = %92.5 */
+    return round25(t*0.925);
+  }
+
+  var prevKg=_pr.attempts[idx-1].kg;
+
+  if(idx===1){
+    /* 2. deneme */
+    if(prevFeel==='good') return round25(prevKg+10);       /* iyi → +10 */
+    if(prevFeel==='normal') return round25(prevKg+5);      /* normal → +5 */
+    if(prevFeel==='bad') return round25(prevKg+5);         /* kötü → +5 (zorla) */
+    return prevKg; /* fail → aynı — ama aslında attempt-feel'de fail ise bitti demiştik */
+  }
+
+  if(idx===2){
+    /* 3. deneme */
+    if(prevFeel==='good') return t;                        /* iyi → hedef */
+    if(prevFeel==='normal') return round25(prevKg+5);      /* normal → +5 */
+    if(prevFeel==='bad') return round25(prevKg+2.5);       /* kötü → +2.5 */
+    if(prevFeel==='fail') return prevKg;                   /* başarısız → aynı */
+  }
+
+  return prevKg;
+}
+
+/* ══ DENEME EKRANLARI ═══════════════════════════════════════ */
+function _prAttempt(){
+  var att=_pr.attempts[_pr.attemptIdx];
+  if(!att) return '<div>Hata</div>';
+  /* Varyant hesapla */
+  if(!att.variants){
+    att.variants=_prCalcPlateVariants(att.kg,_pr.bar);
+    att.variantIdx=0;
+  }
+  var variant=att.variants[att.variantIdx]||{};
+
+  var html='';
+  html+='<div style="padding:20px 0">';
+  html+='<div style="font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:1px">'+(_pr.attemptIdx+1)+'. Deneme · '+_prExerciseName(_pr.exercise)+'</div>';
+  html+='<div style="font-family:\'Bebas Neue\',cursive;font-size:56px;letter-spacing:2px;line-height:1;margin-top:8px;color:var(--accent)">'+att.kg+' '+unitLabel()+' × 1</div>';
+  html+='</div>';
+
+  html+=_prRenderBarbellAttempt(att.kg, variant, att.variants.length>1);
+
+  html+='<div style="background:var(--card2);border-radius:12px;padding:14px;margin-top:20px;font-size:12px;color:var(--text2);line-height:1.5">';
+  html+='💡 Dikkatlice ısın, nefes kontrolü sağla. Bu seti 1 tekrar çıkarabileceksen sete başla.';
+  html+='</div>';
+
+  html+='<button class="btn btn-full" onclick="_prAttemptBeginSet()" style="margin-top:16px">Denemeye Başla</button>';
+  html+='<button class="btn btn-full" style="margin-top:10px;background:var(--card2);color:var(--text2)" onclick="_prAttemptBack()">← Geri Dön</button>';
+
+  return html;
+}
+
+function _prRenderBarbellAttempt(kg, variant, showVariantBtn){
+  /* Benzer ama attempt için */
+  var plates=[25,20,15,10,5,2.5,1.25];
+  var leftPlates=[];
+  plates.forEach(function(p){
+    var c=variant[p]||0;
+    for(var i=0;i<c;i++) leftPlates.push(p);
+  });
+  var rightPlates=leftPlates.slice().reverse();
+
+  var html='<div style="position:relative;padding:10px 0">';
+  html+='<div style="display:flex;align-items:center;justify-content:center;gap:0;min-height:80px">';
+  html+='<div style="font-size:10px;color:var(--text3);margin-right:4px">'+_pr.bar+'kg</div>';
+  leftPlates.forEach(function(p){
+    var size=Math.min(60, 30+p*1.2);
+    html+='<div style="width:14px;height:'+size+'px;background:'+PLATE_COLORS[p]+';border-radius:2px;border:1px solid rgba(255,255,255,.1);margin-right:1px"></div>';
+  });
+  html+='<div style="width:60px;height:8px;background:linear-gradient(to bottom, #999, #ccc, #999);border-radius:2px;margin:0 4px"></div>';
+  rightPlates.forEach(function(p){
+    var size=Math.min(60, 30+p*1.2);
+    html+='<div style="width:14px;height:'+size+'px;background:'+PLATE_COLORS[p]+';border-radius:2px;border:1px solid rgba(255,255,255,.1);margin-left:1px"></div>';
+  });
+  html+='</div>';
+  html+='<div style="text-align:center;margin-top:10px;font-size:11px;color:var(--text2)">Her tarafa: <strong style="color:var(--text)">'+_prFormatVariant(variant)+'</strong></div>';
+
+  if(showVariantBtn){
+    var att=_pr.attempts[_pr.attemptIdx];
+    html+='<div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:12px">';
+    html+='<button class="calc-btn" style="padding:6px 12px;min-width:40px" onclick="_prChangeVariantAttempt(-1)">‹</button>';
+    html+='<span style="font-size:11px;color:var(--text2)">Varyant '+(att.variantIdx+1)+' / '+att.variants.length+'</span>';
+    html+='<button class="calc-btn" style="padding:6px 12px;min-width:40px" onclick="_prChangeVariantAttempt(1)">›</button>';
+    html+='</div>';
+  }
+  html+='</div>';
+  return html;
+}
+
+function _prChangeVariantAttempt(delta){
+  var att=_pr.attempts[_pr.attemptIdx];
+  if(!att||!att.variants) return;
+  var len=att.variants.length;
+  att.variantIdx=(att.variantIdx+delta+len)%len;
+  _renderPR();
+}
+
+function _prAttemptBack(){
+  if(_pr.attemptIdx>0){
+    _pr.attemptIdx--;
+    _pr.attempts.pop(); /* son denemeyi sil */
+  }
+  _renderPR();
+}
+
+function _prAttemptBeginSet(){
+  _pr.screen='attempt-active';
+  _renderPR();
+}
+
+function _prAttemptActive(){
+  var att=_pr.attempts[_pr.attemptIdx];
+  var html='';
+  html+='<div style="text-align:center;padding:60px 20px">';
+  html+='<div style="font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:2px">'+(_pr.attemptIdx+1)+'. DENEME AKTİF</div>';
+  html+='<div style="font-family:\'Bebas Neue\',cursive;font-size:80px;letter-spacing:3px;margin-top:20px;color:var(--accent)">'+att.kg+' '+unitLabel()+'</div>';
+  html+='<div style="font-family:\'Bebas Neue\',cursive;font-size:28px;letter-spacing:2px;color:var(--text2)">× 1 TEKRAR</div>';
+  html+='</div>';
+  html+='<button class="btn btn-full" onclick="_prAttemptFinish()">Denemeyi Bitir</button>';
+  html+='<button class="btn btn-full" style="margin-top:10px;background:var(--card2);color:var(--text2)" onclick="_prAttemptCancel()">Geri Dön</button>';
+  return html;
+}
+
+function _prAttemptCancel(){
+  _pr.screen='attempt';
+  _renderPR();
+}
+
+function _prAttemptFinish(){
+  _pr.screen='attempt-feel';
+  _pr._feelValue=0.66; /* default: normal */
+  _renderPR();
+}
+
+function _prAttemptRest(){
+  if(!_pr.restSeconds) _pr.restSeconds=5*60;
+  var next=_pr.attempts[_pr.attemptIdx];
+  var nextVariant=next&&next.variants?next.variants[next.variantIdx]:null;
+  var m=Math.floor(_pr.restSeconds/60), s=_pr.restSeconds%60;
+  var pct=(_pr.restSeconds/(5*60))*100;
+
+  var html='<div style="text-align:center;padding:20px 0">';
+  html+='<div style="display:flex;justify-content:center;margin-bottom:30px">';
+  html+='<div id="pr-rest-ring" style="width:220px;height:220px;border-radius:50%;background:conic-gradient(var(--accent) '+pct+'%, rgba(255,255,255,.1) '+pct+'%);display:flex;align-items:center;justify-content:center">';
+  html+='<div style="width:180px;height:180px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center">';
+  html+='<div id="pr-rest-clock" style="font-family:\'Bebas Neue\',cursive;font-size:48px;letter-spacing:3px;color:var(--text2)">'+(m<10?'0':'')+m+':'+(s<10?'0':'')+s+'</div>';
+  html+='</div></div></div>';
+
+  if(next){
+    /* Attempt için variants hazırla */
+    if(!next.variants){
+      next.variants=_prCalcPlateVariants(next.kg,_pr.bar);
+      next.variantIdx=0;
+      nextVariant=next.variants[0];
+    }
+    html+='<div style="text-align:left;padding:0 4px">';
+    html+='<div style="font-size:11px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:1px">Sonraki: '+(_pr.attemptIdx+1)+'. Deneme</div>';
+    html+='<div style="font-family:\'Bebas Neue\',cursive;font-size:32px;letter-spacing:1px;margin-top:4px">'+next.kg+' '+unitLabel()+' × 1</div>';
+    html+='</div>';
+    if(nextVariant) html+=_prRenderBarbellAttempt(next.kg, nextVariant, next.variants.length>1);
+  }
+
+  html+='</div>';
+  html+='<button class="btn btn-full" onclick="_prSkipRest()">Dinlenmeyi Bitir</button>';
+  return html;
+}
+
+/* ══ SONUÇ EKRANI ═══════════════════════════════════════════ */
+function _prResult(){
+  /* En iyi başarılı deneme */
+  var bestAttempt=null;
+  _pr.attempts.forEach(function(a){
+    if(a.success && (!bestAttempt||a.kg>bestAttempt.kg)) bestAttempt=a;
+  });
+
+  /* Başlık mesajı */
+  var headerKg=bestAttempt?bestAttempt.kg:_pr.target;
+  var achievedTarget=bestAttempt&&bestAttempt.kg>=_pr.target;
+  var message;
+  if(achievedTarget){
+    message='Tebrikler! Bu rekor denemende hedefine ulaştın. Şimdi rekorunu daha da geliştirmen için çalışma zamanı, sana PR alma zamanı geldiğinde hatırlatacağız!';
+  } else if(bestAttempt){
+    message='Bu denemende hedefine ulaşamadın, ancak yine de iyi iş çıkardın. Şimdi seviyeni artırman için çalışma zamanı, sana PR alma zamanı geldiğinde hatırlatacağız!';
+  } else {
+    message='Bu denemede tüm deneme hakların başarısız oldu. Daha hafif yüklerle çalışıp tekrar dene.';
+  }
+
+  var feelColors={fail:'#e63946',bad:'#ff9f1c',normal:'#4cc9f0',good:'#06d6a0'};
+  var feelLabels={fail:'Başarısız',bad:'Kötü hissettirdi',normal:'Normaldi',good:'İyi hissettirdi'};
+
+  var html='';
+  html+='<div style="text-align:center;padding:20px 0">';
+  html+='<div style="font-family:\'Bebas Neue\',cursive;font-size:64px;letter-spacing:2px;line-height:1">'+headerKg+'<span style="font-size:28px">'+unitLabel()+'</span></div>';
+  html+='</div>';
+
+  html+='<div style="font-size:13px;line-height:1.6;color:var(--text2);margin-bottom:24px">'+message+'</div>';
+
+  /* Denemeler listesi (tersten — 3,2,1) */
+  html+='<div style="margin-bottom:20px">';
+  html+='<div style="font-family:\'Bebas Neue\',cursive;font-size:20px;color:var(--accent);letter-spacing:2px;margin-bottom:14px">REKOR DENEMESİ</div>';
+  var attemptsRev=_pr.attempts.slice().reverse();
+  attemptsRev.forEach(function(a){
+    var col=feelColors[a.feel]||'var(--accent)';
+    html+='<div style="display:flex;align-items:center;gap:16px;margin-bottom:14px">';
+    html+='<div style="width:52px;height:52px;border-radius:50%;background:'+col+';color:#fff;display:flex;align-items:center;justify-content:center;font-family:\'Bebas Neue\',cursive;font-size:22px;flex-shrink:0">'+(a.idx+1)+'</div>';
+    html+='<div style="flex:1">';
+    html+='<div style="font-family:\'Bebas Neue\',cursive;font-size:24px;letter-spacing:1px">'+a.kg+unitLabel()+'</div>';
+    html+='<div style="font-size:11px;color:var(--text2)">'+feelLabels[a.feel]+'</div>';
+    html+='</div></div>';
+  });
+  html+='</div>';
+
+  /* Isınma listesi */
+  html+='<div style="border-top:1px solid var(--border);padding-top:16px">';
+  var warmupsRev=_pr.warmupSets.slice().reverse();
+  warmupsRev.forEach(function(w,i){
+    if(w.skipped) return;
+    html+='<div style="padding:10px 0">';
+    html+='<div style="font-size:14px;color:var(--text2)">'+w.kg+unitLabel()+' × '+w.reps+'</div>';
+    /* Son ısınma için feeling göster */
+    if((_pr.warmupSets.length-1-i)===4 && _pr.warmupFeel){
+      html+='<div style="font-size:11px;color:var(--text3);margin-top:2px">'+feelLabels[_pr.warmupFeel]+'</div>';
+    }
+    html+='</div>';
+  });
+  html+='</div>';
+
+  /* Günlüğe Ekle */
+  html+='<button class="btn btn-full" onclick="_prSaveToLog()" style="margin-top:24px">Günlüğe Ekle</button>';
+  html+='<button class="btn btn-full" style="margin-top:10px;background:var(--card2);color:var(--text2)" onclick="closeCalculator()">Kapat</button>';
+
+  return html;
+}
+
+function _prSaveToLog(){
+  /* Antrenman logu olarak kaydet */
+  var logs=getWorkoutLogs();
+  var bestAttempt=null;
+  _pr.attempts.forEach(function(a){
+    if(a.success && (!bestAttempt||a.kg>bestAttempt.kg)) bestAttempt=a;
+  });
+
+  var sets=[];
+  /* Isınma setleri */
+  _pr.warmupSets.forEach(function(w,i){
+    if(!w.skipped){
+      sets.push({
+        exId:_pr.exercise,
+        kg:unitToKg(w.kg)||w.kg,
+        reps:w.reps,
+        note:'Isınma '+(i+1)
+      });
+    }
+  });
+  /* Denemeler */
+  _pr.attempts.forEach(function(a,i){
+    sets.push({
+      exId:_pr.exercise,
+      kg:unitToKg(a.kg)||a.kg,
+      reps:a.success?1:0,
+      note:(i+1)+'. Deneme — '+(a.feel||'')
+    });
+  });
+
+  var log={
+    id:'pr_'+Date.now(),
+    programName:'PR Denemesi: '+_prExerciseName(_pr.exercise),
+    branch:'fitness',
+    date:new Date().toISOString(),
+    sets:sets,
+    isPR:true,
+    prTarget:unitToKg(_pr.target)||_pr.target,
+    prBest:bestAttempt?(unitToKg(bestAttempt.kg)||bestAttempt.kg):0
+  };
+  logs.unshift(log);
+  saveWorkoutLogs(logs);
+  showToast('🎯 Günlüğe eklendi!','success');
+  closeCalculator();
+}
+
+/* Yeni screen: warmup-active ve attempt-active */
+/* renderPR'a bunu eklemem lazım */
 
 /* ══════════════════════════════════════════════════════════
    KATMAN 2B — BRANŞ DETAY SAYFASI
