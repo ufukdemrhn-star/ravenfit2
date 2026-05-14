@@ -1599,7 +1599,12 @@ function restoreWiz(){
     }
   }
   if(A.st)selST=A.st;
-  if(A.gl)selGL=A.gl;
+  if(A.gl){
+    /* Eski hedef isimlerini yeni'ye mapla */
+    var oldGlMap={yag:'cut', idame:'maintain', kutle:'bulk'};
+    selGL=oldGlMap[A.gl]||A.gl;
+    A.gl=selGL;
+  }
   Object.keys(BT).forEach(function(g){var q=BT[g];var el=document.querySelector('[data-g="'+g+'"][data-ec="'+q.ec+'"][data-me="'+q.me+'"][data-en="'+q.en+'"]');if(el)markSelBT(g,el);});
 }
 function sv(id,v){var el=document.getElementById(id);if(el&&v!=null&&v!==undefined&&v!=='')el.value=v;}
@@ -1665,7 +1670,12 @@ function validate(s){
   }
   if(s===4){
     if(!selST||!selGL){document.getElementById('al4').classList.add('v');return false;}
-    A.st=selST;A.gl=selGL;calcAll();saveData();return true;
+    /* Recomp seçildiyse modu otomatik default'a ata */
+    if(selGL==='recomp' && !A.recompMode) A.recompMode='balanced';
+    A.st=selST;A.gl=selGL;
+    try { calcAll(); } catch(err){ console.warn('calcAll hatası:',err); }
+    try { saveData(); } catch(err){ console.warn('saveData hatası:',err); }
+    return true;
   }
   // Step 5 (ölçüler) ve Step 6 (özel durumlar) her zaman geç
   return true;
@@ -1718,44 +1728,52 @@ function selOpt(el,grp){
   if(grp==='st')selST=el.dataset.v;
   if(grp==='gl'){
     selGL=el.dataset.v;
-    /* Bulk seçildi ve yağ oranı yüksekse uyar */
-    var bulkW=document.getElementById('bulk-warning');
-    if(bulkW){
-      if(selGL==='bulk' && !_bulkOk()){
-        var bf=R.bf, male=U.gender==='male';
-        var limit=male?'%20':'%30';
-        var rec='Senin yağ oranın <strong>%'+bf.toFixed(1)+'</strong>. '+limit+' altında olduğunda bulk daha sağlıklıdır. Şimdi recomp ile yağ oranını düşürmeni öneriyoruz.';
-        document.getElementById('bulk-warning-text').innerHTML=rec;
-        bulkW.style.display='block';
-      } else {
-        bulkW.style.display='none';
-      }
-    }
-    /* Recomp seçildiyse ek seçenekleri göster */
-    var rcExtra=document.getElementById('recomp-extra');
-    if(rcExtra){
-      rcExtra.style.display=(selGL==='recomp')?'block':'none';
-      /* Default: balanced */
-      if(selGL==='recomp' && !A.rc){
-        A.rc='balanced';
-        A.recompMode='balanced';
-        var balEl=document.querySelector('[data-g="rc"][data-v="balanced"]');
-        if(balEl){
-          document.querySelectorAll('[data-g="rc"]').forEach(function(e){e.classList.remove('sel');});
-          balEl.classList.add('sel');
+    /* Bulk seçildi ve yağ oranı yüksekse uyar — defansif */
+    try {
+      var bulkW=document.getElementById('bulk-warning');
+      if(bulkW){
+        if(selGL==='bulk' && typeof _bulkOk==='function' && !_bulkOk()){
+          var bf=R.bf||0, male=U.gender==='male';
+          var limit=male?'%20':'%30';
+          var rec='Senin yağ oranın <strong>%'+bf.toFixed(1)+'</strong>. '+limit+' altında olduğunda bulk daha sağlıklıdır. Şimdi recomp ile yağ oranını düşürmeni öneriyoruz.';
+          var bwText=document.getElementById('bulk-warning-text');
+          if(bwText) bwText.innerHTML=rec;
+          bulkW.style.display='block';
+        } else {
+          bulkW.style.display='none';
         }
       }
-    }
-    if(R.recGoal)renderGoalAdvice(selGL);
+    } catch(err){ console.warn('Bulk warning render hatası:',err); }
+    /* Recomp seçildiyse ek seçenekleri göster — defansif */
+    try {
+      var rcExtra=document.getElementById('recomp-extra');
+      if(rcExtra){
+        rcExtra.style.display=(selGL==='recomp')?'block':'none';
+        if(selGL==='recomp' && !A.rc){
+          A.rc='balanced';
+          A.recompMode='balanced';
+          var balEl=document.querySelector('[data-g="rc"][data-v="balanced"]');
+          if(balEl){
+            document.querySelectorAll('[data-g="rc"]').forEach(function(e){e.classList.remove('sel');});
+            balEl.classList.add('sel');
+          }
+        }
+      }
+    } catch(err){ console.warn('Recomp render hatası:',err); }
+    /* Hedef tavsiye metni güncelle — defansif */
+    try {
+      if(R.recGoal && typeof renderGoalAdvice==='function') renderGoalAdvice(selGL);
+    } catch(err){ console.warn('Goal advice render hatası:',err); }
   }
   if(grp==='rc'){
     A.recompMode=el.dataset.v;
-    /* Makro yeniden hesapla */
-    if(selGL==='recomp' && R.tdee){
-      var male=U.gender==='male';
-      R.macros=calcMacros(R.goalCal, 'recomp', selST||'hybrid', R.lm, U.weight, R.bf, male, A.recompMode);
-      renderGoalAdvice('recomp');
-    }
+    try {
+      if(selGL==='recomp' && R.tdee){
+        var male=U.gender==='male';
+        R.macros=calcMacros(R.goalCal, 'recomp', selST||'hybrid', R.lm, U.weight, R.bf, male, A.recompMode);
+        renderGoalAdvice('recomp');
+      }
+    } catch(err){ console.warn('Recomp mode hatası:',err); }
   }
 }
 function markSel(grp,el){
@@ -2152,40 +2170,50 @@ function calcAll(){
 
 /* ── GOAL STEP ────────────────────────────────────────── */
 function renderGoalStep(){
-  /* Önerilen hedef = R.recGoal — Yeni isimlerle */
-  renderGoalAdvice(selGL || R.recGoal);
+  /* R.tdee/R.bf yoksa erken çık */
+  if(!R.tdee || !R.bf){ return; }
+
+  try { renderGoalAdvice(selGL || R.recGoal); } catch(err){ console.warn('renderGoalAdvice hata:',err); }
 
   /* Recomp extra'yı sync et */
-  var rcExtra=document.getElementById('recomp-extra');
-  if(rcExtra) rcExtra.style.display=(selGL==='recomp')?'block':'none';
+  try {
+    var rcExtra=document.getElementById('recomp-extra');
+    if(rcExtra) rcExtra.style.display=(selGL==='recomp')?'block':'none';
+  } catch(err){}
 
   /* Bulk warning sync */
-  var bw=document.getElementById('bulk-warning');
-  if(bw) bw.style.display=(selGL==='bulk' && !_bulkOk())?'block':'none';
+  try {
+    var bw=document.getElementById('bulk-warning');
+    if(bw) bw.style.display=(selGL==='bulk' && !_bulkOk())?'block':'none';
+  } catch(err){}
 
   /* Açıklamaları dinamik kg değerleriyle güncelle */
-  var bf=R.bf||20, male=U.gender==='male';
-  var goals=['cut','recomp','maintain','bulk'];
-  goals.forEach(function(g){
-    var od=document.getElementById('od-'+g);
-    if(!od) return;
-    var cal=calcGoalCalories(R.tdee, g, bf, male);
-    var diff=cal-R.tdee;
-    var pctStr=R.tdee?(diff>0?'+':'')+((diff/R.tdee)*100).toFixed(0)+'%':'';
-    var calStr=(diff>=0?'+':'')+diff+' kcal';
-    od.textContent=calStr+' ('+pctStr+' TDEE)';
-  });
+  try {
+    var bf=R.bf||20, male=U.gender==='male';
+    var goals=['cut','recomp','maintain','bulk'];
+    goals.forEach(function(g){
+      var od=document.getElementById('od-'+g);
+      if(!od) return;
+      var cal=calcGoalCalories(R.tdee, g, bf, male);
+      var diff=cal-R.tdee;
+      var pctStr=R.tdee?(diff>0?'+':'')+((diff/R.tdee)*100).toFixed(0)+'%':'';
+      var calStr=(diff>=0?'+':'')+diff+' kcal';
+      od.textContent=calStr+' ('+pctStr+' TDEE)';
+    });
+  } catch(err){ console.warn('Goal options dynamic render hata:',err); }
 
   /* Önerilen rozeti */
-  document.querySelectorAll('[data-g="gl"]').forEach(function(el){
-    var ex=el.querySelector('.rec-badge');if(ex)ex.remove();
-    if(el.dataset.v===R.recGoal){
-      var b=document.createElement('span');b.className='rec-badge';
-      b.style.cssText='font-size:9px;color:var(--success);font-weight:700;margin-left:4px';
-      b.textContent='⭐ Önerilen';
-      var on=el.querySelector('.on');if(on)on.appendChild(b);
-    }
-  });
+  try {
+    document.querySelectorAll('[data-g="gl"]').forEach(function(el){
+      var ex=el.querySelector('.rec-badge');if(ex)ex.remove();
+      if(el.dataset.v===R.recGoal){
+        var b=document.createElement('span');b.className='rec-badge';
+        b.style.cssText='font-size:9px;color:var(--success);font-weight:700;margin-left:4px';
+        b.textContent='⭐ Önerilen';
+        var on=el.querySelector('.on');if(on)on.appendChild(b);
+      }
+    });
+  } catch(err){}
 }
 function renderGoalAdvice(goal) {
   /* Eski isimleri mapla */
@@ -2200,27 +2228,27 @@ function renderGoalAdvice(goal) {
   };
   /* Haftalık kg değişim açıklaması */
   var bw=U.weight||0;
-  var range=_weeklyChangeRange(goal);
   var changeText='';
-  if(bw && (range.min!==0 || range.max!==0)){
-    var minKg=(bw*range.min).toFixed(2);
-    var maxKg=(bw*range.max).toFixed(2);
-    /* Negatifse "kayıp", pozitifse "kazanım" */
-    if(range.max<=0){
-      /* Cut veya recomp (negatif) */
-      var lo=Math.abs(maxKg), hi=Math.abs(minKg);
-      changeText='Haftalık hedef: <strong>'+lo+' - '+hi+' kg kayıp</strong>';
-    } else if(range.min>=0){
-      /* Bulk */
-      changeText='Haftalık hedef: <strong>'+minKg+' - '+maxKg+' kg kazanım</strong>';
-    } else {
-      /* Maintain: ±dalgalanma */
-      var d=Math.abs(maxKg);
-      changeText='Sağlıklı dalgalanma: <strong>±'+d+' kg/hafta</strong>';
+  try {
+    var range=_weeklyChangeRange(goal);
+    if(bw && range && (range.min!==0 || range.max!==0)){
+      var minKg=parseFloat((bw*range.min).toFixed(2));
+      var maxKg=parseFloat((bw*range.max).toFixed(2));
+      if(range.max<=0){
+        var lo=Math.abs(maxKg).toFixed(2), hi=Math.abs(minKg).toFixed(2);
+        changeText='Haftalık hedef: <strong>'+lo+' - '+hi+' kg kayıp</strong>';
+      } else if(range.min>=0){
+        changeText='Haftalık hedef: <strong>'+minKg.toFixed(2)+' - '+maxKg.toFixed(2)+' kg kazanım</strong>';
+      } else {
+        var d=Math.abs(maxKg).toFixed(2);
+        changeText='Sağlıklı dalgalanma: <strong>±'+d+' kg/hafta</strong>';
+      }
     }
-  }
+  } catch(err){ console.warn('Weekly change calc hata:',err); }
 
-  var smartAdvice = getSmartWorkoutAdvice(goal);
+  var smartAdvice='';
+  try { smartAdvice = getSmartWorkoutAdvice(goal); } catch(err){}
+
   var adviceHtml = smartAdvice
     ? '<br><br><strong style="color:var(--text)">📌 Antrenman Tavsiyesi:</strong> <span style="color:var(--warn)">' + smartAdvice + '</span>'
     : '';
@@ -2228,7 +2256,8 @@ function renderGoalAdvice(goal) {
     ? '<br><br><strong style="color:var(--accent)">📉</strong> ' + changeText
     : '';
 
-  document.getElementById('g-rec-txt').innerHTML =
+  var elTxt=document.getElementById('g-rec-txt');
+  if(elTxt) elTxt.innerHTML =
     '<strong>Hedef Analizi:</strong> ' + (rTexts[goal] || '') + changeHtml + adviceHtml;
 }
 
