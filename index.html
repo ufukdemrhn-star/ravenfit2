@@ -889,9 +889,34 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 
       <div class="seclbl" style="margin-top:8px">Kalori Hedefin</div>
       <div class="opts" id="o-gl">
-        <div class="oc" data-g="gl" data-v="yag" onclick="selOpt(this,'gl')"><div class="oi">🔥</div><div class="ot"><div class="on">Yağ Kaybetme</div><div class="od">TDEE − 350 kcal | Kalori açığı</div></div><div class="orad"></div></div>
-        <div class="oc" data-g="gl" data-v="idame" onclick="selOpt(this,'gl')"><div class="oi">⚖️</div><div class="ot"><div class="on">İdare-i Maslahat</div><div class="od">TDEE ± 0 kcal | Vücut koruma</div></div><div class="orad"></div></div>
-        <div class="oc" data-g="gl" data-v="kutle" onclick="selOpt(this,'gl')"><div class="oi">💪</div><div class="ot"><div class="on">Kütle Kazanma</div><div class="od">TDEE + 350 kcal | Kalori fazlası</div></div><div class="orad"></div></div>
+        <div class="oc" data-g="gl" data-v="cut" onclick="selOpt(this,'gl')"><div class="oi">🔥</div><div class="ot"><div class="on">Yağ Kaybı (Cut)</div><div class="od" id="od-cut">Kalori açığı</div></div><div class="orad"></div></div>
+        <div class="oc" data-g="gl" data-v="recomp" onclick="selOpt(this,'gl')"><div class="oi">♻️</div><div class="ot"><div class="on">Recomp</div><div class="od" id="od-recomp">Yağ kaybı + kas kazanımı</div></div><div class="orad"></div></div>
+        <div class="oc" data-g="gl" data-v="maintain" onclick="selOpt(this,'gl')"><div class="oi">⚖️</div><div class="ot"><div class="on">Formunu Koru (Maintain)</div><div class="od" id="od-maintain">TDEE ± 0 kcal</div></div><div class="orad"></div></div>
+        <div class="oc" data-g="gl" data-v="bulk" onclick="selOpt(this,'gl')"><div class="oi">💪</div><div class="ot"><div class="on">Kütle Kazanma (Bulk)</div><div class="od" id="od-bulk">Kalori fazlası</div></div><div class="orad"></div></div>
+      </div>
+      <!-- Recomp ek seçenekler -->
+      <div id="recomp-extra" style="display:none;margin-top:10px;padding:12px;background:var(--card2);border:1px solid var(--border);border-radius:12px">
+        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px">♻️ Recomp Karb Tercihi</div>
+        <div style="font-size:11px;color:var(--text2);margin-bottom:10px;line-height:1.4">Recomp'ta karbonhidrat ve yağ dengesini sen belirliyorsun:</div>
+        <div class="opts" id="o-rc">
+          <div class="oc compact" data-g="rc" data-v="lowcarb" onclick="selOpt(this,'rc')"><div class="oi">🥑</div><div class="ot"><div class="on">Düşük Karb</div><div class="od">Yüksek yağ — 1.0 g/kg</div></div><div class="orad"></div></div>
+          <div class="oc compact" data-g="rc" data-v="balanced" onclick="selOpt(this,'rc')"><div class="oi">⚖️</div><div class="ot"><div class="on">Dengeli</div><div class="od">Yağ 0.8 g/kg</div></div><div class="orad"></div></div>
+          <div class="oc compact" data-g="rc" data-v="performance" onclick="selOpt(this,'rc')"><div class="oi">🏃</div><div class="ot"><div class="on">Performans</div><div class="od">Yüksek karb — Yağ 0.6-0.7 g/kg</div></div><div class="orad"></div></div>
+        </div>
+      </div>
+      <!-- Bulk uyarı popup (inline) -->
+      <div id="bulk-warning" style="display:none;margin-top:10px;padding:14px;background:rgba(255,159,28,.08);border:1.5px solid var(--warn);border-radius:12px">
+        <div style="display:flex;align-items:flex-start;gap:10px">
+          <div style="font-size:24px;flex-shrink:0">⚠️</div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:700;color:var(--warn);margin-bottom:4px">Bulk Önerilmiyor</div>
+            <div style="font-size:11px;color:var(--text2);line-height:1.5" id="bulk-warning-text">Yağ oranın yüksek olduğu için bulk dönemi sağlıklı değil. Önce recomp ile yağ oranını düşürmeni öneriyoruz.</div>
+            <div style="margin-top:10px;display:flex;gap:8px">
+              <button onclick="selOpt(document.querySelector('[data-g=gl][data-v=recomp]'),'gl')" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:11px;font-weight:700;cursor:pointer">♻️ Recomp'a Geç</button>
+              <button onclick="document.getElementById('bulk-warning').style.display='none'" style="background:var(--card);color:var(--text2);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:11px;font-weight:600;cursor:pointer">Yine de Bulk</button>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="alert" id="al4">⚠️ Lütfen spor türü ve kalori hedefinizi seçin.</div>
     </div>
@@ -1672,7 +1697,9 @@ function updS5GenderUI(){
 
 function selOpt(el,grp){
   markSel(grp,el);
-  A[grp]=parseFloat(el.dataset.v);
+  var rawV=el.dataset.v;
+  var numV=parseFloat(rawV);
+  A[grp]=isNaN(numV)?rawV:numV;
   if(grp==='sd'){
     var shEls=document.querySelectorAll('[data-g="sh"]');
     var shZ=document.querySelector('[data-g="sh"][data-v="0"]');
@@ -1689,7 +1716,47 @@ function selOpt(el,grp){
     }
   }
   if(grp==='st')selST=el.dataset.v;
-  if(grp==='gl'){selGL=el.dataset.v;if(R.recGoal)renderGoalAdvice(selGL);}
+  if(grp==='gl'){
+    selGL=el.dataset.v;
+    /* Bulk seçildi ve yağ oranı yüksekse uyar */
+    var bulkW=document.getElementById('bulk-warning');
+    if(bulkW){
+      if(selGL==='bulk' && !_bulkOk()){
+        var bf=R.bf, male=U.gender==='male';
+        var limit=male?'%20':'%30';
+        var rec='Senin yağ oranın <strong>%'+bf.toFixed(1)+'</strong>. '+limit+' altında olduğunda bulk daha sağlıklıdır. Şimdi recomp ile yağ oranını düşürmeni öneriyoruz.';
+        document.getElementById('bulk-warning-text').innerHTML=rec;
+        bulkW.style.display='block';
+      } else {
+        bulkW.style.display='none';
+      }
+    }
+    /* Recomp seçildiyse ek seçenekleri göster */
+    var rcExtra=document.getElementById('recomp-extra');
+    if(rcExtra){
+      rcExtra.style.display=(selGL==='recomp')?'block':'none';
+      /* Default: balanced */
+      if(selGL==='recomp' && !A.rc){
+        A.rc='balanced';
+        A.recompMode='balanced';
+        var balEl=document.querySelector('[data-g="rc"][data-v="balanced"]');
+        if(balEl){
+          document.querySelectorAll('[data-g="rc"]').forEach(function(e){e.classList.remove('sel');});
+          balEl.classList.add('sel');
+        }
+      }
+    }
+    if(R.recGoal)renderGoalAdvice(selGL);
+  }
+  if(grp==='rc'){
+    A.recompMode=el.dataset.v;
+    /* Makro yeniden hesapla */
+    if(selGL==='recomp' && R.tdee){
+      var male=U.gender==='male';
+      R.macros=calcMacros(R.goalCal, 'recomp', selST||'hybrid', R.lm, U.weight, R.bf, male, A.recompMode);
+      renderGoalAdvice('recomp');
+    }
+  }
 }
 function markSel(grp,el){
   document.querySelectorAll('[data-g="'+grp+'"]').forEach(function(e){e.classList.remove('sel');});
@@ -1740,29 +1807,147 @@ function calcAct(){
   if(sc<=6.5)return{m:1.725,lbl:'Çok Aktif — Yoğun egzersiz'};
   return{m:1.9,lbl:'Aşırı Aktif — Spor odaklı yaşam'};
 }
-function goalAdj(g){return{yag:-350,idame:0,kutle:350}[g]||0;}
-function calcMacros(cals,gl,st,lm){
-  var prM={bb:{yag:2.4,idame:2.2,kutle:2.0},cardio:{yag:2.0,idame:1.8,kutle:1.8},hybrid:{yag:2.2,idame:2.0,kutle:1.9}};
-  var fatM={bb:.25,cardio:.20,hybrid:.22};
-  var pr=(prM[st]&&prM[st][gl])||2.0;
-  var fr=fatM[st]||.25;
-  var pg=Math.round(lm*pr),fg=Math.round(cals*fr/9),pc=pg*4,fc=Math.round(fg*9),cc=Math.max(0,cals-pc-fc);
-  return{pg:pg,fg:fg,cg:Math.round(cc/4),pc:pc,fc:fc,cc:Math.round(cc)};
+/* ══════════════════════════════════════════════════════════
+   YENİ KALORİ + MAKRO ALGORİTMASI (cut/recomp/maintain/bulk)
+   ══════════════════════════════════════════════════════════ */
+
+/* Yağ oranını bandına çevir: yüksek/orta/düşük */
+function _bfBand(bf, male){
+  if(male){
+    if(bf>25) return 'highest';     /* >25 */
+    if(bf>=15) return 'high';        /* 15-25 */
+    if(bf>=10) return 'mid';         /* 10-15 */
+    return 'low';                    /* <10 */
+  } else {
+    if(bf>35) return 'highest';     /* >35 */
+    if(bf>=25) return 'high';        /* 25-35 */
+    if(bf>=20) return 'mid';         /* 20-25 */
+    return 'low';                    /* <20 */
+  }
 }
-function calcBT(){
-  var ec=0,me=0,en=0;
-  Object.values(BT).forEach(function(q){ec+=q.ec;me+=q.me;en+=q.en;});
-  var t=ec+me+en||1;
-  return{ecto:Math.round(ec/t*10000)/100,meso:Math.round(me/t*10000)/100,endo:Math.round(en/t*10000)/100};
+
+/* Hedef → TDEE ayarlaması (yüzde olarak, açığın orta noktasını al) */
+function calcGoalCalories(tdee, gl, bf, male){
+  var band=_bfBand(bf, male);
+  var pct=0;
+  if(gl==='cut'){
+    /* Açık % aralıkları → orta nokta */
+    var cutMap={highest:-22.5, high:-17.5, mid:-12.5, low:-7.5};
+    pct=cutMap[band]||-15;
+  } else if(gl==='recomp'){
+    var recompMap={highest:-10, high:-5, mid:0, low:5};
+    pct=recompMap[band]||0;
+  } else if(gl==='maintain'){
+    pct=0;
+  } else if(gl==='bulk'){
+    var bulkMap={lowest:15, low:15, mid:10, high:5};
+    /* Bulk için band yeniden ölçekleniyor */
+    var bulkBand;
+    if(male){
+      if(bf<10) bulkBand='lowest';
+      else if(bf<15) bulkBand='low';
+      else if(bf<20) bulkBand='mid';
+      else bulkBand='high';
+    } else {
+      if(bf<18) bulkBand='lowest';
+      else if(bf<25) bulkBand='low';
+      else if(bf<30) bulkBand='mid';
+      else bulkBand='high';
+    }
+    pct={lowest:15, low:15, mid:10, high:5}[bulkBand]||5;
+  }
+  return Math.round(tdee*(1+pct/100));
 }
-function calcIdealRange(h){
-  var hm=h/100,h2=hm*hm;
-  return{lo:Math.round(18.5*h2*10)/10,hi:Math.round(24.9*h2*10)/10};
+
+/* Hedef için protein g/kg (bodyweight!) */
+function _proteinPerKg(gl, bf, male){
+  var band=_bfBand(bf, male);
+  /* Cut: high(1.8-2.0), mid(2.0-2.2), low(2.2-2.4) */
+  /* Recomp: aynı tablo, çünkü protein vurgusu */
+  /* Maintain: high(1.6-1.8), mid(1.8-2.0), low(2.0-2.2) */
+  /* Bulk: high(1.6-1.8), mid(1.8-2.0), low(2.0-2.2) */
+  if(gl==='cut'||gl==='recomp'){
+    var m={highest:1.9, high:1.9, mid:2.1, low:2.3};
+    return m[band]||2.0;
+  } else {
+    /* maintain ve bulk */
+    var m={highest:1.7, high:1.7, mid:1.9, low:2.1};
+    return m[band]||1.9;
+  }
 }
+
+/* Hedef için yağ g/kg (bodyweight!) */
+function _fatPerKg(gl, recompMode){
+  if(gl==='recomp'){
+    if(recompMode==='lowcarb') return 1.0;
+    if(recompMode==='performance') return 0.65; /* 0.6-0.7 ort */
+    return 0.8;
+  }
+  /* cut, maintain, bulk → ideal aralık 0.8-1.0, ort 0.9 */
+  return 0.9;
+}
+
+/* Yeni makro hesabı */
+function calcMacros(cals, gl, st, lm, bw, bf, male, recompMode){
+  bw=bw||lm; /* fallback */
+  var prKg=_proteinPerKg(gl, bf, male);
+  var fatKg=_fatPerKg(gl, recompMode);
+  var pg=Math.round(bw*prKg);
+  var fg=Math.round(bw*fatKg);
+  var pc=pg*4;
+  var fc=fg*9;
+  var cc=Math.max(0, cals-pc-fc);
+  var cg=Math.round(cc/4);
+  return {pg:pg, fg:fg, cg:cg, pc:pc, fc:Math.round(fc), cc:Math.round(cc)};
+}
+
+/* Önerilen hedef — yağ oranı bandına göre */
 function recGoal(){
-  var bf=R.bf,bmi=R.bmi,male=U.gender==='male';
-  if(male){if(bf>20||bmi>27)return'yag';if(bf>14||bmi>23)return'idame';return'kutle';}
-  else{if(bf>30||bmi>27)return'yag';if(bf>24||bmi>23)return'idame';return'kutle';}
+  var bf=R.bf, male=U.gender==='male';
+  if(male){
+    if(bf>25) return 'cut';      /* yüksek yağ → cut */
+    if(bf>=18) return 'recomp';   /* orta-yüksek → recomp */
+    if(bf>=12) return 'maintain'; /* orta → maintain */
+    return 'bulk';                /* lean → bulk */
+  } else {
+    if(bf>32) return 'cut';
+    if(bf>=26) return 'recomp';
+    if(bf>=20) return 'maintain';
+    return 'bulk';
+  }
+}
+
+/* Bulk uygun mu? (Yağ oranı çok yüksekse uyarı verir) */
+function _bulkOk(){
+  var bf=R.bf, male=U.gender==='male';
+  if(male) return bf<=20;
+  return bf<=30;
+}
+
+/* Haftalık vücut ağırlığı değişim aralığı (% bodyweight/week) */
+function _weeklyChangeRange(gl){
+  /* Returns {min, max} as decimal: 0.005 = %0.5 */
+  if(gl==='cut') return {min:-0.01, max:-0.005};
+  if(gl==='recomp') return {min:-0.005, max:0};
+  if(gl==='maintain') return {min:-0.0025, max:0.0025};
+  if(gl==='bulk'){
+    /* Seviyeye göre: beginner / intermediate / advanced */
+    var lvl='beginner';
+    try{ lvl=getUserLevel(); }catch(e){}
+    if(lvl==='advanced') return {min:0.001, max:0.002};
+    if(lvl==='intermediate') return {min:0.0015, max:0.003};
+    return {min:0.0025, max:0.005};
+  }
+  return {min:0, max:0};
+}
+
+/* Eski goalAdj geri uyumluluk için — eski 3'lü hedef geldi mi yeni'ye map et */
+function goalAdj(g){
+  /* Eski isimler: yag/idame/kutle → cut/maintain/bulk */
+  var map={yag:'cut', idame:'maintain', kutle:'bulk'};
+  if(map[g]) g=map[g];
+  var bf=R.bf||20, male=U.gender==='male';
+  return calcGoalCalories(R.tdee||2000, g, bf, male) - (R.tdee||2000);
 }
 
 /* Vücut Profili Algoritması - cinsiyet bazlı ve daha dengeli sürüm */
@@ -1915,21 +2100,29 @@ function getSmartWorkoutAdvice(goalOverride) {
   if (!goal) return "";
   var msg = "";
 
-  if (goal === 'yag') {
+  /* Eski isim → yeni isim mapping (backward-compat) */
+  var glMap={yag:'cut', idame:'maintain', kutle:'bulk'};
+  if(glMap[goal]) goal=glMap[goal];
+
+  if (goal === 'cut') {
     if (days === 0)        msg = "Yağ yakmak için egzersiz şart. Haftada en az 3 gün antrenman yapmalısın.";
     else if (days === 1)   msg = "Haftada 1 gün yağ kaybı için yeterli değil. Minimum 3 güne çıkmalısın, yoksa sonuç alamazsın.";
     else if (days === 2)   msg = "İyi bir başlangıç, ama yağ kaybı için haftada 3–4 gün idealdir.";
     else if (days <= 4)    msg = "Yağ kaybı için optimal antrenman sıklığındasın. Devam et!";
     else                   msg = "5+ gün fazla bile olabilir. Overtraining ve toparlanmaya dikkat et; dinlenme de antrenmanın bir parçası.";
-  } else if (goal === 'kutle') {
+  } else if (goal === 'bulk') {
     if (days === 0)        msg = "Açık konuşmak gerekirse; hiç antrenman yapmadan kas kazanamazsın. Hemen başlamalısın.";
     else if (days <= 2)    msg = "Kas gelişimi (hipertrofi) için minimum 3 gün şarttır. Şu an yetersiz kalıyorsun.";
     else if (days <= 4)    msg = "İdeal hipertrofi aralığındasın. Prog. overload ve yeterli uyku ile gelişim garantili!";
     else                   msg = "Yoğun bir hacim dönemi. Eklemlerini dinlendirmeyi ve toparlanmayı ihmal etme.";
-  } else if (goal === 'idame') {
+  } else if (goal === 'maintain') {
     if (days <= 1)         msg = "Kas kütleni korumak için haftada 1–2 gün yeterli olabilir. Yine de hareketi artırmanı öneririz.";
     else if (days <= 3)    msg = "Mevcut formu korumak için iyi bir sıklık.";
     else                   msg = "Harika bir aktivite seviyesin. Formunu geliştirmeyi de düşünebilirsin.";
+  } else if (goal === 'recomp') {
+    if (days <= 1)         msg = "Recomp için minimum 3 gün antrenman şarttır. Daha az antrenman ile yağ kaybı + kas kazanımı çok zor.";
+    else if (days <= 3)    msg = "Recomp için kabul edilebilir sıklık. Yüksek proteine ve antrenman yoğunluğuna dikkat et.";
+    else                   msg = "Recomp için ideal antrenman sıklığı. Antrenman kalitesi ve toparlanma kritik.";
   }
   return msg;
 }
@@ -1943,25 +2136,47 @@ function calcAll(){
   R.bt=calcBT();
   R.iw=calcIdealRange(U.height);
   R.water=Math.round(U.weight*35)/1000;
-  R.minProt=Math.round(R.lm*1.6);R.maxProt=Math.round(R.lm*2.4);
+  R.minProt=Math.round(U.weight*1.6);R.maxProt=Math.round(U.weight*2.4);
   R.recGoal=recGoal();
+  /* Eski hedef isimleri yeni ile mapla — backward compatibility */
+  var glOld=selGL||R.recGoal;
+  var glMap={yag:'cut', idame:'maintain', kutle:'bulk'};
+  if(glMap[glOld]){ selGL=glMap[glOld]; }
   var gl=selGL||R.recGoal,st=selST||'hybrid';
-  R.goalCal=R.tdee+goalAdj(gl);
-  R.macros=calcMacros(R.goalCal,gl,st,R.lm);
+  var male=U.gender==='male';
+  R.goalCal=calcGoalCalories(R.tdee, gl, R.bf, male);
+  R.macros=calcMacros(R.goalCal, gl, st, R.lm, U.weight, R.bf, male, A.recompMode);
   if(U.gender==='male')R.swr=Math.round(U.shoulder/U.waist*100)/100;
   else R.whr=Math.round(U.waist/U.hip*100)/100;
 }
 
 /* ── GOAL STEP ────────────────────────────────────────── */
 function renderGoalStep(){
-  var rTexts={
-    yag:'Yağ oranın ideal değerlerin üzerinde. Kalori açığı ve protein ağırlıklı bir strateji öneriyoruz.',
-    idame:'Vücut kompozisyonun iyi konumda. İdame ile kas/yağ oranını koru ve geliştir.',
-    kutle:'Yağ oranın düşük, kas kazanıma hazırsın. Kalori fazlasıyla maksimum gelişim sağlayabilirsin.'
-  };
-  
+  /* Önerilen hedef = R.recGoal — Yeni isimlerle */
   renderGoalAdvice(selGL || R.recGoal);
 
+  /* Recomp extra'yı sync et */
+  var rcExtra=document.getElementById('recomp-extra');
+  if(rcExtra) rcExtra.style.display=(selGL==='recomp')?'block':'none';
+
+  /* Bulk warning sync */
+  var bw=document.getElementById('bulk-warning');
+  if(bw) bw.style.display=(selGL==='bulk' && !_bulkOk())?'block':'none';
+
+  /* Açıklamaları dinamik kg değerleriyle güncelle */
+  var bf=R.bf||20, male=U.gender==='male';
+  var goals=['cut','recomp','maintain','bulk'];
+  goals.forEach(function(g){
+    var od=document.getElementById('od-'+g);
+    if(!od) return;
+    var cal=calcGoalCalories(R.tdee, g, bf, male);
+    var diff=cal-R.tdee;
+    var pctStr=R.tdee?(diff>0?'+':'')+((diff/R.tdee)*100).toFixed(0)+'%':'';
+    var calStr=(diff>=0?'+':'')+diff+' kcal';
+    od.textContent=calStr+' ('+pctStr+' TDEE)';
+  });
+
+  /* Önerilen rozeti */
   document.querySelectorAll('[data-g="gl"]').forEach(function(el){
     var ex=el.querySelector('.rec-badge');if(ex)ex.remove();
     if(el.dataset.v===R.recGoal){
@@ -1973,17 +2188,48 @@ function renderGoalStep(){
   });
 }
 function renderGoalAdvice(goal) {
+  /* Eski isimleri mapla */
+  var glMap={yag:'cut', idame:'maintain', kutle:'bulk'};
+  if(glMap[goal]) goal=glMap[goal];
+
   var rTexts = {
-    yag:   'Yağ oranın ideal değerlerin üzerinde. Kalori açığı ve protein ağırlıklı bir strateji öneriyoruz.',
-    idame: 'Vücut kompozisyonun iyi konumda. İdame ile kas/yağ oranını koru ve geliştir.',
-    kutle: 'Yağ oranın düşük, kas kazanıma hazırsın. Kalori fazlasıyla maksimum gelişim sağlayabilirsin.'
+    cut:      'Kalori açığıyla yağ kaybı dönemi. Yüksek protein, orta yağ, kontrollü karbonhidrat.',
+    recomp:   'Eş zamanlı yağ kaybı + kas kazanımı. Yağ oranına göre ufak kalori ayarı, yüksek protein.',
+    maintain: 'Mevcut kompozisyonu koruma. TDEE seviyesinde dengeli beslenme.',
+    bulk:     'Kalori fazlasıyla kas kazanımı. Yağ oranına göre kontrollü artış.'
   };
+  /* Haftalık kg değişim açıklaması */
+  var bw=U.weight||0;
+  var range=_weeklyChangeRange(goal);
+  var changeText='';
+  if(bw && (range.min!==0 || range.max!==0)){
+    var minKg=(bw*range.min).toFixed(2);
+    var maxKg=(bw*range.max).toFixed(2);
+    /* Negatifse "kayıp", pozitifse "kazanım" */
+    if(range.max<=0){
+      /* Cut veya recomp (negatif) */
+      var lo=Math.abs(maxKg), hi=Math.abs(minKg);
+      changeText='Haftalık hedef: <strong>'+lo+' - '+hi+' kg kayıp</strong>';
+    } else if(range.min>=0){
+      /* Bulk */
+      changeText='Haftalık hedef: <strong>'+minKg+' - '+maxKg+' kg kazanım</strong>';
+    } else {
+      /* Maintain: ±dalgalanma */
+      var d=Math.abs(maxKg);
+      changeText='Sağlıklı dalgalanma: <strong>±'+d+' kg/hafta</strong>';
+    }
+  }
+
   var smartAdvice = getSmartWorkoutAdvice(goal);
   var adviceHtml = smartAdvice
     ? '<br><br><strong style="color:var(--text)">📌 Antrenman Tavsiyesi:</strong> <span style="color:var(--warn)">' + smartAdvice + '</span>'
     : '';
+  var changeHtml = changeText
+    ? '<br><br><strong style="color:var(--accent)">📉</strong> ' + changeText
+    : '';
+
   document.getElementById('g-rec-txt').innerHTML =
-    '<strong>Hedef Analizi:</strong> ' + (rTexts[goal] || '') + adviceHtml;
+    '<strong>Hedef Analizi:</strong> ' + (rTexts[goal] || '') + changeHtml + adviceHtml;
 }
 
 /* ── TABS ─────────────────────────────────────────────── */
@@ -2087,9 +2333,13 @@ function mkBTB(name,pct,col){
 
 /* ── TAB: BESLENME ────────────────────────────────────── */
 function renderBeslenme(){
-  var gl=selGL||R.recGoal,st=selST||'hybrid';
-  var gN={yag:'Yağ Kaybetme',idame:'İdare-i Maslahat',kutle:'Kütle Kazanma'};
-  var gC={yag:'br',idame:'by',kutle:'bb'};
+  /* Eski hedef isimlerini yeni'ye mapla */
+  var glMap={yag:'cut', idame:'maintain', kutle:'bulk'};
+  var gl=selGL||R.recGoal;
+  if(glMap[gl]) gl=glMap[gl];
+  var st=selST||'hybrid';
+  var gN={cut:'🔥 Cut (Yağ Kaybı)', recomp:'♻️ Recomp', maintain:'⚖️ Maintain (Koruma)', bulk:'💪 Bulk (Kütle)'};
+  var gC={cut:'br', recomp:'bi', maintain:'by', bulk:'bb'};
   var stN={bb:'Vücut Geliştirme',cardio:'Kardiyo',hybrid:'Hibrit'};
   document.getElementById('cal-v').textContent=R.goalCal;
   document.getElementById('goal-badge').innerHTML=
@@ -2343,6 +2593,65 @@ function saveWeeklyMeasurements(){
   closeMeasurementModal();renderAll();
   showToast(wasEdit?'✅ Kayıt güncellendi!':'✅ Ölçümler kaydedildi!','success');
   if(!wasEdit) setTimeout(checkAndAwardBadges,600);
+
+  /* ══ HEDEF YENİDEN DEĞERLENDİRME ══
+     Yeni ölçü sonrası: mevcut hedef yağ oranı için hala uygun mu? */
+  if(!wasEdit) setTimeout(_checkGoalReevaluation, 1200);
+}
+
+/* ══════════════════════════════════════════════════════════
+   🎯 OTOMATİK HEDEF YENİDEN DEĞERLENDİRME
+   Yeni vücut ölçüleri girildiğinde mevcut hedef yağ oranı bandı
+   için uygun mu kontrol et — değilse popup ile yeni hedef öner.
+   ══════════════════════════════════════════════════════════ */
+function _checkGoalReevaluation(){
+  if(!R.bf || !selGL) return;
+  var newRec=recGoal();
+  var current=selGL;
+  /* Yeni öneri farklıysa VE mevcut hedef yağ oranı bandına aykırıysa uyar */
+  if(newRec===current) return;
+
+  /* Özel olarak BULK + yüksek yağ → kritik uyarı */
+  var male=U.gender==='male';
+  var bf=R.bf;
+  var criticalBulk = (current==='bulk' && !_bulkOk());
+
+  /* Cut → kütle kazanılması beklenmez ama yağ oranı düşerse: maintain ya da recomp önerilebilir */
+  /* Bulk → yağ oranı çok artarsa: cut/recomp öner */
+  /* Recomp → yağ oranı düştü/arttıysa: yeni öneri varsa göster */
+
+  var titles={cut:'🔥 Cut → '+_goalLabel(newRec), recomp:'♻️ Recomp → '+_goalLabel(newRec),
+              maintain:'⚖️ Maintain → '+_goalLabel(newRec), bulk:'💪 Bulk → '+_goalLabel(newRec)};
+  var msg='';
+  if(criticalBulk){
+    msg='Yağ oranın <strong>%'+bf.toFixed(1)+'</strong>\'e çıktı. Bu seviyede bulk sağlıklı değil. '+
+        '<strong>'+_goalLabel(newRec)+'</strong> hedefine geçmeni şiddetle öneriyoruz.';
+  } else {
+    msg='Yeni ölçülerine göre yağ oranın <strong>%'+bf.toFixed(1)+'</strong>. '+
+        'Mevcut hedef "<strong>'+_goalLabel(current)+'</strong>" yerine '+
+        '<strong>'+_goalLabel(newRec)+'</strong> daha uygun. Geçmek ister misin?';
+  }
+
+  showConfirm(
+    '🎯 Hedef Önerisi Güncellendi',
+    msg,
+    function(){
+      /* Onaylandı — yeni hedefe geç */
+      selGL=newRec;
+      /* Recomp ise mod sor — default balanced */
+      if(newRec==='recomp' && !A.recompMode) A.recompMode='balanced';
+      calcAll();
+      saveData();
+      saveToFirebase();
+      renderAll();
+      showToast('✅ Hedefin '+_goalLabel(newRec)+' olarak güncellendi','success');
+    },
+    'Evet, Geç'
+  );
+}
+
+function _goalLabel(g){
+  return {cut:'Cut (Yağ Kaybı)', recomp:'Recomp', maintain:'Maintain (Koruma)', bulk:'Bulk (Kütle)'}[g]||g;
 }
 
 /* ── TAB: İLERLEME (3 Haftalık Tablo ve Liste) ────────── */
@@ -2394,7 +2703,8 @@ function renderIlerleme(){
   }
 
   var rName = male ? 'Omuz/Bel' : 'Kalça/Bel';
-  var isYag = selGL === 'yag';
+  /* Eski "yag" + yeni "cut"/"recomp" hedefler için yağ kaybı vurgusu */
+  var isYag = selGL === 'yag' || selGL === 'cut' || selGL === 'recomp';
   
   tblCont.innerHTML =
     '<div class="ptable-wrapper">' +
@@ -2815,9 +3125,9 @@ function openSuppModal(){
   _suppStep=0;_suppAnswers={};_suppMaxStep=SUPP_QS.length-1;
   /* Uygulama verilerinden otomatik doldur */
   var gl=selGL||R.recGoal;
-  if(gl==='yag')_suppAnswers.goal='cut';
-  else if(gl==='kutle')_suppAnswers.goal='bulk';
-  else if(gl==='idame')_suppAnswers.goal='recomp';
+  /* Eski + yeni isimler */
+  var glMap={yag:'cut', idame:'maintain', kutle:'bulk', cut:'cut', recomp:'recomp', maintain:'maintain', bulk:'bulk'};
+  if(glMap[gl]) _suppAnswers.goal=glMap[gl];
   if(selST==='bb')_suppAnswers.sport='bb';
   else if(selST==='cardio')_suppAnswers.sport='cardio';
   else if(selST==='hybrid')_suppAnswers.sport='hybrid';
@@ -3159,9 +3469,8 @@ function renderSuppResults(){
 function resetSuppSurvey(){
   _suppStep=0;_suppAnswers={};_suppMaxStep=SUPP_QS.length-1;
   var gl=selGL||R.recGoal;
-  if(gl==='yag')_suppAnswers.goal='cut';
-  else if(gl==='kutle')_suppAnswers.goal='bulk';
-  else if(gl==='idame')_suppAnswers.goal='recomp';
+  var glMap={yag:'cut', idame:'maintain', kutle:'bulk', cut:'cut', recomp:'recomp', maintain:'maintain', bulk:'bulk'};
+  if(glMap[gl]) _suppAnswers.goal=glMap[gl];
   if(selST)_suppAnswers.sport=selST;
   /* Kayıtlı supplementlerden current_usage otomatik doldur */
   var usedCount=getUserSupplements().length;
@@ -3348,17 +3657,24 @@ function _buildDietPanel(){
 function _buildMealSuggestionsInline(){
   if(!R.goalCal) return '';
   var gl=selGL||R.recGoal;
+  /* Eski → yeni map */
+  var glMap={yag:'cut', idame:'maintain', kutle:'bulk'};
+  if(glMap[gl]) gl=glMap[gl];
   var conds=U.conditions||[];
   var html='<div class="rct">🍽️ Öğün Önerileri</div>';
   var tips=[];
-  if(gl==='kutle'){
+  if(gl==='bulk'){
     var mealCal=Math.round(R.goalCal/5);
     tips.push('Gün içinde 4-6 öğün. Öğün başı ~<strong>'+mealCal+' kcal</strong>.');
     tips.push('Antrenman öncesi/sonrası karbonhidrat yığ.');
-  } else if(gl==='yag'){
+  } else if(gl==='cut'){
     var mealCal3=Math.round(R.goalCal/3);
     tips.push('3 ana + 1-2 ara öğün. Ana öğün ~<strong>'+mealCal3+' kcal</strong>.');
     tips.push('Protein öncelikli, akşam karbo azalt.');
+  } else if(gl==='recomp'){
+    var mealCalR=Math.round(R.goalCal/4);
+    tips.push('4 dengeli öğün. Öğün başı ~<strong>'+mealCalR+' kcal</strong>.');
+    tips.push('Antrenman saatlerinde karbo yığ; diğer öğünlerde protein + sağlıklı yağ.');
   } else {
     var mealCal4=Math.round(R.goalCal/4);
     tips.push('3-4 dengeli öğün. Öğün başı ~<strong>'+mealCal4+' kcal</strong>.');
@@ -3375,13 +3691,15 @@ function _buildMealSuggestionsInline(){
 function _buildDietAdviceInline(){
   if(!R.bf) return '';
   var gl=selGL||R.recGoal;
+  var glMap={yag:'cut', idame:'maintain', kutle:'bulk'};
+  if(glMap[gl]) gl=glMap[gl];
   var bp=determineBodyProfile(R.bf,R.ffmi,R.bmi);
-  var gNames={yag:'Yağ Kaybetme',idame:'İdare-i Maslahat',kutle:'Kütle Kazanma'};
+  var gNames={cut:'🔥 Cut (Yağ Kaybı)', recomp:'♻️ Recomp', maintain:'⚖️ Maintain', bulk:'💪 Bulk'};
   var html='<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">';
   html+='<div style="font-size:12px;font-weight:700;margin-bottom:8px">🥗 Kişisel Diyet Önerileri</div>';
   var tips=[];
   tips.push('🎯 <strong>Hedef:</strong> '+(gNames[gl]||gl)+' — '+R.goalCal+' kcal/gün');
-  tips.push('🥩 <strong>Protein:</strong> En az '+R.minProt+'g/gün (yağsız kütle: '+R.lm.toFixed(1)+' kg)');
+  tips.push('🥩 <strong>Protein:</strong> En az '+R.minProt+'g/gün (vücut ağırlığı: '+U.weight.toFixed(1)+' kg)');
   if(U.weight>R.iw.hi) tips.push('⚠️ İdeal aralığın ('+R.iw.lo+'-'+R.iw.hi+' kg) '+Math.round((U.weight-R.iw.hi)*10)/10+' kg üzerinde.');
   else if(U.weight<R.iw.lo) tips.push('⬆️ İdeal aralığın ('+R.iw.lo+'-'+R.iw.hi+' kg) '+Math.round((R.iw.lo-U.weight)*10)/10+' kg altında.');
   tips.push('🧬 <strong>'+bp.n+':</strong> '+getDietTipByProfile(bp.n));
