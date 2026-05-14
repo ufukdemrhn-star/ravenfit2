@@ -1082,7 +1082,13 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
     <div class="rb">
       <!-- 1. Günlük Kalori Hedefi -->
       <div class="rc">
-        <div class="rct">🎯 Günlük Kalori Hedefi</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <div class="rct" style="margin-bottom:0">🎯 Günlük Kalori Hedefi</div>
+          <button onclick="openGoalQuickEdit()" style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:6px 9px;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:4px;font-size:11px;font-family:'Outfit',sans-serif;transition:all .2s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--text)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'" title="Hedefi Düzenle">
+            <span style="font-size:14px">⚙️</span>
+            <span>Düzenle</span>
+          </button>
+        </div>
         <div style="display:flex;align-items:flex-end;gap:5px"><div class="bv" id="cal-v">—</div><div class="bu">kcal</div></div>
         <div id="goal-badge"></div>
         <div class="ib" style="margin-top:9px"><span>🔥</span><span>TDEE: <strong id="tdee-info">—</strong> kcal &nbsp;|&nbsp; BMR (K-McA): <strong id="bmr-info">—</strong> kcal</span></div>
@@ -1421,6 +1427,20 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
     </div>
   </div>
   <div class="calc-body" id="calc-body"></div>
+</div>
+
+<!-- ══ HEDEF HIZLI DÜZENLEME OVERLAY ══════════════════════════ -->
+<div class="calc-overlay" id="goal-edit-overlay">
+  <div class="calc-header">
+    <button class="calc-close" onclick="closeGoalQuickEdit()">✕</button>
+    <div>
+      <div class="calc-header-sub">HEDEFİNİ DÜZENLE</div>
+      <div class="calc-header-title">⚙️ HIZLI AYAR</div>
+    </div>
+  </div>
+  <div class="calc-body" id="goal-edit-body">
+    <!-- İçerik openGoalQuickEdit() ile dolduruluyor -->
+  </div>
 </div>
 
 <!-- ══ ISINMA / SOĞUMA OVERLAY ══════════════════════════════ -->
@@ -5266,6 +5286,187 @@ function closeCalculator(){
       renderWorkoutTools();
     }
   }
+}
+
+/* ══════════════════════════════════════════════════════════
+   ⚙️ HEDEF HIZLI DÜZENLEME — Beslenme tab'ından direkt erişim
+   Wizard'a gitmeden spor türü + hedef + recomp modunu değiştir
+   ══════════════════════════════════════════════════════════ */
+function openGoalQuickEdit(){
+  var ov=document.getElementById('goal-edit-overlay');
+  if(!ov) return;
+  ov.classList.add('active');
+  _renderGoalQuickEdit();
+}
+
+function closeGoalQuickEdit(){
+  var ov=document.getElementById('goal-edit-overlay');
+  if(!ov) return;
+  ov.classList.remove('active');
+}
+
+function _renderGoalQuickEdit(){
+  var body=document.getElementById('goal-edit-body');
+  if(!body) return;
+
+  var detail=null;
+  try { detail=recGoalDetailed(); } catch(e){}
+  var currentGl=selGL||(detail&&detail.primary)||'maintain';
+  var currentSt=selST||'hybrid';
+  var currentRc=A.recompMode||'balanced';
+  var gates=(detail&&detail.gates)||{cut:'safe',recomp:'safe',maintain:'safe',bulk:'safe'};
+
+  var html='';
+
+  /* ── 1. SPOR TÜRÜ ── */
+  html+='<div class="calc-grid-card">';
+  html+='<div class="calc-label" style="margin-bottom:8px">🏃 Spor Türü</div>';
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">';
+  var sportOpts=[
+    {id:'bb',icon:'🏋️',name:'Vücut Geliştirme',sub:'Ağırlık'},
+    {id:'cardio',icon:'🏃',name:'Kardiyo',sub:'Kondisyon'},
+    {id:'hybrid',icon:'⚡',name:'Hibrit',sub:'İkisi de'}
+  ];
+  sportOpts.forEach(function(s){
+    var sel=currentSt===s.id;
+    html+='<div onclick="_quickEditSport(\''+s.id+'\')" class="oc compact'+(sel?' sel':'')+'" style="flex-direction:column;text-align:center;padding:10px 6px;gap:4px">';
+    html+='<div style="font-size:20px;width:auto;height:auto;background:transparent">'+s.icon+'</div>';
+    html+='<div style="font-size:11px;font-weight:600;line-height:1.2">'+s.name+'</div>';
+    html+='<div style="font-size:9px;color:var(--text2)">'+s.sub+'</div>';
+    html+='</div>';
+  });
+  html+='</div></div>';
+
+  /* ── 2. KALORİ HEDEFİ ── */
+  html+='<div class="calc-grid-card">';
+  html+='<div class="calc-label" style="margin-bottom:8px">🎯 Kalori Hedefi</div>';
+
+  var bf=R.bf||20, male=U.gender==='male';
+  var tdee=R.tdee||0;
+  var goalOpts=[
+    {id:'cut',icon:'🔥',name:'Cut',sub:'Yağ Kaybı'},
+    {id:'recomp',icon:'♻️',name:'Recomp',sub:'Yağ↓+Kas↑'},
+    {id:'maintain',icon:'⚖️',name:'Maintain',sub:'Koruma'},
+    {id:'bulk',icon:'💪',name:'Bulk',sub:'Kütle'}
+  ];
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">';
+  goalOpts.forEach(function(g){
+    var sel=currentGl===g.id;
+    var risky=gates[g.id]==='risky';
+    var recBadge=(detail&&detail.primary===g.id)?'<span class="rec-badge" style="font-size:8px;padding:1px 4px;margin-left:3px">⭐</span>':'';
+    var altBadge=(detail&&detail.alternative===g.id)?'<span class="alt-badge" style="font-size:8px;padding:1px 4px;margin-left:3px">💡</span>':'';
+    var cal=tdee?calcGoalCalories(tdee, g.id, bf, male):0;
+    var diff=cal-tdee;
+    var calStr=cal?((diff>=0?'+':'')+diff+' kcal'):'—';
+    html+='<div onclick="_quickEditGoal(\''+g.id+'\')" class="oc'+(sel?' sel':'')+(risky?' risky':'')+'" style="padding:10px 12px;position:relative">';
+    html+='<div class="oi">'+g.icon+'</div>';
+    html+='<div class="ot"><div class="on">'+g.name+recBadge+altBadge+'</div><div class="od" style="font-size:9px">'+g.sub+' · '+calStr+'</div></div>';
+    html+='<div class="orad"></div>';
+    html+='</div>';
+  });
+  html+='</div>';
+
+  /* Neden bu öneri */
+  if(detail && detail.reason){
+    html+='<div style="margin-top:10px;padding:8px 10px;background:rgba(76,201,240,.08);border-left:3px solid var(--info);border-radius:6px">';
+    html+='<div style="font-size:10px;font-weight:700;color:var(--info);margin-bottom:2px">🧠 Neden bu öneri?</div>';
+    html+='<div style="font-size:10px;color:var(--text2);line-height:1.4">'+detail.reason+'</div>';
+    html+='</div>';
+  }
+  html+='</div>';
+
+  /* ── 3. RECOMP MODU (sadece recomp seçiliyse) ── */
+  if(currentGl==='recomp'){
+    html+='<div class="calc-grid-card" id="quickedit-recomp-modes">';
+    html+='<div class="calc-label" style="margin-bottom:8px">♻️ Recomp Karb Tercihi</div>';
+    var rcOpts=[
+      {id:'lowcarb',icon:'🥑',name:'Düşük Karb',sub:'Yağ 1.0 g/kg'},
+      {id:'balanced',icon:'⚖️',name:'Dengeli',sub:'Yağ 0.8 g/kg'},
+      {id:'performance',icon:'🏃',name:'Performans',sub:'Yağ 0.65 g/kg'}
+    ];
+    html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">';
+    rcOpts.forEach(function(r){
+      var sel=currentRc===r.id;
+      html+='<div onclick="_quickEditRecompMode(\''+r.id+'\')" class="oc compact'+(sel?' sel':'')+'" style="flex-direction:column;text-align:center;padding:10px 6px;gap:3px">';
+      html+='<div style="font-size:18px;width:auto;height:auto;background:transparent">'+r.icon+'</div>';
+      html+='<div style="font-size:10px;font-weight:600;line-height:1.2">'+r.name+'</div>';
+      html+='<div style="font-size:9px;color:var(--text2)">'+r.sub+'</div>';
+      html+='</div>';
+    });
+    html+='</div></div>';
+  }
+
+  /* ── 4. SONUÇ ÖNİZLEMESİ ── */
+  if(R.macros && R.goalCal){
+    html+='<div class="calc-grid-card" style="background:linear-gradient(135deg, rgba(230,57,70,.06), rgba(76,201,240,.04));border-color:var(--accent)">';
+    html+='<div class="calc-label" style="margin-bottom:8px">📊 Güncel Değerler</div>';
+    html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">';
+    html+='<span style="font-size:11px;color:var(--text2)">Günlük Kalori</span>';
+    html+='<span style="font-family:\'Bebas Neue\',cursive;font-size:22px;letter-spacing:1px;color:var(--accent)">'+R.goalCal+' kcal</span>';
+    html+='</div>';
+    html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px">';
+    html+='<div style="text-align:center;padding:6px;background:var(--card2);border-radius:8px"><div style="font-size:9px;color:var(--text2)">🥩 Protein</div><div style="font-family:\'Bebas Neue\',cursive;font-size:18px;color:var(--text)">'+R.macros.pg+'g</div></div>';
+    html+='<div style="text-align:center;padding:6px;background:var(--card2);border-radius:8px"><div style="font-size:9px;color:var(--text2)">🍚 Karb</div><div style="font-family:\'Bebas Neue\',cursive;font-size:18px;color:var(--text)">'+R.macros.cg+'g</div></div>';
+    html+='<div style="text-align:center;padding:6px;background:var(--card2);border-radius:8px"><div style="font-size:9px;color:var(--text2)">🥑 Yağ</div><div style="font-family:\'Bebas Neue\',cursive;font-size:18px;color:var(--text)">'+R.macros.fg+'g</div></div>';
+    html+='</div></div>';
+  }
+
+  /* ── KAYDET BUTONU ── */
+  html+='<button class="btn btn-p btn-full" onclick="_saveGoalQuickEdit()" style="margin-top:8px">✅ Tamam</button>';
+
+  body.innerHTML=html;
+}
+
+function _quickEditSport(id){
+  selST=id;
+  A.st=id;
+  _recalcAndRefreshQuickEdit();
+}
+
+function _quickEditGoal(id){
+  var detail=null;
+  try { detail=recGoalDetailed(); } catch(e){}
+  var gates=(detail&&detail.gates)||{};
+  /* Riskli uyarı */
+  if(gates[id]==='risky'){
+    var warning=_gateWarning(id);
+    if(warning){
+      showConfirm(
+        '⚠️ Bu hedef sana uygun değil',
+        warning,
+        function(){
+          selGL=id; A.gl=id;
+          if(id==='recomp' && !A.recompMode) A.recompMode='balanced';
+          _recalcAndRefreshQuickEdit();
+        },
+        'Yine de Seç',
+        function(){ /* iptal — değişiklik yok */ },
+        'Vazgeç'
+      );
+      return;
+    }
+  }
+  selGL=id; A.gl=id;
+  if(id==='recomp' && !A.recompMode) A.recompMode='balanced';
+  _recalcAndRefreshQuickEdit();
+}
+
+function _quickEditRecompMode(id){
+  A.recompMode=id;
+  A.rc=id;
+  _recalcAndRefreshQuickEdit();
+}
+
+function _recalcAndRefreshQuickEdit(){
+  try { calcAll(); } catch(e){}
+  _renderGoalQuickEdit();
+}
+
+function _saveGoalQuickEdit(){
+  try { calcAll(); saveData(); } catch(e){}
+  try { renderAll(); } catch(e){}
+  closeGoalQuickEdit();
+  showToast('✅ Hedefin güncellendi','success');
 }
 
 function renderCalculator(id){
