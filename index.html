@@ -1829,6 +1829,33 @@ function calcFFMI(bf){
   return{ffmi:Math.round(ffmi*100)/100,norm:Math.round(norm*100)/100,ffm:Math.round(ffm*100)/100};
 }
 function calcBMR(lm){return Math.round(370+21.6*lm);}
+
+/* Vücut Tipi hesabı (Ektomorf/Mezomorf/Endomorf) — BT objesindeki cevaplara göre */
+function calcBT(){
+  var ec=0,me=0,en=0;
+  Object.keys(BT).forEach(function(k){
+    var q=BT[k];
+    if(!q) return;
+    ec += q.ec||0;
+    me += q.me||0;
+    en += q.en||0;
+  });
+  var t=ec+me+en||1;
+  return{
+    ecto: Math.round(ec/t*10000)/100,
+    meso: Math.round(me/t*10000)/100,
+    endo: Math.round(en/t*10000)/100
+  };
+}
+
+/* İdeal kilo aralığı (BMI 18.5-24.9 üzerinden) */
+function calcIdealRange(h){
+  var hm=h/100, h2=hm*hm;
+  return{
+    lo: Math.round(18.5*h2*10)/10,
+    hi: Math.round(24.9*h2*10)/10
+  };
+}
 function calcAct(){
   // A.sd is now actual day count (0–6). Scale to 0–2 range for scoring.
   var sdScore = Math.min((A.sd||0) * 0.35, 2.1);
@@ -2160,26 +2187,58 @@ function getSmartWorkoutAdvice(goalOverride) {
 }
 
 function calcAll(){
-  R.bf=calcBF();
-  var fd=calcFFMI(R.bf);R.ffmi=fd.ffmi;R.norm_ffmi=fd.norm;R.lm=fd.ffm;R.fm=Math.round((U.weight-R.lm)*100)/100;
-  R.bmi=Math.round(U.weight/Math.pow(U.height/100,2)*10)/10;
-  R.bmr=calcBMR(R.lm);
-  var am=calcAct();R.actMult=am.m;R.actLbl=am.lbl;R.tdee=Math.round(R.bmr*R.actMult);
-  R.bt=calcBT();
-  R.iw=calcIdealRange(U.height);
-  R.water=Math.round(U.weight*35)/1000;
-  R.minProt=Math.round(U.weight*1.6);R.maxProt=Math.round(U.weight*2.4);
-  R.recGoal=recGoal();
-  /* Eski hedef isimleri yeni ile mapla — backward compatibility */
-  var glOld=selGL||R.recGoal;
-  var glMap={yag:'cut', idame:'maintain', kutle:'bulk'};
-  if(glMap[glOld]){ selGL=glMap[glOld]; }
-  var gl=selGL||R.recGoal,st=selST||'hybrid';
-  var male=U.gender==='male';
-  R.goalCal=calcGoalCalories(R.tdee, gl, R.bf, male);
-  R.macros=calcMacros(R.goalCal, gl, st, R.lm, U.weight, R.bf, male, A.recompMode);
-  if(U.gender==='male')R.swr=Math.round(U.shoulder/U.waist*100)/100;
-  else R.whr=Math.round(U.waist/U.hip*100)/100;
+  try {
+    /* Temel hesaplar */
+    R.bf=calcBF();
+    if(!R.bf || isNaN(R.bf)) R.bf=20; /* fallback */
+    var fd=calcFFMI(R.bf);
+    R.ffmi=fd.ffmi; R.norm_ffmi=fd.norm; R.lm=fd.ffm;
+    R.fm=Math.round((U.weight-R.lm)*100)/100;
+    R.bmi=Math.round(U.weight/Math.pow(U.height/100,2)*10)/10;
+    R.bmr=calcBMR(R.lm);
+    var am=calcAct();
+    R.actMult=am.m; R.actLbl=am.lbl;
+    R.tdee=Math.round(R.bmr*R.actMult);
+    R.bt=calcBT();
+    R.iw=calcIdealRange(U.height);
+    R.water=Math.round(U.weight*35)/1000;
+    R.minProt=Math.round(U.weight*1.6);
+    R.maxProt=Math.round(U.weight*2.4);
+    R.recGoal=recGoal();
+
+    /* Eski hedef isimleri yeni ile mapla — backward compatibility */
+    var glOld=selGL||R.recGoal||'maintain';
+    var glMap={yag:'cut', idame:'maintain', kutle:'bulk'};
+    if(glMap[glOld]){ selGL=glMap[glOld]; glOld=selGL; }
+    var gl=selGL||R.recGoal||'maintain';
+    var st=selST||'hybrid';
+    var male=U.gender==='male';
+
+    /* Hedef kalori */
+    try {
+      R.goalCal=calcGoalCalories(R.tdee, gl, R.bf, male);
+      if(!R.goalCal || isNaN(R.goalCal)) R.goalCal=R.tdee;
+    } catch(e){ console.warn('goalCal hata:',e); R.goalCal=R.tdee; }
+
+    /* Makrolar */
+    try {
+      R.macros=calcMacros(R.goalCal, gl, st, R.lm, U.weight, R.bf, male, A.recompMode);
+    } catch(e){
+      console.warn('macros hata:',e);
+      /* Fallback: temel makro */
+      var pg=Math.round(U.weight*2.0), fg=Math.round(U.weight*0.9);
+      var pc=pg*4, fc=fg*9, cc=Math.max(0, R.goalCal-pc-fc);
+      R.macros={pg:pg, fg:fg, cg:Math.round(cc/4), pc:pc, fc:fc, cc:Math.round(cc)};
+    }
+
+    /* Oran (yalnız değerler varsa) */
+    try {
+      if(U.gender==='male' && U.shoulder && U.waist) R.swr=Math.round(U.shoulder/U.waist*100)/100;
+      else if(U.waist && U.hip) R.whr=Math.round(U.waist/U.hip*100)/100;
+    } catch(e){}
+  } catch(err){
+    console.error('calcAll fatal:',err);
+  }
 }
 
 /* ── GOAL STEP ────────────────────────────────────────── */
