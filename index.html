@@ -69,7 +69,20 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 .s-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 50% 100%,var(--ag),transparent 70%);pointer-events:none}
 /* Arka plan silüeti */
 .s-silhouette{position:absolute;top:50%;left:50%;transform:translate(-50%,-54%);width:min(420px,90vw);opacity:.045;pointer-events:none;z-index:1;filter:blur(1px)}
-.splash-icon{width:120px;height:120px;margin:0 auto 18px;position:relative;z-index:3;filter:drop-shadow(0 8px 28px var(--ag))}
+
+/* ── AUTH SCREEN BACKGROUND ── */
+.auth-bg-silhouette{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(1);width:min(560px,110vw);opacity:.04;pointer-events:none;z-index:0;filter:blur(2px);animation:authBgFloat 12s ease-in-out infinite}
+.auth-bg-gradient{position:absolute;inset:0;background:radial-gradient(circle at 30% 20%, var(--ag), transparent 50%), radial-gradient(circle at 70% 80%, var(--ag), transparent 50%);opacity:.6;pointer-events:none;z-index:0;animation:authBgPulse 8s ease-in-out infinite}
+@keyframes authBgFloat{0%,100%{transform:translate(-50%,-50%) scale(1) rotate(0deg)}50%{transform:translate(-50%,-52%) scale(1.05) rotate(2deg)}}
+@keyframes authBgPulse{0%,100%{opacity:.4}50%{opacity:.7}}
+@keyframes authLogoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+/* Auth input class */
+.auth-inp{background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'Outfit',sans-serif;font-size:15px;outline:none;width:100%;transition:border-color .2s,box-shadow .2s;text-transform:none}
+.auth-inp.auth-err-field{border-color:var(--accent)!important;box-shadow:0 0 0 3px rgba(230,57,70,.18)!important;animation:authShake .35s}
+@keyframes authShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+
+.splash-icon{width:148px;height:148px;margin:0 auto 18px;position:relative;z-index:3;filter:drop-shadow(0 8px 28px var(--ag))}
 /* Splash animasyonları */
 .splash-icon{animation:splashLogoIn .7s cubic-bezier(.22,1,.36,1) both, float 3.5s ease-in-out 0.7s infinite}
 @keyframes splashLogoIn{from{opacity:0;transform:translateY(-36px) scale(.85)}to{opacity:1;transform:translateY(0) scale(1)}}
@@ -79,7 +92,7 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 @keyframes splashFadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .pills{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:34px;max-width:420px}
 .pill{background:var(--card);border:1px solid var(--border);border-radius:100px;padding:5px 11px;font-size:11px;color:var(--text2);display:flex;align-items:center;gap:5px;opacity:0;animation:splashFadeUp .4s both}
-.pill:nth-child(1){animation-delay:.5s}.pill:nth-child(2){animation-delay:.58s}.pill:nth-child(3){animation-delay:.66s}.pill:nth-child(4){animation-delay:.74s}.pill:nth-child(5){animation-delay:.82s}
+.pill:nth-child(1){animation-delay:.5s}.pill:nth-child(2){animation-delay:.55s}.pill:nth-child(3){animation-delay:.6s}.pill:nth-child(4){animation-delay:.65s}.pill:nth-child(5){animation-delay:.7s}.pill:nth-child(6){animation-delay:.75s}.pill:nth-child(7){animation-delay:.8s}.pill:nth-child(8){animation-delay:.85s}.pill:nth-child(9){animation-delay:.9s}.pill:nth-child(10){animation-delay:.95s}
 .pill-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0}
 #splash .btn{animation:splashFadeUp .5s .9s both}
 #splash-cont{animation:splashFadeUp .4s 1.05s both}
@@ -605,11 +618,14 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 
 <!-- 🔥 AUTH EKRANI -->
 <div id="auth-screen" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:500;align-items:center;justify-content:center;padding:20px;flex-direction:column;overflow-y:auto">
-  <div style="width:100%;max-width:360px;padding:10px 0">
+  <!-- Background silüet animasyonu -->
+  <img src="logo.png" aria-hidden="true" class="auth-bg-silhouette">
+  <div class="auth-bg-gradient"></div>
+  <div style="width:100%;max-width:360px;padding:10px 0;position:relative;z-index:2">
     <!-- Logo -->
     <div style="text-align:center;margin-bottom:24px">
-      <img src="logo.png" width="68" style="margin-bottom:10px;filter:drop-shadow(0 4px 16px var(--ag))">
-      <div style="font-family:'Bebas Neue',cursive;font-size:30px;letter-spacing:4px;color:var(--text)">RAVEN<span style="color:var(--accent)">FIT</span></div>
+      <img src="logo.png" width="92" style="margin-bottom:12px;filter:drop-shadow(0 6px 20px var(--ag));animation:authLogoFloat 4s ease-in-out infinite">
+      <div style="font-family:'Bebas Neue',cursive;font-size:36px;letter-spacing:5px;color:var(--text)">RAVEN<span style="color:var(--accent)">FIT</span></div>
       <div style="font-size:11px;color:var(--text2);margin-top:3px;letter-spacing:2px;text-transform:uppercase">Hesabına giriş yap</div>
     </div>
     <!-- Tab seçici -->
@@ -622,11 +638,11 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
       <div style="display:flex;flex-direction:column;gap:10px">
         <div style="display:flex;flex-direction:column;gap:5px">
           <label style="font-size:12px;color:var(--text2);font-weight:500">Kullanıcı Adı</label>
-          <input id="auth-nick" type="text" inputmode="text" autocomplete="username" placeholder="kullanici_adin" style="background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'Outfit',sans-serif;font-size:15px;outline:none;width:100%;transition:border-color .2s;text-transform:lowercase" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+          <input id="auth-nick" type="text" inputmode="text" autocomplete="username" placeholder="kullanici_adin" class="auth-inp" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
         </div>
         <div style="display:flex;flex-direction:column;gap:5px">
           <label style="font-size:12px;color:var(--text2);font-weight:500">Şifre</label>
-          <input id="auth-pass" type="password" autocomplete="current-password" placeholder="Şifren" style="background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'Outfit',sans-serif;font-size:15px;outline:none;width:100%;transition:border-color .2s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'" onkeydown="if(event.key==='Enter')doLogin()">
+          <input id="auth-pass" type="password" autocomplete="current-password" placeholder="Şifren" class="auth-inp" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'" onkeydown="if(event.key==='Enter')doLogin()">
         </div>
         <div id="auth-err" style="font-size:12px;color:var(--accent);min-height:16px;text-align:center;line-height:1.4"></div>
         <button id="auth-btn-login" onclick="doLogin()" style="background:var(--accent);color:#fff;border:none;border-radius:11px;padding:14px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;cursor:pointer;width:100%;box-shadow:0 4px 16px var(--ag)">Giriş Yap</button>
@@ -637,16 +653,16 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
       <div style="display:flex;flex-direction:column;gap:10px">
         <div style="display:flex;flex-direction:column;gap:5px">
           <label style="font-size:12px;color:var(--text2);font-weight:500">Kullanıcı Adı</label>
-          <input id="auth-nick-r" type="text" inputmode="text" autocomplete="username" placeholder="kullanici_adin" style="background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'Outfit',sans-serif;font-size:15px;outline:none;width:100%;transition:border-color .2s;text-transform:lowercase" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+          <input id="auth-nick-r" type="text" inputmode="text" autocomplete="username" placeholder="kullanici_adin" class="auth-inp" oninput="_authClearErr(\'nick-r\')" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
           <div style="font-size:10px;color:var(--text3)">Harf, rakam ve _ kullanabilirsin. Min 3 karakter.</div>
         </div>
         <div style="display:flex;flex-direction:column;gap:5px">
           <label style="font-size:12px;color:var(--text2);font-weight:500">Şifre</label>
-          <input id="auth-pass-r" type="password" autocomplete="new-password" placeholder="En az 6 karakter" style="background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'Outfit',sans-serif;font-size:15px;outline:none;width:100%;transition:border-color .2s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+          <input id="auth-pass-r" type="password" autocomplete="new-password" placeholder="En az 6 karakter" class="auth-inp" oninput="_authClearErr(\'pass-r\')" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
         </div>
         <div style="display:flex;flex-direction:column;gap:5px">
           <label style="font-size:12px;color:var(--text2);font-weight:500">Şifre Tekrar</label>
-          <input id="auth-pass2" type="password" autocomplete="new-password" placeholder="Şifreni tekrar gir" style="background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'Outfit',sans-serif;font-size:15px;outline:none;width:100%;transition:border-color .2s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'" onkeydown="if(event.key==='Enter')doRegister()">
+          <input id="auth-pass2" type="password" autocomplete="new-password" placeholder="Şifreni tekrar gir" class="auth-inp" oninput="_authClearErr(\'pass2\')" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'" onkeydown="if(event.key==='Enter')doRegister()">
         </div>
         <div id="auth-err-r" style="font-size:12px;color:var(--accent);min-height:16px;text-align:center;line-height:1.4"></div>
         <button id="auth-btn-register" onclick="doRegister()" style="background:var(--accent);color:#fff;border:none;border-radius:11px;padding:14px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;cursor:pointer;width:100%;box-shadow:0 4px 16px var(--ag)">Kayıt Ol</button>
@@ -675,17 +691,22 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
   <div class="s-bg"></div>
   <img src="logo.png" class="s-silhouette" aria-hidden="true">
   <div class="splash-icon">
-  <img src="logo.png" width="120">
+  <img src="logo.png" width="148">
 </div>
   <h1 class="splash-title">RAVEN<span style="color:var(--accent)">FIT</span></h1>
-  <div class="splash-tag">Versiyon 0.6.1(beta)</div>
+  <div class="splash-tag">Versiyon 0.3.0.1(beta)</div>
   <div class="splash-sub">Sen sadece antrenmanına odaklan</div>
   <div class="pills">
-    <div class="pill"><div class="pill-dot"></div>Navy Yağ Formülü</div>
-    <div class="pill"><div class="pill-dot"></div>FFMI Endeksi</div>
-    <div class="pill"><div class="pill-dot"></div>Katch-McArdle</div>
-    <div class="pill"><div class="pill-dot"></div>Vücut Tipi Testi</div>
-    <div class="pill"><div class="pill-dot"></div>Haftalık Takip</div>
+    <div class="pill"><div class="pill-dot"></div>Çoklu Branş</div>
+    <div class="pill"><div class="pill-dot"></div>Beslenme & Makro</div>
+    <div class="pill"><div class="pill-dot"></div>Su Takibi</div>
+    <div class="pill"><div class="pill-dot"></div>Supplement Rehberi</div>
+    <div class="pill"><div class="pill-dot"></div>Vücut Analizi</div>
+    <div class="pill"><div class="pill-dot"></div>Antrenman Programları</div>
+    <div class="pill"><div class="pill-dot"></div>Rozet Sistemi</div>
+    <div class="pill"><div class="pill-dot"></div>1RM & PR Hesaplayıcılar</div>
+    <div class="pill"><div class="pill-dot"></div>Postür Düzeltme</div>
+    <div class="pill"><div class="pill-dot"></div>Yüzme Modülü</div>
   </div>
   <button class="btn btn-p btn-lg" type="button" onclick="startWizard()" ontouchend="startWizardFromTouch(event)">Analize Başla <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
   <div id="splash-cont" style="display:none;margin-top:11px">
@@ -3585,7 +3606,25 @@ var CONDITIONS_GROUPS=[
 ];
 
 function renderConditionsStep(){
-  var list=CONDITIONS_DATA?CONDITIONS_DATA.conditions:BUILTIN_CONDITIONS;
+  var rawList=CONDITIONS_DATA&&CONDITIONS_DATA.conditions?CONDITIONS_DATA.conditions:BUILTIN_CONDITIONS;
+  /* JSON'dan gelen condition'larda 'group' alanı yok — BUILTIN'den fallback ekle */
+  var builtinMap={};
+  BUILTIN_CONDITIONS.forEach(function(b){builtinMap[b.id]=b;});
+  var list=rawList.map(function(c){
+    if(c.group) return c;
+    var b=builtinMap[c.id];
+    return {
+      id:c.id,
+      label_tr:c.label_tr||(b&&b.label_tr)||c.id,
+      icon:c.icon||(b&&b.icon)||'⚠️',
+      group:(b&&b.group)||'saglik'  /* fallback: bilinmeyenleri sağlık grubuna at */
+    };
+  });
+  /* BUILTIN'de olup CONDITIONS_DATA'da olmayanları da ekle (güvenlik için) */
+  BUILTIN_CONDITIONS.forEach(function(b){
+    if(!list.some(function(c){return c.id===b.id;})) list.push(b);
+  });
+
   var selected=U.conditions||[];
   var grid=document.getElementById('conditions-grid');
   if(!grid)return;
@@ -7666,18 +7705,79 @@ function doLogin(){
 }
 
 /* ── Kayıt Ol ────────────────────────────────────────── */
+function _authClearErr(fieldId){
+  var el=document.getElementById('auth-'+fieldId);
+  if(el) el.classList.remove('auth-err-field');
+}
+function _authMarkErr(ids){
+  /* ids: ['nick-r', 'pass-r', 'pass2'] gibi */
+  ids.forEach(function(id){
+    var el=document.getElementById('auth-'+id);
+    if(el){
+      el.classList.add('auth-err-field');
+      /* Animasyonu restart için */
+      el.style.animation='none';
+      el.offsetHeight;
+      el.style.animation='';
+    }
+  });
+}
+
 function doRegister(){
-  var nick=document.getElementById('auth-nick-r').value.trim().toLowerCase();
-  var pass=document.getElementById('auth-pass-r').value;
-  var pass2=document.getElementById('auth-pass2').value;
+  var nickEl=document.getElementById('auth-nick-r');
+  var passEl=document.getElementById('auth-pass-r');
+  var pass2El=document.getElementById('auth-pass2');
+  var nick=nickEl.value.trim().toLowerCase();
+  var pass=passEl.value;
+  var pass2=pass2El.value;
   var errEl=document.getElementById('auth-err-r');
   errEl.style.color='var(--accent)';errEl.textContent='';
-  if(!nick){errEl.textContent='Kullanıcı adı gerekli.';return;}
-  if(nick.length<3){errEl.textContent='Kullanıcı adı en az 3 karakter olmalı.';return;}
-  if(!/^[a-z0-9_]+$/.test(nick)){errEl.textContent='Sadece harf, rakam ve _ kullanabilirsin.';return;}
-  if(!pass){errEl.textContent='Şifre gerekli.';return;}
-  if(pass.length<6){errEl.textContent='Şifre en az 6 karakter olmalı.';return;}
-  if(pass!==pass2){errEl.textContent='Şifreler eşleşmiyor.';return;}
+  /* Tüm hata vurgularını temizle */
+  ['nick-r','pass-r','pass2'].forEach(_authClearErr);
+
+  /* Nickname validasyon */
+  if(!nick){
+    errEl.textContent='Kullanıcı adı gerekli.';
+    _authMarkErr(['nick-r']);
+    return;
+  }
+  if(nick.length<3){
+    errEl.textContent='Kullanıcı adı en az 3 karakter olmalı.';
+    _authMarkErr(['nick-r']);
+    return;
+  }
+  if(!/^[a-z0-9_]+$/.test(nick)){
+    errEl.textContent='Sadece harf, rakam ve _ kullanabilirsin.';
+    _authMarkErr(['nick-r']);
+    return;
+  }
+  /* Şifre validasyon — 6 karakter şartı her iki kutucuğu kontrol et */
+  var passShort=pass.length<6;
+  var pass2Short=pass2.length<6;
+  if(!pass||!pass2){
+    errEl.textContent='Şifre alanlarını doldur.';
+    var toMark=[];
+    if(!pass) toMark.push('pass-r');
+    if(!pass2) toMark.push('pass2');
+    _authMarkErr(toMark);
+    return;
+  }
+  if(passShort||pass2Short){
+    errEl.textContent='Şifre en az 6 karakter olmalı.';
+    /* Her iki şifre kutucuğunu da uyar (kullanıcı isteği) */
+    var shortMarks=[];
+    if(passShort) shortMarks.push('pass-r');
+    if(pass2Short) shortMarks.push('pass2');
+    _authMarkErr(shortMarks);
+    return;
+  }
+  if(pass!==pass2){
+    errEl.textContent='Şifreler eşleşmiyor.';
+    /* Her iki şifre kutucuğunu da uyar */
+    _authMarkErr(['pass-r','pass2']);
+    return;
+  }
+
   var email=nickToEmail(nick);
   var btn=document.getElementById('auth-btn-register');
   btn.textContent='Kayıt yapılıyor...';btn.disabled=true;
@@ -7701,6 +7801,8 @@ function doRegister(){
         'auth/weak-password':'Şifre çok zayıf.'
       };
       errEl.textContent=msgs[e.code]||'Hata: '+e.message;
+      if(e.code==='auth/email-already-in-use') _authMarkErr(['nick-r']);
+      else _authMarkErr(['pass-r','pass2']);
     });
 }
 
