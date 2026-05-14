@@ -272,8 +272,8 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 .avatar img{width:100%;height:100%;object-fit:cover}
 .avatar-cam{position:absolute;bottom:0;right:0;width:18px;height:18px;background:var(--card2);border:1.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;cursor:pointer}
 /* ── SETTINGS DRAWER ──────────────────────────────────────────  */
-.settings-drawer{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);border-radius:20px 20px 0 0;z-index:600;transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);padding:0 0 env(safe-area-inset-bottom,0px);max-height:85vh;overflow-y:auto}
-.settings-drawer.open{transform:translateY(0)}
+.settings-drawer{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);background:var(--card);border-top:1px solid var(--border);border-left:1px solid var(--border);border-right:1px solid var(--border);border-radius:20px 20px 0 0;z-index:600;transition:transform .32s cubic-bezier(.4,0,.2,1);padding:0 0 env(safe-area-inset-bottom,0px);max-height:85vh;overflow-y:auto;max-width:640px;width:100%}
+.settings-drawer.open{transform:translateX(-50%) translateY(0)}
 .settings-drawer-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:12px auto 8px}
 .settings-drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0);z-index:599;pointer-events:none;transition:background .3s}
 .settings-drawer-overlay.open{background:rgba(0,0,0,0.6);pointer-events:all}
@@ -288,14 +288,14 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 /* ── AKTİF ANTRENMAN EKRANI ──────────────────────────  */
 .ws-screen{position:fixed;inset:0;background:var(--bg);z-index:400;display:none;flex-direction:column;overflow:hidden}
 .ws-screen.active{display:flex}
-.ws-header{background:var(--hbg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.ws-header{background:var(--hbg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;max-width:640px;width:100%;margin:0 auto;box-sizing:border-box}
 .ws-header-title{flex:1;min-width:0}
 .ws-prog{font-size:10px;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
 .ws-day{font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:1.5px;line-height:1.1}
 .ws-timer{font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:2px;color:var(--accent);flex-shrink:0;min-width:60px;text-align:right}
-.ws-progress-bar{height:3px;background:var(--border);flex-shrink:0}
+.ws-progress-bar{height:3px;background:var(--border);flex-shrink:0;max-width:640px;width:100%;margin:0 auto}
 .ws-progress-fill{height:100%;background:var(--accent);transition:width .4s ease}
-.ws-body{flex:1;overflow-y:auto;padding:12px 16px 20px}
+.ws-body{flex:1;overflow-y:auto;padding:12px 16px 20px;max-width:640px;width:100%;margin:0 auto;box-sizing:border-box}
 .ws-ex-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;transition:all .2s}
 .ws-ex-card.current{border-color:var(--accent);border-width:2px}
 .ws-ex-card.done-card{opacity:.5;border-color:var(--success)}
@@ -317,24 +317,24 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 .ws-rest-num{font-family:'Bebas Neue',cursive;font-size:80px;letter-spacing:2px;color:var(--accent);line-height:1}
 .ws-rest-label{font-size:12px;color:var(--text2);letter-spacing:1px;text-transform:uppercase}
 .ws-rest-next{font-size:13px;color:var(--text2);text-align:center;max-width:260px;line-height:1.4}
-.ws-footer{background:var(--card);border-top:1px solid var(--border);padding:10px 16px;padding-bottom:max(10px,env(safe-area-inset-bottom));flex-shrink:0;display:flex;gap:8px}
+.ws-footer{background:var(--card);border-top:1px solid var(--border);padding:10px 16px;padding-bottom:max(10px,env(safe-area-inset-bottom));flex-shrink:0;display:flex;gap:8px;max-width:640px;width:100%;margin:0 auto;box-sizing:border-box}
 .ws-report-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
 .ws-report-stat{background:var(--card2);border-radius:12px;padding:12px;text-align:center}
 .ws-report-val{font-family:'Bebas Neue',cursive;font-size:30px;letter-spacing:1px;color:var(--accent);line-height:1;margin-bottom:3px}
 .ws-report-lbl{font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
 /* Game-like single exercise view */
-.ws-hero-name{font-family:'Bebas Neue',cursive;font-size:28px;letter-spacing:2px;text-align:center;color:var(--text);line-height:1.1;margin-bottom:4px}
-.ws-hero-meta{font-size:11px;color:var(--text2);text-align:center;margin-bottom:12px}
-.ws-video-area{background:var(--card2);border:1px solid var(--border);border-radius:16px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;margin-bottom:14px;overflow:hidden;position:relative}
-.ws-video-area img{width:100%;height:100%;object-fit:cover;border-radius:16px}
-.ws-po-info{background:rgba(46,196,182,.06);border:1px solid rgba(46,196,182,.2);border-radius:10px;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.ws-set-dots{display:flex;justify-content:center;gap:6px;margin-bottom:10px}
+.ws-hero-name{font-family:'Bebas Neue',cursive;font-size:24px;letter-spacing:2px;text-align:center;color:var(--text);line-height:1.1;margin-bottom:3px}
+.ws-hero-meta{font-size:10px;color:var(--text2);text-align:center;margin-bottom:8px}
+.ws-video-area{background:var(--card2);border:1px solid var(--border);border-radius:14px;height:130px;max-height:22vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;margin-bottom:10px;overflow:hidden;position:relative}
+.ws-video-area img{width:100%;height:100%;object-fit:cover;border-radius:14px}
+.ws-po-info{background:rgba(46,196,182,.06);border:1px solid rgba(46,196,182,.2);border-radius:10px;padding:6px 10px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.ws-set-dots{display:flex;justify-content:center;gap:6px;margin-bottom:8px}
 .ws-set-dot{width:10px;height:10px;border-radius:50%;border:2px solid var(--border);background:none;transition:all .2s}
 .ws-set-dot.active{border-color:var(--accent);background:var(--accent);transform:scale(1.2)}
 .ws-set-dot.done{border-color:var(--success);background:var(--success)}
-.ws-set-current{background:var(--card);border:2px solid var(--accent);border-radius:16px;padding:16px;margin-bottom:12px}
-.ws-set-label{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;text-align:center;margin-bottom:10px}
-.ws-input-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.ws-set-current{background:var(--card);border:2px solid var(--accent);border-radius:14px;padding:12px;margin-bottom:10px}
+.ws-set-label{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;text-align:center;margin-bottom:8px}
+.ws-input-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px}
 .ws-input-group{text-align:center}
 .ws-input-label{font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
 .ws-input-big{background:var(--card2);border:2px solid var(--border);border-radius:12px;padding:12px 8px;color:var(--text);font-family:'Bebas Neue',cursive;font-size:28px;text-align:center;width:100%;outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none;letter-spacing:1px}
@@ -566,11 +566,11 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 /* ── HESAPLAYICILAR ─────────────────────────────────── */
 .calc-overlay{position:fixed;inset:0;background:var(--bg);z-index:800;display:none;flex-direction:column;overflow:hidden}
 .calc-overlay.active{display:flex}
-.calc-header{background:var(--hbg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.calc-header{background:var(--hbg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0;max-width:640px;width:100%;margin:0 auto;box-sizing:border-box}
 .calc-header-title{flex:1;font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:2px;line-height:1}
 .calc-header-sub{font-size:10px;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
 .calc-close{background:none;border:none;color:var(--text2);cursor:pointer;padding:4px 8px;font-size:22px}
-.calc-body{flex:1;overflow-y:auto;padding:18px}
+.calc-body{flex:1;overflow-y:auto;padding:18px;max-width:640px;width:100%;margin:0 auto;box-sizing:border-box}
 .calc-grid-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:14px}
 .calc-label{font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
 .calc-input{background:var(--card2);border:2px solid var(--border);border-radius:12px;padding:14px 12px;color:var(--text);font-family:'Bebas Neue',cursive;font-size:32px;letter-spacing:1px;text-align:center;width:100%;outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none}
@@ -703,8 +703,8 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
   <img src="logo.png" width="148">
 </div>
   <h1 class="splash-title">RAVEN<span style="color:var(--accent)">FIT</span></h1>
-  <div class="splash-tag">Versiyon 0.3.0.1(beta)</div>
-  <div class="splash-sub">Sen sadece antrenmanına odaklan</div>
+  <div class="splash-tag">Versiyon 0.3.1.3(beta)</div>
+  <div class="splash-sub">Sen sadece antrenmanına odaklan diye</div>
   <div class="pills">
     <div class="pill"><div class="pill-dot"></div>Çoklu Branş</div>
     <div class="pill"><div class="pill-dot"></div>Beslenme & Makro</div>
@@ -1300,6 +1300,10 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
     </div>
     <div style="color:var(--text2);font-size:11px;margin-bottom:12px;">Yeni ölçülerini girdiğinde ana profilindeki kalori, makro, vücut tipi ve yağ oranları otomatik güncellenecektir.</div>
     
+    <div class="frow" style="margin-bottom:8px">
+      <div class="fg"><label class="fl">Yaş</label><input class="fi" id="m-age" type="number" inputmode="numeric" min="10" max="100" placeholder="ör. 28"></div>
+      <div class="fg"><label class="fl">Boy (cm)</label><input class="fi" id="m-ht" type="number" inputmode="decimal" step="0.5" min="100" max="250" placeholder="ör. 178"></div>
+    </div>
     <div class="fg" style="margin-bottom:8px"><label class="fl">Vücut Ağırlığı (kg)</label><input class="fi" id="m-wt" type="number" inputmode="decimal" step="0.1"></div>
     <div class="frow" style="margin-bottom:8px">
       <div class="fg"><label class="fl">Boyun (cm)</label><input class="fi" id="m-nk" type="number" inputmode="decimal" step="0.5"></div>
@@ -1828,10 +1832,10 @@ function selOpt(el,grp){
         }
       }
     } catch(err){ console.warn('Recomp render hatası:',err); }
-    /* Hedef tavsiye metni güncelle — defansif */
+    /* Hedef tavsiye metni + reason güncelle — renderGoalStep tüm panel'i yeniden çizer */
     try {
-      if(R.recGoal && typeof renderGoalAdvice==='function') renderGoalAdvice(selGL);
-    } catch(err){ console.warn('Goal advice render hatası:',err); }
+      if(R.recGoal && typeof renderGoalStep==='function') renderGoalStep();
+    } catch(err){ console.warn('Goal step render hatası:',err); }
   }
   if(grp==='rc'){
     A.recompMode=el.dataset.v;
@@ -1839,7 +1843,7 @@ function selOpt(el,grp){
       if(selGL==='recomp' && R.tdee){
         var male=U.gender==='male';
         R.macros=calcMacros(R.goalCal, 'recomp', selST||'hybrid', R.lm, U.weight, R.bf, male, A.recompMode);
-        renderGoalAdvice('recomp');
+        if(typeof renderGoalStep==='function') renderGoalStep();
       }
     } catch(err){ console.warn('Recomp mode hatası:',err); }
   }
@@ -2506,16 +2510,7 @@ function renderGoalStep(){
       }
     });
 
-    /* "Neden bu öneri?" açıklamasını g-rec-txt'e ek */
-    /* renderGoalAdvice zaten setledi, üzerine reason'u da ekle */
-    var elTxt=document.getElementById('g-rec-txt');
-    if(elTxt && detail.reason){
-      var existing=elTxt.innerHTML;
-      var reasonHtml='<div style="margin-top:10px;padding:10px 12px;background:rgba(76,201,240,.08);border-left:3px solid var(--info);border-radius:8px"><div style="font-size:11px;font-weight:700;color:var(--info);margin-bottom:3px">🧠 Neden bu öneri?</div><div style="font-size:11px;color:var(--text2);line-height:1.5">'+detail.reason+'</div></div>';
-      /* Eski reason varsa kaldır */
-      existing=existing.replace(/<div style="margin-top:10px;padding:10px 12px;background:rgba\(76,201,240,\.08\);[^]*?<\/div><\/div>/,'');
-      elTxt.innerHTML=existing+reasonHtml;
-    }
+    /* "Neden bu öneri?" artık renderGoalAdvice içinde otomatik gösteriliyor */
   } catch(err){ console.warn('Hybrid badge render hata:',err); }
 }
 function renderGoalAdvice(goal) {
@@ -2560,8 +2555,17 @@ function renderGoalAdvice(goal) {
     : '';
 
   var elTxt=document.getElementById('g-rec-txt');
-  if(elTxt) elTxt.innerHTML =
-    '<strong>Hedef Analizi:</strong> ' + (rTexts[goal] || '') + changeHtml + adviceHtml;
+  if(elTxt){
+    /* Neden bu öneri kutusu — her zaman göster */
+    var reasonHtml='';
+    try {
+      var detail=recGoalDetailed();
+      if(detail && detail.reason){
+        reasonHtml='<div style="margin-top:10px;padding:10px 12px;background:rgba(76,201,240,.08);border-left:3px solid var(--info);border-radius:8px"><div style="font-size:11px;font-weight:700;color:var(--info);margin-bottom:3px">🧠 Neden bu öneri?</div><div style="font-size:11px;color:var(--text2);line-height:1.5">'+detail.reason+'</div></div>';
+      }
+    } catch(e){}
+    elTxt.innerHTML='<strong>Hedef Analizi:</strong> ' + (rTexts[goal] || '') + changeHtml + adviceHtml + reasonHtml;
+  }
 }
 
 /* ── TABS ─────────────────────────────────────────────── */
@@ -2869,6 +2873,8 @@ function saveFirstWeekMeasurements() {
 
 /* ── YENİ MODAL & HAFTALIK KAYIT İŞLEMLERİ ─────────────── */
 function openMeasurementModal() {
+  document.getElementById('m-age').value = U.age || '';
+  document.getElementById('m-ht').value = U.height || '';
   document.getElementById('m-wt').value = U.weight || '';
   document.getElementById('m-nk').value = U.neck || '';
   document.getElementById('m-wst').value = U.waist || '';
@@ -2889,6 +2895,9 @@ function closeMeasurementModal() {
 function editEntry(idx){
   _editingEntryIdx=idx;
   var entries=getEntries();var e=entries[idx];if(!e)return;
+  /* Yaş/Boy: entry'de varsa onu kullan, yoksa current U */
+  document.getElementById('m-age').value=e.age||U.age||'';
+  document.getElementById('m-ht').value=e.height||U.height||'';
   document.getElementById('m-wt').value=e.weight||'';
   document.getElementById('m-nk').value=e.neck||'';
   document.getElementById('m-wst').value=e.waist||'';
@@ -2903,8 +2912,23 @@ function editEntry(idx){
   document.getElementById('measureModal').classList.add('active');
 }
 function saveWeeklyMeasurements(){
-  var fd={weight:parseFloat(document.getElementById('m-wt').value)||null,neck:parseFloat(document.getElementById('m-nk').value)||null,waist:parseFloat(document.getElementById('m-wst').value)||null,shoulder:parseFloat(document.getElementById('m-sh').value)||null,chest:parseFloat(document.getElementById('m-ch').value)||null,arm:parseFloat(document.getElementById('m-arm').value)||null,forearm:parseFloat(document.getElementById('m-farm').value)||null,hip:parseFloat(document.getElementById('m-hip').value)||null,leg:parseFloat(document.getElementById('m-leg').value)||null,calf:parseFloat(document.getElementById('m-calf').value)||null};
+  var fd={
+    age:parseInt(document.getElementById('m-age').value)||null,
+    height:parseFloat(document.getElementById('m-ht').value)||null,
+    weight:parseFloat(document.getElementById('m-wt').value)||null,
+    neck:parseFloat(document.getElementById('m-nk').value)||null,
+    waist:parseFloat(document.getElementById('m-wst').value)||null,
+    shoulder:parseFloat(document.getElementById('m-sh').value)||null,
+    chest:parseFloat(document.getElementById('m-ch').value)||null,
+    arm:parseFloat(document.getElementById('m-arm').value)||null,
+    forearm:parseFloat(document.getElementById('m-farm').value)||null,
+    hip:parseFloat(document.getElementById('m-hip').value)||null,
+    leg:parseFloat(document.getElementById('m-leg').value)||null,
+    calf:parseFloat(document.getElementById('m-calf').value)||null
+  };
   var tmpU=Object.assign({},U);
+  if(fd.age)tmpU.age=fd.age;
+  if(fd.height)tmpU.height=fd.height;
   if(fd.weight)tmpU.weight=fd.weight;if(fd.neck)tmpU.neck=fd.neck;if(fd.waist)tmpU.waist=fd.waist;
   if(fd.shoulder)tmpU.shoulder=fd.shoulder;if(fd.hip)tmpU.hip=fd.hip;
   var savedU=U;U=tmpU;calcAll();
@@ -2915,15 +2939,24 @@ function saveWeeklyMeasurements(){
   var entry={
     date:_editingEntryIdx!==null?entries[_editingEntryIdx].date:now.toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric'}),
     timestamp:_editingEntryIdx!==null?entries[_editingEntryIdx].timestamp:now.getTime(),
+    age:fd.age||U.age||null,
+    height:fd.height||U.height||null,
     weight:fd.weight||U.weight,neck:fd.neck||U.neck,waist:fd.waist||U.waist,
     shoulder:fd.shoulder||U.shoulder||null,chest:fd.chest||U.chest||null,arm:fd.arm||U.arm||null,
     forearm:fd.forearm||U.forearm||null,hip:fd.hip||U.hip||null,leg:fd.leg||U.leg||null,calf:fd.calf||U.calf||null,
     bf:entryBf,lm:entryLm,ffmi:entryFfmi,bmi:entryBmi,ratio:entryRatio};
-  if(_editingEntryIdx!==null){entries[_editingEntryIdx]=entry;}
-  else{if(fd.weight)U.weight=fd.weight;if(fd.neck)U.neck=fd.neck;if(fd.waist)U.waist=fd.waist;
+  if(_editingEntryIdx!==null){
+    entries[_editingEntryIdx]=entry;
+    /* Düzenleme sonrası U'yu en son kayıttan senkronize et */
+    _syncUFromLatestEntry(entries);
+  }
+  else{
+    if(fd.age)U.age=fd.age;if(fd.height)U.height=fd.height;
+    if(fd.weight)U.weight=fd.weight;if(fd.neck)U.neck=fd.neck;if(fd.waist)U.waist=fd.waist;
     if(fd.shoulder)U.shoulder=fd.shoulder;if(fd.chest)U.chest=fd.chest;if(fd.arm)U.arm=fd.arm;
     if(fd.forearm)U.forearm=fd.forearm;if(fd.hip)U.hip=fd.hip;if(fd.leg)U.leg=fd.leg;if(fd.calf)U.calf=fd.calf;
-    calcAll();saveData();entries.push(entry);}
+    calcAll();saveData();entries.push(entry);
+  }
   localStorage.setItem('rf_entries',JSON.stringify(entries));
   saveToFirebase();
   var wasEdit=_editingEntryIdx!==null;
@@ -2994,6 +3027,8 @@ function _goalLabel(g){
 /* ── TAB: İLERLEME (3 Haftalık Tablo ve Liste) ────────── */
 function renderIlerleme(){
   var entries=getEntries();
+  /* Tüm entry'leri timestamp'a göre sırala (en eski → en yeni) */
+  entries=entries.slice().sort(function(a,b){return (a.timestamp||0)-(b.timestamp||0);});
   var elList=document.getElementById('h-list');
   var tblCont=document.getElementById('progress-table-container');
 
@@ -3003,10 +3038,16 @@ function renderIlerleme(){
     return;
   }
   
-  // Eski tip liste görünümü
+  // Eski tip liste görünümü — en yeni üstte
+  // realIdx için: getEntries()'in orijinal sırasındaki index'i bulmamız lazım
+  var origEntries=getEntries();
   elList.innerHTML=entries.slice().reverse().map(function(e,i){
-    var realIdx=entries.length-1-i;
-    return'<div class="hi"><div class="hi-left"><div class="hi-date">📅 '+e.date+'</div><div class="hi-d">'+e.weight+' kg | %'+e.bf+' yağ</div></div>'+
+    /* Orijinal entries array'inde bu entry'nin gerçek index'ini bul */
+    var realIdx=origEntries.findIndex(function(x){return x.timestamp===e.timestamp;});
+    if(realIdx<0) realIdx=origEntries.indexOf(e);
+    var isLatest=(i===0);
+    var latestBadge=isLatest?'<span style="font-size:9px;color:var(--success);background:rgba(46,196,182,.15);padding:2px 6px;border-radius:5px;margin-left:6px;font-weight:700">● GÜNCEL</span>':'';
+    return'<div class="hi"><div class="hi-left"><div class="hi-date">📅 '+e.date+latestBadge+'</div><div class="hi-d">'+e.weight+' kg | %'+e.bf+' yağ</div></div>'+
     '<div class="hi-stats"><div class="hi-stat"><div class="hi-sv" style="color:var(--accent)">%'+e.bf+'</div><div class="hi-sl">Yağ</div></div>'+
     '<div class="hi-stat"><div class="hi-sv" style="color:var(--success)">'+e.lm+'</div><div class="hi-sl">Yağsız</div></div>'+
     '<div class="hi-stat"><div class="hi-sv" style="color:var(--info)">'+e.ffmi+'</div><div class="hi-sl">FFMI</div></div>'+
@@ -3046,7 +3087,7 @@ function renderIlerleme(){
   tblCont.innerHTML =
     '<div class="ptable-wrapper">' +
     '<table class="ptable"><thead><tr>' +
-    '<th>Ölçü</th><th>Son Ölçüm</th><th>1 Hafta Önce</th><th>2 Hafta Önce</th><th>3 Hafta Önce</th>' +
+    '<th>Ölçü</th><th><span style="color:var(--success)">●</span> GÜNCEL</th><th>1 Hafta Önce</th><th>2 Hafta Önce</th><th>3 Hafta Önce</th>' +
     '</tr></thead><tbody>' +
     mkRow('Ağırlık (kg)',   'weight',   isYag) +
     mkRow('Yağ Oranı (%)',  'bf',       true)  +
@@ -3068,7 +3109,42 @@ function renderIlerleme(){
 }
 
 function getEntries(){try{return JSON.parse(localStorage.getItem('rf_entries')||'[]');}catch(e){return[];}}
-function deleteEntry(i){var entries=getEntries();entries.splice(i,1);localStorage.setItem('rf_entries',JSON.stringify(entries));saveToFirebase();renderIlerleme();}
+function deleteEntry(i){
+  showConfirm('Kaydı Sil','Bu ölçüm kaydını silmek istediğine emin misin?',function(){
+    var entries=getEntries();
+    entries.splice(i,1);
+    localStorage.setItem('rf_entries',JSON.stringify(entries));
+    /* U'yu en son entry'ye göre güncelle (varsa) */
+    if(entries.length>0){
+      _syncUFromLatestEntry(entries);
+    }
+    saveToFirebase();
+    renderAll();
+    showToast('🗑 Kayıt silindi','success');
+  },'Sil');
+}
+
+/* En son entry'den U değerlerini senkronize et (özet tablo güncellensin) */
+function _syncUFromLatestEntry(entries){
+  /* Timestamp'a göre sırala, en yeniyi al */
+  var sorted=entries.slice().sort(function(a,b){return (b.timestamp||0)-(a.timestamp||0);});
+  var latest=sorted[0];
+  if(!latest) return;
+  if(latest.weight!=null) U.weight=latest.weight;
+  if(latest.neck!=null) U.neck=latest.neck;
+  if(latest.waist!=null) U.waist=latest.waist;
+  if(latest.shoulder!=null) U.shoulder=latest.shoulder;
+  if(latest.chest!=null) U.chest=latest.chest;
+  if(latest.arm!=null) U.arm=latest.arm;
+  if(latest.forearm!=null) U.forearm=latest.forearm;
+  if(latest.hip!=null) U.hip=latest.hip;
+  if(latest.leg!=null) U.leg=latest.leg;
+  if(latest.calf!=null) U.calf=latest.calf;
+  /* Yaş/Boy entry'de varsa onları da güncelle */
+  if(latest.age!=null) U.age=latest.age;
+  if(latest.height!=null) U.height=latest.height;
+  try { calcAll(); saveData(); } catch(e){}
+}
 function resetAll(){
   showConfirm('Tüm Verileri Sıfırla','Tüm veriler, ölçümler ve geçmiş kayıtlar silinecek. Emin misin?',function(){
     localStorage.removeItem('rf_data');localStorage.removeItem('rf_entries');localStorage.removeItem('rf_water_today');localStorage.removeItem('rf_workout_logs');localStorage.removeItem('rf_custom_workouts');localStorage.removeItem('rf_supplements_used');localStorage.removeItem('rf_badges');
@@ -4974,14 +5050,14 @@ function renderWorkoutHome(){
   var html='<div class="wh-grid">';
 
   /* ── Araçlar kartı (tam genişlik) ── */
-  html+='<div class="wh-card tools wh-full" onclick="renderWorkoutTools()" style="cursor:pointer">';
-  html+='<div style="display:flex;align-items:center;gap:10px">';
-  html+='<div style="font-size:24px">🛠️</div>';
+  html+='<div class="wh-card tools wh-full" onclick="renderWorkoutTools()" style="cursor:pointer;padding:18px 16px;border-width:2px;border-color:var(--border)">';
+  html+='<div style="display:flex;align-items:center;gap:12px">';
+  html+='<div style="font-size:30px">🛠️</div>';
   html+='<div style="flex:1">';
-  html+='<div class="wh-card-label">ARAÇLAR</div>';
-  html+='<div class="wh-card-sub">Egzersiz havuzu, geçmiş, kronometre, set sayacı</div>';
+  html+='<div class="wh-card-label" style="font-size:18px">ARAÇLAR</div>';
+  html+='<div class="wh-card-sub" style="font-size:11px;margin-top:2px">Egzersiz havuzu, geçmiş, kronometre, set sayacı, hesaplayıcılar</div>';
   html+='</div>';
-  html+='<span style="color:var(--text3);font-size:20px">›</span>';
+  html+='<span style="color:var(--text3);font-size:22px">›</span>';
   html+='</div></div>';
 
   /* ── Streak banner ── */
@@ -5262,6 +5338,15 @@ function openCalculator(id){
     'sleep':{title:'UYKU DÖNGÜSÜ',sub:'REM OPTİMİZASYON',icon:'😴'},
     'pr':{title:'REKOR DENEMESİ',sub:'PR ATTEMPT',icon:'🎯'}
   };
+  /* PR için: sonuç ekranı veya yarıda kalanları setup'a sıfırla
+     (target/exercise/plates kullanıcı tercihi olarak kalır) */
+  if(id==='pr' && _pr){
+    if(_pr.screen==='result' || _pr.screen==='attempt-active' || _pr.screen==='warmup-active'){
+      _resetPRState();
+    }
+    /* Setup ekranı zaten yarıda kalmışsa olduğu gibi devam et */
+    if(!_pr.screen) _pr.screen='setup';
+  }
   var info=names[id]||{title:id.toUpperCase(),sub:'HESAPLAYICI',icon:'🧮'};
   document.getElementById('calc-header-title').textContent=info.icon+' '+info.title;
   document.getElementById('calc-header-sub').textContent=info.sub;
@@ -6504,57 +6589,137 @@ function _prWarmupRest(){
 /* ══ HISSETTIRME SLIDER ═════════════════════════════════════ */
 function _prFeelSlider(context){
   /* context: 'warmup' (3-kademe) veya 'attempt' (4-kademe) */
-  var levels, labels, colors;
+  var levels, labels, colors, emojis;
   if(context==='warmup'){
     levels=3;
     labels=['Kötü hissettirdi','Normaldi','İyi hissettirdi'];
     colors=['#ff9f1c','#4cc9f0','#06d6a0'];
+    emojis=['😣','😐','💪'];
   } else {
     levels=4;
     labels=['Başarısız','Kötü hissettirdi','Normaldi','İyi hissettirdi'];
     colors=['#e63946','#ff9f1c','#4cc9f0','#06d6a0'];
+    emojis=['❌','😣','😐','💪'];
   }
 
   var v=_pr._feelValue;
   var selIdx=Math.min(levels-1, Math.floor(v*levels));
+  if(selIdx<0) selIdx=0;
+
+  /* Inline CSS animasyon + logo silüet için */
   var html='';
+  html+='<style>'+
+    '.pr-feel-wrap{position:relative;min-height:480px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:30px 8px}'+
+    '.pr-feel-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;border-radius:14px}'+
+    '.pr-feel-bg::before{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(70vw,520px);height:min(70vw,520px);background:url("logo.png") center/contain no-repeat;opacity:.045;filter:blur(2px) grayscale(1);animation:prFeelLogoFloat 8s ease-in-out infinite}'+
+    '.pr-feel-bg::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 30%, rgba(230,57,70,.12), transparent 60%);animation:prFeelPulse 4s ease-in-out infinite}'+
+    '@keyframes prFeelLogoFloat{0%,100%{transform:translate(-50%,-50%) scale(1) rotate(0)}50%{transform:translate(-50%,-52%) scale(1.04) rotate(3deg)}}'+
+    '@keyframes prFeelPulse{0%,100%{opacity:.5}50%{opacity:.9}}'+
+    '.pr-feel-title{position:relative;z-index:2;text-align:center;font-family:\'Bebas Neue\',cursive;font-size:30px;letter-spacing:3px;line-height:1.1;color:var(--text);margin:30px 0 10px;text-shadow:0 4px 24px rgba(230,57,70,.4)}'+
+    '.pr-feel-sub{position:relative;z-index:2;text-align:center;font-size:11px;color:var(--text2);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:24px}'+
+    '.pr-feel-emoji{position:relative;z-index:2;font-size:72px;text-align:center;line-height:1;margin:0 0 6px;transition:all .3s cubic-bezier(.34,1.56,.64,1);filter:drop-shadow(0 6px 20px rgba(0,0,0,.4))}'+
+    '.pr-feel-label{position:relative;z-index:2;text-align:center;font-family:\'Bebas Neue\',cursive;font-size:32px;letter-spacing:2px;font-weight:700;margin-bottom:30px;transition:color .3s;text-shadow:0 2px 12px rgba(0,0,0,.5)}'+
+    '.pr-feel-arc{position:relative;z-index:2;display:flex;justify-content:center;margin:8px 0 20px;width:100%;max-width:340px}'+
+    '.pr-feel-arc svg{width:100%;height:auto;overflow:visible}'+
+    '.pr-feel-thumb{transition:cx .3s cubic-bezier(.34,1.56,.64,1),cy .3s cubic-bezier(.34,1.56,.64,1),fill .3s;filter:drop-shadow(0 4px 12px rgba(0,0,0,.6))}'+
+    '.pr-feel-btns{position:relative;z-index:2;display:grid;gap:8px;width:100%;max-width:340px;margin-top:8px}'+
+    '.pr-feel-btn{background:var(--card2);border:2px solid var(--border);border-radius:14px;padding:14px 16px;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:14px;font-family:\'Outfit\',sans-serif;font-size:15px;font-weight:600;transition:all .2s;-webkit-tap-highlight-color:transparent}'+
+    '.pr-feel-btn:active{transform:scale(.98)}'+
+    '.pr-feel-btn .icn{font-size:24px;line-height:1;width:32px;text-align:center}'+
+    '.pr-feel-btn.sel{background:var(--card);transform:scale(1.02);box-shadow:0 6px 24px rgba(0,0,0,.4)}'+
+    '.pr-feel-confirm{position:relative;z-index:2;width:100%;max-width:340px;margin:20px 0 0;padding:16px;border:none;border-radius:14px;color:#fff;font-family:\'Outfit\',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;-webkit-tap-highlight-color:transparent;box-shadow:0 6px 24px rgba(0,0,0,.4);transition:all .2s}'+
+    '.pr-feel-confirm:active{transform:translateY(2px)}'+
+  '</style>';
 
-  html+='<div style="padding:80px 0 40px;text-align:center">';
-  html+='<div style="font-family:\'Bebas Neue\',cursive;font-size:28px;letter-spacing:2px;line-height:1.2">BU SET<br>NASIL HİSSETTİRDİ?</div>';
+  html+='<div class="pr-feel-wrap">';
+  html+='<div class="pr-feel-bg"></div>';
+
+  html+='<div class="pr-feel-title">BU SET NASIL HİSSETTİRDİ?</div>';
+  html+='<div class="pr-feel-sub">Seçiminize göre hesaplayacağız</div>';
+
+  /* Büyük emoji + label */
+  html+='<div class="pr-feel-emoji" id="pr-feel-emoji">'+emojis[selIdx]+'</div>';
+  html+='<div class="pr-feel-label" id="pr-feel-label" style="color:'+colors[selIdx]+'">'+labels[selIdx]+'</div>';
+
+  /* Kavisli SVG arc — kalın, parlak gradient */
+  html+='<div class="pr-feel-arc">';
+  /* SVG ark: 340x100, yay yarı çap 200 */
+  var w=340, h=120;
+  var cx=w/2, cy=h+60, r=180; /* merkez aşağıda, yay yukarıda */
+  /* Her seviye için x,y koordinatı (yay üzerinde) */
+  function posOnArc(i, total){
+    /* yay açı aralığı: -160° ile -20° (saat 7 → saat 5 arası) */
+    var startAngle=-160, endAngle=-20;
+    var t=total===1?0.5:i/(total-1);
+    var ang=(startAngle+(endAngle-startAngle)*t)*Math.PI/180;
+    return {x:cx+r*Math.cos(ang), y:cy+r*Math.sin(ang)};
+  }
+  var startP=posOnArc(0, levels), endP=posOnArc(levels-1, levels);
+  /* Tam yay path */
+  var startA=-160*Math.PI/180, endA=-20*Math.PI/180;
+  var pathSx=cx+r*Math.cos(startA), pathSy=cy+r*Math.sin(startA);
+  var pathEx=cx+r*Math.cos(endA), pathEy=cy+r*Math.sin(endA);
+  /* Aktif renge göre yay rengi */
+  var arcCol=colors[selIdx];
+
+  html+='<svg viewBox="0 0 '+w+' '+h+'" xmlns="http://www.w3.org/2000/svg">';
+  /* Glow filtresi */
+  html+='<defs>';
+  html+='<filter id="prGlow" x="-50%" y="-50%" width="200%" height="200%">';
+  html+='<feGaussianBlur stdDeviation="4" result="blur"/>';
+  html+='<feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>';
+  html+='</filter>';
+  /* Gradient yay için */
+  html+='<linearGradient id="prArcGrad" x1="0%" y1="0%" x2="100%" y2="0%">';
+  colors.forEach(function(c,i){
+    var pct=(i/(colors.length-1))*100;
+    html+='<stop offset="'+pct+'%" stop-color="'+c+'"/>';
+  });
+  html+='</linearGradient>';
+  html+='</defs>';
+
+  /* Arka plan yay (kalın, soluk) */
+  html+='<path d="M '+pathSx+' '+pathSy+' A '+r+' '+r+' 0 0 1 '+pathEx+' '+pathEy+'" stroke="rgba(255,255,255,0.08)" stroke-width="14" fill="none" stroke-linecap="round"/>';
+  /* Aktif yay (gradient, parlak) */
+  html+='<path d="M '+pathSx+' '+pathSy+' A '+r+' '+r+' 0 0 1 '+pathEx+' '+pathEy+'" stroke="url(#prArcGrad)" stroke-width="10" fill="none" stroke-linecap="round" opacity="0.9"/>';
+
+  /* Her seviye için işaret nokta */
+  for(var i=0;i<levels;i++){
+    var p=posOnArc(i, levels);
+    var isSelected=i===selIdx;
+    var dotR=isSelected?16:7;
+    var dotCol=isSelected?colors[i]:'rgba(255,255,255,0.3)';
+    html+='<circle cx="'+p.x+'" cy="'+p.y+'" r="'+dotR+'" fill="'+dotCol+'" stroke="rgba(0,0,0,0.6)" stroke-width="2" class="pr-feel-thumb" id="pr-feel-dot-'+i+'" '+(isSelected?'filter="url(#prGlow)"':'')+' onclick="_prFeelSliderSet('+i+','+levels+')" style="cursor:pointer"/>';
+  }
+  html+='</svg>';
   html+='</div>';
 
-  /* Slider — native range input */
-  html+='<div style="padding:20px 4px">';
-  html+='<input type="range" min="0" max="'+(levels-1)+'" step="1" value="'+selIdx+'" oninput="_prFeelSliderUpdate(this.value,'+levels+')" id="pr-feel-slider" style="width:100%;accent-color:'+colors[selIdx]+';height:8px">';
-
-  /* Seçili etiket */
-  html+='<div id="pr-feel-label" style="text-align:center;margin-top:30px;font-size:18px;font-weight:700;color:'+colors[selIdx]+';letter-spacing:1px">'+labels[selIdx]+'</div>';
+  /* Alternatif olarak liste butonları (mobilde daha kullanılabilir) */
+  html+='<div class="pr-feel-btns">';
+  for(var i=0;i<levels;i++){
+    var sel=(i===selIdx)?' sel':'';
+    var bcol=(i===selIdx)?(' style="border-color:'+colors[i]+';background:linear-gradient(135deg, '+colors[i]+'22, transparent)"'):'';
+    html+='<button class="pr-feel-btn'+sel+'"'+bcol+' onclick="_prFeelSliderSet('+i+','+levels+')">';
+    html+='<div class="icn">'+emojis[i]+'</div>';
+    html+='<div style="flex:1;text-align:left">'+labels[i]+'</div>';
+    if(i===selIdx) html+='<div style="color:'+colors[i]+';font-size:20px">✓</div>';
+    html+='</button>';
+  }
   html+='</div>';
 
-  /* Seç butonu */
-  html+='<button class="btn btn-full" onclick="_prFeelSelect(\''+context+'\')" style="margin-top:40px">Seç</button>';
+  /* Onay butonu */
+  html+='<button class="pr-feel-confirm" style="background:linear-gradient(135deg, '+colors[selIdx]+', '+colors[selIdx]+'cc)" onclick="_prFeelSelect(\''+context+'\')">DEVAM ET →</button>';
+
+  html+='</div>';
 
   return html;
 }
 
-function _prFeelSliderUpdate(val,levels){
-  var idx=parseInt(val);
-  var labels, colors;
-  if(levels===3){
-    labels=['Kötü hissettirdi','Normaldi','İyi hissettirdi'];
-    colors=['#ff9f1c','#4cc9f0','#06d6a0'];
-  } else {
-    labels=['Başarısız','Kötü hissettirdi','Normaldi','İyi hissettirdi'];
-    colors=['#e63946','#ff9f1c','#4cc9f0','#06d6a0'];
-  }
+/* Seviye direkt tıklamayla seç */
+function _prFeelSliderSet(idx, levels){
   _pr._feelValue=idx/(levels-1);
-  var lbl=document.getElementById('pr-feel-label');
-  var sld=document.getElementById('pr-feel-slider');
-  if(lbl){
-    lbl.textContent=labels[idx];
-    lbl.style.color=colors[idx];
-  }
-  if(sld) sld.style.accentColor=colors[idx];
+  /* Tüm ekranı yeniden render et (daha güvenilir, küçük overhead) */
+  _renderPR();
 }
 
 function _prFeelSelect(context){
@@ -6823,10 +6988,11 @@ function _prResult(){
   attemptsRev.forEach(function(a){
     var col=feelColors[a.feel]||'var(--accent)';
     html+='<div style="display:flex;align-items:center;gap:16px;margin-bottom:14px">';
-    html+='<div style="width:52px;height:52px;border-radius:50%;background:'+col+';color:#fff;display:flex;align-items:center;justify-content:center;font-family:\'Bebas Neue\',cursive;font-size:22px;flex-shrink:0">'+(a.idx+1)+'</div>';
+    /* Parlak gradient circle + glow halo */
+    html+='<div style="width:56px;height:56px;border-radius:50%;background:radial-gradient(circle at 30% 30%, '+col+'ff, '+col+'cc 60%, '+col+'88);color:#fff;display:flex;align-items:center;justify-content:center;font-family:\'Bebas Neue\',cursive;font-size:24px;flex-shrink:0;box-shadow:0 0 24px '+col+'66, 0 6px 16px rgba(0,0,0,.3), inset 0 1px 2px rgba(255,255,255,.3);text-shadow:0 1px 2px rgba(0,0,0,.4);font-weight:700">'+(a.idx+1)+'</div>';
     html+='<div style="flex:1">';
     html+='<div style="font-family:\'Bebas Neue\',cursive;font-size:24px;letter-spacing:1px">'+a.kg+unitLabel()+'</div>';
-    html+='<div style="font-size:11px;color:var(--text2)">'+feelLabels[a.feel]+'</div>';
+    html+='<div style="font-size:11px;color:'+col+';font-weight:600">'+feelLabels[a.feel]+'</div>';
     html+='</div></div>';
   });
   html+='</div>';
@@ -6846,57 +7012,101 @@ function _prResult(){
   });
   html+='</div>';
 
-  /* Günlüğe Ekle */
-  html+='<button class="btn btn-full" onclick="_prSaveToLog()" style="margin-top:24px">Günlüğe Ekle</button>';
+  /* Günlüğe Ekle + Yeni Deneme */
+  html+='<button class="btn btn-full" onclick="_prSaveToLog()" style="margin-top:24px">🎯 Günlüğe Ekle</button>';
+  html+='<button class="btn btn-full" style="margin-top:10px;background:linear-gradient(135deg, var(--card2), var(--card));color:var(--text)" onclick="_prRestartFromResult()">🔄 Yeni Deneme Yap</button>';
   html+='<button class="btn btn-full" style="margin-top:10px;background:var(--card2);color:var(--text2)" onclick="closeCalculator()">Kapat</button>';
 
   return html;
 }
 
-function _prSaveToLog(){
-  /* Antrenman logu olarak kaydet */
-  var logs=getWorkoutLogs();
-  var bestAttempt=null;
-  _pr.attempts.forEach(function(a){
-    if(a.success && (!bestAttempt||a.kg>bestAttempt.kg)) bestAttempt=a;
-  });
+/* Sonuç ekranından yeni deneme başlat */
+function _prRestartFromResult(){
+  _resetPRState();
+  _renderPR();
+}
 
-  var sets=[];
-  /* Isınma setleri */
-  _pr.warmupSets.forEach(function(w,i){
-    if(!w.skipped){
+function _prSaveToLog(){
+  try {
+    /* Antrenman logu olarak kaydet */
+    var logs=getWorkoutLogs();
+    var bestAttempt=null;
+    _pr.attempts.forEach(function(a){
+      if(a.success && (!bestAttempt||a.kg>bestAttempt.kg)) bestAttempt=a;
+    });
+
+    var sets=[];
+    /* Isınma setleri */
+    _pr.warmupSets.forEach(function(w,i){
+      if(!w.skipped){
+        sets.push({
+          exId:_pr.exercise,
+          kg:(typeof unitToKg==='function'?unitToKg(w.kg):w.kg)||w.kg,
+          reps:w.reps,
+          note:'Isınma '+(i+1)
+        });
+      }
+    });
+    /* Denemeler */
+    _pr.attempts.forEach(function(a,i){
       sets.push({
         exId:_pr.exercise,
-        kg:unitToKg(w.kg)||w.kg,
-        reps:w.reps,
-        note:'Isınma '+(i+1)
+        kg:(typeof unitToKg==='function'?unitToKg(a.kg):a.kg)||a.kg,
+        reps:a.success?1:0,
+        note:(i+1)+'. Deneme — '+(a.feel||'')
       });
-    }
-  });
-  /* Denemeler */
-  _pr.attempts.forEach(function(a,i){
-    sets.push({
-      exId:_pr.exercise,
-      kg:unitToKg(a.kg)||a.kg,
-      reps:a.success?1:0,
-      note:(i+1)+'. Deneme — '+(a.feel||'')
     });
-  });
 
-  var log={
-    id:'pr_'+Date.now(),
-    programName:'PR Denemesi: '+_prExerciseName(_pr.exercise),
-    branch:'fitness',
-    date:new Date().toISOString(),
-    sets:sets,
-    isPR:true,
-    prTarget:unitToKg(_pr.target)||_pr.target,
-    prBest:bestAttempt?(unitToKg(bestAttempt.kg)||bestAttempt.kg):0
-  };
-  logs.unshift(log);
-  saveWorkoutLogs(logs);
-  showToast('🎯 Günlüğe eklendi!','success');
-  closeCalculator();
+    var prBestKg=bestAttempt?bestAttempt.kg:0;
+    var log={
+      id:'pr_'+Date.now(),
+      programName:'🎯 PR Denemesi: '+_prExerciseName(_pr.exercise),
+      branch:'fitness',
+      date:new Date().toISOString(),
+      sets:sets,
+      isPR:true,
+      prExercise:_pr.exercise,
+      prTarget:_pr.target,
+      prBest:prBestKg,
+      prAttempts:_pr.attempts.map(function(a){return {kg:a.kg,feel:a.feel,success:a.success};}),
+      prWarmups:_pr.warmupSets.map(function(w){return {kg:w.kg,reps:w.reps,skipped:!!w.skipped};}),
+      prWarmupFeel:_pr.warmupFeel
+    };
+    logs.unshift(log);
+    /* localStorage'a kaydet */
+    localStorage.setItem('rf_workout_logs',JSON.stringify(logs));
+    /* Firebase'e sync */
+    if(typeof saveToFirebase==='function') saveToFirebase();
+
+    showToast('🎯 PR günlüğe eklendi!','success');
+
+    /* PR state'ini tamamen sıfırla → kullanıcı yeniden başlayabilir */
+    _resetPRState();
+
+    /* Calculator'ı kapat */
+    closeCalculator();
+  } catch(err){
+    console.error('PR günlüğe ekleme hatası:',err);
+    showToast('⚠️ Günlüğe ekleme hatası: '+(err.message||err),'warn');
+  }
+}
+
+/* PR state'ini temizle — yeni deneme için hazır */
+function _resetPRState(){
+  if(_pr._restTimer){
+    try { clearInterval(_pr._restTimer); } catch(e){}
+    _pr._restTimer=null;
+  }
+  _pr.screen='setup';
+  /* target/exercise/bar/plates kayıtlı kalsın (kullanıcı tekrar deneyebilsin) */
+  _pr.warmupIdx=0;
+  _pr.warmupSets=[];
+  _pr.warmupFeel=null;
+  _pr.attemptIdx=0;
+  _pr.attempts=[];
+  _pr.history=[];
+  _pr.restSeconds=0;
+  _pr._feelValue=0.5;
 }
 
 /* Yeni screen: warmup-active ve attempt-active */
@@ -7099,10 +7309,12 @@ function renderWorkoutHistory(){
   var totalKcal=filtered.reduce(function(a,l){return a+(l.kcal||0);},0);
   var totalMin=filtered.reduce(function(a,l){return a+Math.floor((l.elapsedSec||0)/60);},0);
   var totalSets=filtered.reduce(function(a,l){return a+(l.doneSets||0);},0);
-  html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px">';
+  var prCount=filtered.filter(function(l){return l.isPR;}).length;
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:12px">';
   html+='<div class="ws-report-stat"><div class="ws-report-val">'+filtered.length+'</div><div class="ws-report-lbl">Antrenman</div></div>';
   html+='<div class="ws-report-stat"><div class="ws-report-val">'+totalMin+'dk</div><div class="ws-report-lbl">Toplam Süre</div></div>';
   html+='<div class="ws-report-stat"><div class="ws-report-val">'+totalKcal+'</div><div class="ws-report-lbl">Toplam kcal</div></div>';
+  html+='<div class="ws-report-stat" style="background:linear-gradient(135deg, rgba(230,57,70,.15), var(--card2));border:1px solid rgba(230,57,70,.3)"><div class="ws-report-val" style="color:var(--accent)">🎯 '+prCount+'</div><div class="ws-report-lbl">PR</div></div>';
   html+='</div>';
 
   /* Log listesi — yeniden eskiye, son 30 */
@@ -7110,6 +7322,38 @@ function renderWorkoutHistory(){
   shown.forEach(function(log){
     /* Gerçek index'i bul (orijinal logs dizisinde) */
     var realIdx=logs.indexOf(log);
+
+    /* PR kayıtları için özel kart */
+    if(log.isPR){
+      var prExName={squat:'🦵 Squat',bench:'💪 Bench',deadlift:'🏋️ Deadlift'}[log.prExercise]||log.prExercise;
+      var feelEmoji={good:'💪',normal:'😐',bad:'😣',fail:'❌'};
+      var feelColor={good:'#06d6a0',normal:'#4cc9f0',bad:'#ff9f1c',fail:'#e63946'};
+      /* En iyi feel'i ve değeri bul */
+      var bestKg=log.prBest||0;
+      var prDate=(typeof log.date==='string' && log.date.indexOf('T')>0)?new Date(log.date).toLocaleDateString('tr-TR'):log.date;
+
+      html+='<div class="rc" style="padding:12px 14px;background:linear-gradient(135deg, rgba(230,57,70,.05), var(--card));border:1.5px solid rgba(230,57,70,.3);cursor:pointer" onclick="_prShowDetailFromLog('+realIdx+')">';
+      html+='<div style="display:flex;align-items:flex-start;gap:10px">';
+      html+='<div style="font-size:30px;line-height:1;flex-shrink:0">🎯</div>';
+      html+='<div style="flex:1">';
+      html+='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:3px">';
+      html+='<span style="font-size:14px;font-weight:700;color:var(--accent)">PR Denemesi</span>';
+      html+='<span style="font-size:11px;color:var(--text2)">· '+prExName+'</span>';
+      html+='</div>';
+      html+='<div style="display:flex;align-items:center;gap:12px;margin-bottom:5px">';
+      html+='<div><div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">Hedef</div><div style="font-family:\'Bebas Neue\',cursive;font-size:18px;color:var(--text)">'+log.prTarget+'kg</div></div>';
+      html+='<div style="color:var(--text3);font-size:18px">→</div>';
+      html+='<div><div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">En İyi</div><div style="font-family:\'Bebas Neue\',cursive;font-size:18px;color:'+(bestKg>=log.prTarget?'var(--success)':'var(--warn)')+'">'+bestKg+'kg</div></div>';
+      html+='</div>';
+      html+='<div style="font-size:10px;color:var(--text2)">📅 '+prDate+' · '+(log.prAttempts?log.prAttempts.length:0)+' deneme</div>';
+      html+='</div>';
+      html+='<div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0">';
+      html+='<button onclick="event.stopPropagation();deleteWorkoutLog('+realIdx+')" style="background:none;border:1px solid var(--border);border-radius:7px;padding:4px 8px;font-size:10px;color:var(--accent);cursor:pointer;font-family:\'Outfit\',sans-serif">🗑</button>';
+      html+='</div></div></div>';
+      return;
+    }
+
+    /* Normal antrenman kartı */
     var prog=_findProgram(log.programId);
     var progName=prog?prog.name_tr:(log.programId||'Program');
     var dayName=prog&&prog.days&&prog.days[log.dayIndex]?prog.days[log.dayIndex].name:'Antrenman';
@@ -7132,6 +7376,33 @@ function renderWorkoutHistory(){
   });
 
   el.innerHTML=html;
+}
+
+/* PR log'unu detay olarak göster — kalori hesaplayıcı overlay üzerinden */
+function _prShowDetailFromLog(logIdx){
+  var logs=getWorkoutLogs();
+  var log=logs[logIdx];
+  if(!log||!log.isPR){
+    showToast('Kayıt bulunamadı','warn');
+    return;
+  }
+  /* PR state'ini geçici olarak doldur ve sonuç ekranını göster */
+  _pr.target=log.prTarget||0;
+  _pr.exercise=log.prExercise||'squat';
+  _pr.attempts=(log.prAttempts||[]).map(function(a){return {kg:a.kg,feel:a.feel,success:a.success,idx:0};});
+  _pr.attempts.forEach(function(a,i){a.idx=i;});
+  _pr.warmupSets=(log.prWarmups||[]).map(function(w){return {kg:w.kg,reps:w.reps,skipped:w.skipped};});
+  _pr.warmupFeel=log.prWarmupFeel||null;
+  _pr.screen='result';
+
+  /* Calculator overlay'i aç PR moduna */
+  _activeCalc='pr';
+  var nameEl=document.getElementById('calc-header-title');
+  var subEl=document.getElementById('calc-header-sub');
+  if(nameEl) nameEl.textContent='🎯 PR GEÇMİŞ KAYDI';
+  if(subEl) subEl.textContent='REKOR DENEMESİ';
+  document.getElementById('calc-overlay').classList.add('active');
+  _renderPR();
 }
 
 /* ── Silme ── */
@@ -8466,6 +8737,14 @@ function showAuthScreen(){
 function hideAuthScreen(){
   document.getElementById('auth-screen').style.display='none';
   document.getElementById('app-main').style.display='block';
+  /* Eğer misafir banner/note görünüyorsa ve kullanıcı giriş yaptıysa kaldır */
+  if(_fbUser){
+    _isGuest=false;
+    var bn=document.getElementById('guest-banner');
+    if(bn) bn.remove();
+    var note=document.getElementById('guest-mode-note');
+    if(note) note.style.display='none';
+  }
 }
 
 /* ── Misafir Girişi ──────────────────────────────────── */
@@ -8526,6 +8805,12 @@ function doLogin(){
   var email=nickToEmail(nick);
   var btn=document.getElementById('auth-btn-login');
   btn.textContent='Giriş yapılıyor...';btn.disabled=true;
+  /* Eğer misafirken bir veri varsa, giriş yapmadan önce temizle
+     (misafir verisi başka hesaba akmasın) */
+  var hadGuestData=_isGuest;
+  if(hadGuestData){
+    _clearUserLocalData();
+  }
   _fbAuth.signInWithEmailAndPassword(email,pass)
     .then(function(){btn.textContent='Giriş Yap';btn.disabled=false;})
     .catch(function(e){
@@ -8625,8 +8910,17 @@ function doRegister(){
         _isGuest=false;
         var bn=document.getElementById('guest-banner');
         if(bn)bn.remove();
+        var note=document.getElementById('guest-mode-note');
+        if(note)note.style.display='none';
         showToast('✅ Hesap oluşturuldu! Veriler aktarılıyor...');
       }
+      /* Misafir notunu kesin kapat (hesap oluştuktan sonra hep gizli) */
+      try {
+        var note2=document.getElementById('guest-mode-note');
+        if(note2) note2.style.display='none';
+        var bn2=document.getElementById('guest-banner');
+        if(bn2) bn2.remove();
+      } catch(e){}
       /* Kullanıcı adını Firebase'e kaydet */
       _fbDb.collection('users').doc(cred.user.uid).set({nickname:nick,created:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
     })
@@ -8645,9 +8939,55 @@ function doRegister(){
 /* ── Çıkış Yap ───────────────────────────────────────── */
 function doLogout(){
   showConfirm('Çıkış Yap','Hesabından çıkmak istiyor musun?',function(){
+    /* Önce localStorage'taki kullanıcıya özel verileri temizle */
+    _clearUserLocalData();
     _fbAuth.signOut();
     showToast('Çıkış yapıldı.');
   },'Çıkış Yap');
+}
+
+/* Tüm kullanıcı state'ini ve localStorage'ı sıfırla */
+function _clearUserLocalData(){
+  /* Memory state */
+  U={};R={};A={};BT={};
+  selST=null;selGL=null;
+  step=0;
+  _editingEntryIdx=null;
+  _isGuest=false;
+  /* localStorage temizle (kullanıcıya özel olanları) */
+  var keysToRemove=['rf_data','rf_entries','rf_workout_logs','rf_custom_workouts',
+                    'rf_branches','rf_supplements_used','rf_badges','rf_pr_plates',
+                    'rf_water_today','avatar','nickname'];
+  keysToRemove.forEach(function(k){
+    try{ localStorage.removeItem(k); }catch(e){}
+  });
+  /* Misafir banner'ını gizle */
+  var bn=document.getElementById('guest-banner');
+  if(bn) bn.remove();
+  /* Misafir mode notunu gizle */
+  var note=document.getElementById('guest-mode-note');
+  if(note) note.style.display='none';
+  /* Aktif ekranları gizle */
+  try {
+    var splash=document.getElementById('splash');if(splash) splash.style.display='none';
+    var results=document.getElementById('results');if(results) results.style.display='none';
+    var wizard=document.getElementById('wizard');if(wizard) wizard.style.display='none';
+    var bnav=document.getElementById('bottom-nav');if(bnav) bnav.classList.remove('visible');
+  } catch(e){}
+  /* Wizard input'larını temizle */
+  try {
+    document.querySelectorAll('#wizard input.fi').forEach(function(inp){inp.value='';});
+    document.querySelectorAll('.gbtn.sel').forEach(function(el){el.classList.remove('sel');});
+    document.querySelectorAll('.oc.sel').forEach(function(el){el.classList.remove('sel');});
+  } catch(e){}
+  /* Timer'ları durdur */
+  try {
+    if(typeof _chronoInterval!=='undefined' && _chronoInterval) clearInterval(_chronoInterval);
+    if(typeof _restInterval!=='undefined' && _restInterval) clearInterval(_restInterval);
+    if(typeof _chronoMs!=='undefined') _chronoMs=0;
+    if(typeof _chronoRunning!=='undefined') _chronoRunning=false;
+    if(typeof _setCount!=='undefined') _setCount=0;
+  } catch(e){}
 }
 
 /* ── Giriş Sonrası: Firebase'den Veri Yükle + Eski Veri Migrasyonu ── */
@@ -8718,8 +9058,19 @@ function onUserLoggedIn(user){
           }
         }catch(e){}
       }
-      if(Object.keys(R).length){
+      if(Object.keys(R).length && R.tdee){
+        /* Kullanıcının analizi tamamlanmış — direkt sonuç ekranına geç */
+        try {
+          showResults();
+        } catch(e){
+          console.warn('showResults hatası, splash gösteriliyor:',e);
+          document.getElementById('splash-cont').style.display='block';
+          document.getElementById('splash').style.display='flex';
+        }
+      } else {
+        /* Analiz tamamlanmamış — splash ekranını göster */
         document.getElementById('splash-cont').style.display='block';
+        document.getElementById('splash').style.display='flex';
       }
       if(fbHasData) showToast('Hoş geldin! 👋');
     })
@@ -8730,15 +9081,32 @@ function onUserLoggedIn(user){
         var raw=localStorage.getItem('rf_data');
         if(raw){var d=JSON.parse(raw);U=d.U||{};R=d.R||{};A=d.A||{};BT=d.BT||{};}
       }catch(ex){}
-      if(Object.keys(R).length) document.getElementById('splash-cont').style.display='block';
+      if(Object.keys(R).length && R.tdee){
+        try { showResults(); } catch(err){
+          document.getElementById('splash-cont').style.display='block';
+          document.getElementById('splash').style.display='flex';
+        }
+      } else {
+        /* Hata + analiz yok → splash göster */
+        document.getElementById('splash-cont').style.display='block';
+        document.getElementById('splash').style.display='flex';
+      }
     });
 }
 
 /* ── Çıkış Sonrası ────────────────────────────────────── */
 function onUserLoggedOut(){
-  U={};R={};A={};BT={};selST=null;selGL=null;
+  _clearUserLocalData();
+  /* Yıkımları görsel temizle */
   document.getElementById('splash-cont').style.display='none';
   document.getElementById('bottom-nav').classList.remove('visible');
+  /* Sayfa yüklenmiş elementleri sıfırla */
+  try {
+    var avEl=document.getElementById('avatar-display');
+    if(avEl){ avEl.textContent=''; avEl.style.backgroundImage=''; }
+    var nickEl=document.getElementById('user-email-display');
+    if(nickEl) nickEl.textContent='';
+  } catch(e){}
   showAuthScreen();
 }
 
