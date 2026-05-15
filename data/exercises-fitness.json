@@ -36,63 +36,55 @@
       "muscles": {
         "açıklama": "Egzersizin çalıştırdığı kaslar ve şiddet değerleri. 0-10 arası. 0 = hiç çalışmaz, 10 = maksimum çalışır.",
         "KAS_GRUBU_LİSTESİ": {
-          "GÖĞÜS": [
-            "chest",
-            "upper-chest",
-            "lower-chest"
+          "BOYUN": [
+            "neck-flexors"
           ],
           "OMUZ": [
-            "front-shoulder",
-            "mid-shoulder",
-            "rear-shoulder"
-          ],
-          "ÜST_KOL": [
-            "biceps",
-            "triceps-long",
-            "triceps-medial",
-            "triceps-lateral"
-          ],
-          "ÖN_KOL": [
-            "forearm-flexors",
-            "forearm-extensors",
-            "brachioradialis"
+            "anterior-deltoid",
+            "middle-deltoid",
+            "posterior-deltoid"
           ],
           "SIRT": [
-            "upper-traps",
-            "mid-traps",
+            "traps",
             "lower-traps",
+            "rotator-cuff",
             "lats",
-            "rhomboids",
-            "rear-delt"
+            "spinal-erectors"
+          ],
+          "KOL": [
+            "biceps",
+            "triceps-long",
+            "triceps-lateral",
+            "forearms"
+          ],
+          "GÖĞÜS": [
+            "pectoralis-sternal",
+            "pectoralis-clavicular"
           ],
           "CORE": [
-            "abs-upper",
-            "abs-lower",
-            "obliques",
-            "transverse-abs",
-            "erector-spinae"
+            "abs",
+            "obliques"
+          ],
+          "KALÇA": [
+            "glute-max",
+            "glute-med"
           ],
           "BACAK": [
             "quads",
             "hamstrings",
-            "glutes",
-            "hip-flexors",
             "adductors",
-            "abductors"
+            "hip-flexors"
           ],
           "KALF": [
-            "gastrocnemius",
-            "soleus"
+            "calves"
           ],
           "GENEL": [
-            "full-body",
-            "grip",
-            "rotator-cuff"
+            "full-body"
           ]
         },
         "örnek": {
-          "chest": 9,
-          "front-shoulder": 7,
+          "pectoralis-sternal": 9,
+          "anterior-deltoid": 7,
           "triceps-long": 6
         }
       },
@@ -101,7 +93,8 @@
       "video_url": "Video URL'i. Henüz yoksa null bırak.",
       "instructions_tr": "Adım adım nasıl yapılır. Dizi olarak yaz.",
       "tips_tr": "Önemli ipuçları. Dizi olarak yaz.",
-      "common_mistakes_tr": "Yaygın yapılan hatalar. Dizi olarak yaz."
+      "common_mistakes_tr": "Yaygın yapılan hatalar. Dizi olarak yaz.",
+      "name_tr_NOT": "İngilizce egzersiz isimleri kullanılır (Bench Press, Pull Up gibi). Türkçeleştirme yok."
     },
     "CATEGORY_LİSTESİ": {
       "chest": "Göğüs",
@@ -141,12 +134,59 @@
           "alternative": "Machine Chest Press"
         }
       }
+    },
+    "KAS_GRUBU_LİSTESİ": {
+      "BOYUN": [
+        "neck-flexors"
+      ],
+      "OMUZ": [
+        "anterior-deltoid",
+        "middle-deltoid",
+        "posterior-deltoid"
+      ],
+      "SIRT": [
+        "traps",
+        "lower-traps",
+        "rotator-cuff",
+        "lats",
+        "spinal-erectors"
+      ],
+      "KOL": [
+        "biceps",
+        "triceps-long",
+        "triceps-lateral",
+        "forearms"
+      ],
+      "GÖĞÜS": [
+        "pectoralis-sternal",
+        "pectoralis-clavicular"
+      ],
+      "CORE": [
+        "abs",
+        "obliques"
+      ],
+      "KALÇA": [
+        "glute-max",
+        "glute-med"
+      ],
+      "BACAK": [
+        "quads",
+        "hamstrings",
+        "adductors",
+        "hip-flexors"
+      ],
+      "KALF": [
+        "calves"
+      ],
+      "GENEL": [
+        "full-body"
+      ]
     }
   },
   "exercises": [
     {
       "id": "incline-bench-press",
-      "name_tr": "Eğik Bench Press",
+      "name_tr": "Incline Bench Press",
       "name_en": "Incline Barbell Bench Press",
       "branch": "fitness",
       "category": "chest",
@@ -158,9 +198,9 @@
       "is_compound": true,
       "force_type": "push",
       "muscles": {
-        "upper-chest": 9,
-        "chest": 7,
-        "front-shoulder": 8,
+        "pectoralis-clavicular": 9,
+        "pectoralis-sternal": 7,
+        "anterior-deltoid": 8,
         "triceps-long": 5,
         "triceps-lateral": 4
       },
@@ -185,7 +225,7 @@
     },
     {
       "id": "dumbbell-flye",
-      "name_tr": "Dumbbell Flye (Kelebek)",
+      "name_tr": "Dumbbell Flye",
       "name_en": "Dumbbell Chest Flye",
       "branch": "fitness",
       "category": "chest",
@@ -197,9 +237,9 @@
       "is_compound": false,
       "force_type": "push",
       "muscles": {
-        "chest": 9,
-        "upper-chest": 5,
-        "front-shoulder": 4,
+        "pectoralis-sternal": 9,
+        "pectoralis-clavicular": 5,
+        "anterior-deltoid": 4,
         "biceps": 2
       },
       "contraindications": [
@@ -222,7 +262,7 @@
     },
     {
       "id": "overhead-press",
-      "name_tr": "Overhead Press (Baş Üstü Baskı)",
+      "name_tr": "Overhead Press",
       "name_en": "Barbell Overhead Press",
       "branch": "fitness",
       "category": "shoulders",
@@ -233,12 +273,12 @@
       "is_compound": true,
       "force_type": "push",
       "muscles": {
-        "front-shoulder": 9,
-        "mid-shoulder": 7,
+        "anterior-deltoid": 9,
+        "middle-deltoid": 7,
         "triceps-long": 6,
         "triceps-lateral": 5,
-        "upper-traps": 4,
-        "abs-upper": 3
+        "traps": 4,
+        "abs": 3
       },
       "contraindications": [
         "shoulder-injury",
@@ -264,7 +304,7 @@
     },
     {
       "id": "lateral-raise",
-      "name_tr": "Lateral Raise (Yan Kaldırma)",
+      "name_tr": "Lateral Raise",
       "name_en": "Dumbbell Lateral Raise",
       "branch": "fitness",
       "category": "shoulders",
@@ -275,9 +315,9 @@
       "is_compound": false,
       "force_type": "pull",
       "muscles": {
-        "mid-shoulder": 9,
-        "front-shoulder": 4,
-        "upper-traps": 3
+        "middle-deltoid": 9,
+        "anterior-deltoid": 4,
+        "traps": 3
       },
       "contraindications": [
         "shoulder-injury"
@@ -302,7 +342,7 @@
     },
     {
       "id": "pull-up",
-      "name_tr": "Pull-Up (Çekiş)",
+      "name_tr": "Pull Up",
       "name_en": "Pull-Up",
       "branch": "fitness",
       "category": "back",
@@ -314,12 +354,11 @@
       "force_type": "pull",
       "muscles": {
         "lats": 9,
-        "mid-traps": 6,
-        "rhomboids": 6,
-        "rear-delt": 5,
+        "traps": 6,
         "biceps": 7,
-        "brachioradialis": 5,
-        "abs-upper": 3
+        "forearms": 5,
+        "abs": 3,
+        "posterior-deltoid": 5
       },
       "contraindications": [
         "shoulder-injury"
@@ -344,7 +383,7 @@
     },
     {
       "id": "bent-over-row",
-      "name_tr": "Bent Over Row (Eğik Sırt Çekişi)",
+      "name_tr": "Bent Over Row",
       "name_en": "Barbell Bent Over Row",
       "branch": "fitness",
       "category": "back",
@@ -356,12 +395,11 @@
       "force_type": "pull",
       "muscles": {
         "lats": 8,
-        "mid-traps": 8,
-        "rhomboids": 7,
-        "rear-delt": 6,
+        "traps": 8,
         "biceps": 6,
-        "erector-spinae": 5,
-        "brachioradialis": 4
+        "spinal-erectors": 5,
+        "forearms": 4,
+        "posterior-deltoid": 6
       },
       "contraindications": [
         "lower-back",
@@ -399,11 +437,10 @@
       "force_type": "pull",
       "muscles": {
         "lats": 9,
-        "mid-traps": 5,
-        "rhomboids": 5,
-        "rear-delt": 4,
+        "traps": 5,
         "biceps": 6,
-        "brachioradialis": 4
+        "forearms": 4,
+        "posterior-deltoid": 4
       },
       "contraindications": [],
       "gif": null,
@@ -423,7 +460,7 @@
     },
     {
       "id": "barbell-curl",
-      "name_tr": "Barbell Curl (Halter Küklüsü)",
+      "name_tr": "Barbell Curl",
       "name_en": "Barbell Bicep Curl",
       "branch": "fitness",
       "category": "arms",
@@ -435,8 +472,7 @@
       "force_type": "pull",
       "muscles": {
         "biceps": 9,
-        "brachioradialis": 6,
-        "forearm-flexors": 5
+        "forearms": 6
       },
       "contraindications": [],
       "gif": null,
@@ -456,7 +492,7 @@
     },
     {
       "id": "tricep-pushdown",
-      "name_tr": "Tricep Pushdown (Kablo İniş)",
+      "name_tr": "Tricep Pushdown",
       "name_en": "Cable Tricep Pushdown",
       "branch": "fitness",
       "category": "arms",
@@ -468,7 +504,6 @@
       "force_type": "push",
       "muscles": {
         "triceps-lateral": 8,
-        "triceps-medial": 7,
         "triceps-long": 5
       },
       "contraindications": [],
@@ -489,7 +524,7 @@
     },
     {
       "id": "squat",
-      "name_tr": "Squat (Çömelme)",
+      "name_tr": "Squat",
       "name_en": "Barbell Back Squat",
       "branch": "fitness",
       "category": "legs",
@@ -501,12 +536,11 @@
       "force_type": "legs",
       "muscles": {
         "quads": 9,
-        "glutes": 8,
+        "glute-max": 8,
         "hamstrings": 5,
         "adductors": 5,
-        "erector-spinae": 6,
-        "abs-upper": 3,
-        "transverse-abs": 4
+        "spinal-erectors": 6,
+        "abs": 4
       },
       "contraindications": [
         "knee-injury",
@@ -538,7 +572,7 @@
     },
     {
       "id": "romanian-deadlift",
-      "name_tr": "Romanian Deadlift (RDL)",
+      "name_tr": "Romanian Deadlift",
       "name_en": "Romanian Deadlift",
       "branch": "fitness",
       "category": "legs",
@@ -550,11 +584,11 @@
       "force_type": "pull",
       "muscles": {
         "hamstrings": 9,
-        "glutes": 8,
-        "erector-spinae": 7,
+        "glute-max": 8,
+        "spinal-erectors": 7,
         "lower-traps": 4,
         "adductors": 4,
-        "gastrocnemius": 3
+        "calves": 3
       },
       "contraindications": [
         "lower-back",
@@ -589,13 +623,11 @@
       "is_compound": false,
       "force_type": "core",
       "muscles": {
-        "transverse-abs": 9,
-        "abs-upper": 7,
-        "abs-lower": 7,
+        "abs": 9,
         "obliques": 6,
-        "erector-spinae": 5,
-        "glutes": 4,
-        "front-shoulder": 4
+        "spinal-erectors": 5,
+        "glute-max": 4,
+        "anterior-deltoid": 4
       },
       "contraindications": [],
       "gif": null,
@@ -615,7 +647,7 @@
     },
     {
       "id": "push-up",
-      "name_tr": "Şınav (Push-Up)",
+      "name_tr": "Push Up",
       "name_en": "Push-Up",
       "branch": "fitness",
       "category": "chest",
@@ -624,11 +656,11 @@
       "is_compound": true,
       "force_type": "push",
       "muscles": {
-        "chest": 8,
-        "front-shoulder": 6,
+        "pectoralis-sternal": 8,
+        "anterior-deltoid": 6,
         "triceps-long": 5,
-        "triceps-medial": 5,
-        "transverse-abs": 4
+        "triceps-lateral": 5,
+        "abs": 4
       },
       "contraindications": [],
       "gif": null,
@@ -650,7 +682,7 @@
     },
     {
       "id": "dumbbell-shoulder-press",
-      "name_tr": "Dumbbell Omuz Presi",
+      "name_tr": "Dumbbell Shoulder Press",
       "name_en": "Dumbbell Shoulder Press",
       "branch": "fitness",
       "category": "shoulders",
@@ -661,11 +693,11 @@
       "is_compound": true,
       "force_type": "push",
       "muscles": {
-        "front-shoulder": 9,
-        "mid-shoulder": 8,
+        "anterior-deltoid": 9,
+        "middle-deltoid": 8,
         "triceps-long": 6,
         "triceps-lateral": 5,
-        "upper-traps": 3
+        "traps": 3
       },
       "contraindications": [
         "shoulder-injury",
@@ -688,7 +720,7 @@
     },
     {
       "id": "calf-raise",
-      "name_tr": "Calf Raise (Baldır Yükseltme)",
+      "name_tr": "Calf Raise",
       "name_en": "Standing Calf Raise",
       "branch": "fitness",
       "category": "legs",
@@ -697,8 +729,7 @@
       "is_compound": false,
       "force_type": "legs",
       "muscles": {
-        "gastrocnemius": 9,
-        "soleus": 7
+        "calves": 9
       },
       "contraindications": [],
       "gif": null,
@@ -729,11 +760,9 @@
       "is_compound": false,
       "force_type": "pull",
       "muscles": {
-        "rear-delt": 9,
-        "mid-traps": 7,
-        "rhomboids": 6,
+        "traps": 7,
         "rotator-cuff": 7,
-        "upper-traps": 4
+        "posterior-deltoid": 9
       },
       "contraindications": [],
       "gif": null,
@@ -754,7 +783,7 @@
     },
     {
       "id": "hip-thrust",
-      "name_tr": "Hip Thrust (Kalça İtişi)",
+      "name_tr": "Hip Thrust",
       "name_en": "Barbell Hip Thrust",
       "branch": "fitness",
       "category": "glutes",
@@ -766,10 +795,10 @@
       "is_compound": true,
       "force_type": "legs",
       "muscles": {
-        "glutes": 9,
+        "glute-max": 9,
         "hamstrings": 6,
         "adductors": 5,
-        "abs-lower": 4,
+        "abs": 4,
         "quads": 3
       },
       "contraindications": [],
@@ -792,7 +821,7 @@
     },
     {
       "id": "back-extension-45",
-      "name_tr": "45° Sırt Ekstansiyonu",
+      "name_tr": "45 Back Focused Extension",
       "name_en": "45 Back Focused Extension",
       "branch": "fitness",
       "category": "back",
@@ -803,8 +832,8 @@
       "is_compound": false,
       "force_type": "pull",
       "muscles": {
-        "erector-spinae": 9,
-        "glutes": 5,
+        "spinal-erectors": 9,
+        "glute-max": 5,
         "hamstrings": 5,
         "lower-traps": 3
       },
@@ -847,7 +876,7 @@
     },
     {
       "id": "dumbbell-back-extension-45",
-      "name_tr": "Dumbbell'lı 45° Sırt Ekstansiyonu",
+      "name_tr": "45 Dumbbell Back Focused Extension",
       "name_en": "45 Dumbbell Back Focused Extension",
       "branch": "fitness",
       "category": "back",
@@ -859,11 +888,11 @@
       "is_compound": false,
       "force_type": "pull",
       "muscles": {
-        "erector-spinae": 9,
-        "glutes": 6,
+        "spinal-erectors": 9,
+        "glute-max": 6,
         "hamstrings": 5,
         "lower-traps": 4,
-        "grip": 4
+        "forearms": 4
       },
       "contraindications": {
         "lower-back": {
@@ -904,7 +933,7 @@
     },
     {
       "id": "dumbbell-glute-extension-45",
-      "name_tr": "Dumbbell'lı 45° Glut Odaklı Ekstansiyon",
+      "name_tr": "45 Dumbbell Glute Focused Extension",
       "name_en": "45 Dumbbell Glute Focused Extension",
       "branch": "fitness",
       "category": "glutes",
@@ -916,10 +945,10 @@
       "is_compound": true,
       "force_type": "pull",
       "muscles": {
-        "glutes": 9,
+        "glute-max": 9,
         "hamstrings": 7,
-        "erector-spinae": 5,
-        "grip": 3
+        "spinal-erectors": 5,
+        "forearms": 3
       },
       "contraindications": {
         "lower-back": {
@@ -955,7 +984,7 @@
     },
     {
       "id": "dumbbell-single-leg-glute-extension-45",
-      "name_tr": "Tek Bacak Dumbbell'lı Glut Ekstansiyonu",
+      "name_tr": "45 Dumbbell Single Leg Glute Focused Extension",
       "name_en": "45 Dumbbell Single Leg Glute Focused Extension",
       "branch": "fitness",
       "category": "glutes",
@@ -967,10 +996,10 @@
       "is_compound": true,
       "force_type": "pull",
       "muscles": {
-        "glutes": 10,
+        "glute-max": 10,
         "hamstrings": 7,
-        "erector-spinae": 5,
-        "abductors": 4,
+        "spinal-erectors": 5,
+        "glute-med": 4,
         "obliques": 4
       },
       "contraindications": {
@@ -1012,7 +1041,7 @@
     },
     {
       "id": "ab-rollout",
-      "name_tr": "Karın Çarkı (Ab Rollout)",
+      "name_tr": "Ab Rollout",
       "name_en": "Ab Rollout",
       "branch": "fitness",
       "category": "core",
@@ -1023,12 +1052,10 @@
       "is_compound": true,
       "force_type": "core",
       "muscles": {
-        "abs-upper": 9,
-        "abs-lower": 8,
-        "transverse-abs": 9,
+        "abs": 9,
         "obliques": 6,
         "lats": 5,
-        "front-shoulder": 4
+        "anterior-deltoid": 4
       },
       "contraindications": {
         "lower-back": {
@@ -1069,7 +1096,7 @@
     },
     {
       "id": "air-box-squat",
-      "name_tr": "Kutu Squat (Vücut Ağırlığı)",
+      "name_tr": "Air Box Squat",
       "name_en": "Air Box Squat",
       "branch": "fitness",
       "category": "legs",
@@ -1081,10 +1108,10 @@
       "force_type": "legs",
       "muscles": {
         "quads": 7,
-        "glutes": 7,
+        "glute-max": 7,
         "hamstrings": 5,
-        "erector-spinae": 4,
-        "abs-upper": 3
+        "spinal-erectors": 4,
+        "abs": 3
       },
       "contraindications": {
         "knee-injury": {
@@ -1120,7 +1147,7 @@
     },
     {
       "id": "air-squat",
-      "name_tr": "Vücut Ağırlığı Squat",
+      "name_tr": "Air Squat",
       "name_en": "Air Squat / Bodyweight Squat",
       "branch": "fitness",
       "category": "legs",
@@ -1130,11 +1157,11 @@
       "force_type": "legs",
       "muscles": {
         "quads": 7,
-        "glutes": 7,
+        "glute-max": 7,
         "hamstrings": 4,
         "calves": 3,
-        "abs-upper": 3,
-        "erector-spinae": 3
+        "abs": 3,
+        "spinal-erectors": 3
       },
       "contraindications": {
         "knee-injury": {
@@ -1182,9 +1209,8 @@
       "force_type": "pull",
       "muscles": {
         "biceps": 9,
-        "brachioradialis": 6,
-        "forearm-flexors": 5,
-        "front-shoulder": 3
+        "forearms": 6,
+        "anterior-deltoid": 3
       },
       "contraindications": {
         "shoulder-injury": {
@@ -1224,8 +1250,7 @@
       "is_compound": true,
       "force_type": "core",
       "muscles": {
-        "abs-upper": 7,
-        "abs-lower": 8,
+        "abs": 8,
         "hip-flexors": 7,
         "obliques": 5
       },
@@ -1273,11 +1298,11 @@
       "is_compound": true,
       "force_type": "push",
       "muscles": {
-        "front-shoulder": 9,
-        "mid-shoulder": 7,
+        "anterior-deltoid": 9,
+        "middle-deltoid": 7,
         "triceps-long": 5,
-        "triceps-medial": 5,
-        "upper-chest": 4,
+        "triceps-lateral": 5,
+        "pectoralis-clavicular": 4,
         "rotator-cuff": 5
       },
       "contraindications": {
@@ -1314,7 +1339,7 @@
     },
     {
       "id": "back-stepping-lunge",
-      "name_tr": "Geri Adım Lunge",
+      "name_tr": "Back Stepping Lunge",
       "name_en": "Back Stepping Lunge / Reverse Lunge",
       "branch": "fitness",
       "category": "legs",
@@ -1324,10 +1349,10 @@
       "force_type": "legs",
       "muscles": {
         "quads": 7,
-        "glutes": 8,
+        "glute-max": 8,
         "hamstrings": 5,
         "adductors": 4,
-        "abs-upper": 3
+        "abs": 3
       },
       "contraindications": {
         "knee-injury": {
@@ -1358,7 +1383,7 @@
     },
     {
       "id": "band-assisted-chin-up",
-      "name_tr": "Band Destekli Chin-Up",
+      "name_tr": "Band Assisted Chin Up",
       "name_en": "Band Assisted Chin Up",
       "branch": "fitness",
       "category": "back",
@@ -1372,11 +1397,10 @@
       "muscles": {
         "lats": 8,
         "biceps": 7,
-        "rear-shoulder": 5,
-        "rhomboids": 5,
-        "mid-traps": 5,
+        "posterior-deltoid": 5,
+        "traps": 5,
         "lower-traps": 4,
-        "forearm-flexors": 5
+        "forearms": 5
       },
       "contraindications": {
         "shoulder-injury": {
@@ -1407,7 +1431,7 @@
     },
     {
       "id": "banded-bent-over-row",
-      "name_tr": "Bantlı Eğik Sırt Çekişi",
+      "name_tr": "Banded Bent Over Row",
       "name_en": "Banded Bent Over Row",
       "branch": "fitness",
       "category": "back",
@@ -1419,11 +1443,10 @@
       "force_type": "pull",
       "muscles": {
         "lats": 7,
-        "rhomboids": 7,
-        "mid-traps": 7,
-        "rear-shoulder": 6,
+        "traps": 7,
+        "posterior-deltoid": 6,
         "biceps": 5,
-        "erector-spinae": 4
+        "spinal-erectors": 4
       },
       "contraindications": {
         "lower-back": {
@@ -1454,7 +1477,7 @@
     },
     {
       "id": "banded-deadlift",
-      "name_tr": "Bantlı Deadlift",
+      "name_tr": "Banded Deadlift",
       "name_en": "Banded Deadlift",
       "branch": "fitness",
       "category": "back",
@@ -1465,12 +1488,12 @@
       "is_compound": true,
       "force_type": "pull",
       "muscles": {
-        "erector-spinae": 7,
-        "glutes": 8,
+        "spinal-erectors": 7,
+        "glute-max": 8,
         "hamstrings": 8,
         "lats": 5,
-        "upper-traps": 5,
-        "grip": 5
+        "traps": 5,
+        "forearms": 5
       },
       "contraindications": {
         "lower-back": {
@@ -1511,7 +1534,7 @@
     },
     {
       "id": "banded-external-rotation",
-      "name_tr": "Bantlı Dış Rotasyon",
+      "name_tr": "Banded External Rotation",
       "name_en": "Banded External Rotation",
       "branch": "fitness",
       "category": "shoulders",
@@ -1523,8 +1546,8 @@
       "force_type": "pull",
       "muscles": {
         "rotator-cuff": 9,
-        "rear-shoulder": 5,
-        "mid-traps": 3
+        "posterior-deltoid": 5,
+        "traps": 3
       },
       "contraindications": {
         "shoulder-injury": {
@@ -1555,7 +1578,7 @@
     },
     {
       "id": "banded-face-pull",
-      "name_tr": "Bantlı Face Pull",
+      "name_tr": "Banded Face Pull",
       "name_en": "Banded Face Pull",
       "branch": "fitness",
       "category": "shoulders",
@@ -1566,10 +1589,9 @@
       "is_compound": false,
       "force_type": "pull",
       "muscles": {
-        "rear-shoulder": 9,
-        "mid-traps": 7,
+        "posterior-deltoid": 9,
+        "traps": 7,
         "rotator-cuff": 6,
-        "rhomboids": 6,
         "lower-traps": 5
       },
       "contraindications": {
@@ -1601,7 +1623,7 @@
     },
     {
       "id": "banded-kettlebell-swing",
-      "name_tr": "Bantlı Kettlebell Swing",
+      "name_tr": "Banded Kettlebell Swing",
       "name_en": "Banded Kettlebell Swing",
       "branch": "fitness",
       "category": "full-body",
@@ -1613,12 +1635,12 @@
       "is_compound": true,
       "force_type": "legs",
       "muscles": {
-        "glutes": 9,
+        "glute-max": 9,
         "hamstrings": 7,
-        "erector-spinae": 6,
-        "front-shoulder": 5,
-        "abs-upper": 5,
-        "grip": 5
+        "spinal-erectors": 6,
+        "anterior-deltoid": 5,
+        "abs": 5,
+        "forearms": 5
       },
       "contraindications": {
         "lower-back": {
@@ -1654,7 +1676,7 @@
     },
     {
       "id": "banded-lat-pulldown",
-      "name_tr": "Bantlı Lat Pulldown",
+      "name_tr": "Banded Lat Pulldown",
       "name_en": "Banded Lat Pulldown",
       "branch": "fitness",
       "category": "back",
@@ -1667,9 +1689,8 @@
       "muscles": {
         "lats": 8,
         "biceps": 5,
-        "mid-traps": 5,
-        "rear-shoulder": 5,
-        "rhomboids": 5
+        "traps": 5,
+        "posterior-deltoid": 5
       },
       "contraindications": {
         "shoulder-injury": {
@@ -1700,7 +1721,7 @@
     },
     {
       "id": "banded-lateral-neck-flexion-iso",
-      "name_tr": "Bantlı Lateral Boyun İzometrik",
+      "name_tr": "Banded Lateral Neck Flexion Isometric",
       "name_en": "Banded Lateral Neck Flexion Isometric",
       "branch": "fitness",
       "category": "shoulders",
@@ -1711,7 +1732,7 @@
       "is_compound": false,
       "force_type": "core",
       "muscles": {
-        "upper-traps": 6,
+        "traps": 6,
         "rotator-cuff": 4
       },
       "contraindications": {
@@ -1742,7 +1763,7 @@
     },
     {
       "id": "banded-lateral-raise",
-      "name_tr": "Bantlı Yan Kaldırma",
+      "name_tr": "Banded Lateral Raise",
       "name_en": "Banded Lateral Raise",
       "branch": "fitness",
       "category": "shoulders",
@@ -1753,10 +1774,10 @@
       "is_compound": false,
       "force_type": "push",
       "muscles": {
-        "mid-shoulder": 9,
-        "front-shoulder": 4,
-        "rear-shoulder": 3,
-        "upper-traps": 4
+        "middle-deltoid": 9,
+        "anterior-deltoid": 4,
+        "posterior-deltoid": 3,
+        "traps": 4
       },
       "contraindications": {
         "shoulder-injury": {
@@ -1787,7 +1808,7 @@
     },
     {
       "id": "banded-overhead-iso-hold",
-      "name_tr": "Bantlı Baş Üstü İzometrik Tutuş",
+      "name_tr": "Banded Overhead Isometric Hold",
       "name_en": "Banded Overhead Isometric Hold",
       "branch": "fitness",
       "category": "shoulders",
@@ -1798,10 +1819,10 @@
       "is_compound": false,
       "force_type": "push",
       "muscles": {
-        "front-shoulder": 6,
-        "mid-shoulder": 5,
+        "anterior-deltoid": 6,
+        "middle-deltoid": 5,
         "triceps-long": 5,
-        "upper-traps": 4,
+        "traps": 4,
         "rotator-cuff": 4
       },
       "contraindications": {
@@ -1833,7 +1854,7 @@
     },
     {
       "id": "banded-overhead-press",
-      "name_tr": "Bantlı Baş Üstü Press",
+      "name_tr": "Banded Overhead Press",
       "name_en": "Banded Overhead Press",
       "branch": "fitness",
       "category": "shoulders",
@@ -1844,12 +1865,12 @@
       "is_compound": true,
       "force_type": "push",
       "muscles": {
-        "front-shoulder": 8,
-        "mid-shoulder": 6,
+        "anterior-deltoid": 8,
+        "middle-deltoid": 6,
         "triceps-long": 6,
-        "triceps-medial": 5,
-        "upper-traps": 4,
-        "abs-upper": 4
+        "triceps-lateral": 5,
+        "traps": 4,
+        "abs": 4
       },
       "contraindications": {
         "shoulder-injury": {
@@ -1885,7 +1906,7 @@
     },
     {
       "id": "banded-pallof-hold",
-      "name_tr": "Bantlı Pallof Tutuş",
+      "name_tr": "Banded Pallof Hold",
       "name_en": "Banded Pallof Hold",
       "branch": "fitness",
       "category": "core",
@@ -1897,9 +1918,7 @@
       "force_type": "core",
       "muscles": {
         "obliques": 9,
-        "transverse-abs": 8,
-        "abs-upper": 5,
-        "abs-lower": 5
+        "abs": 8
       },
       "contraindications": {
         "lower-back": {
@@ -1930,7 +1949,7 @@
     },
     {
       "id": "banded-pull-apart",
-      "name_tr": "Band Açma",
+      "name_tr": "Banded Pull Apart",
       "name_en": "Banded Pull Apart",
       "branch": "fitness",
       "category": "shoulders",
@@ -1941,9 +1960,8 @@
       "is_compound": false,
       "force_type": "pull",
       "muscles": {
-        "rear-shoulder": 8,
-        "mid-traps": 7,
-        "rhomboids": 7,
+        "posterior-deltoid": 8,
+        "traps": 7,
         "lower-traps": 4,
         "rotator-cuff": 4
       },
@@ -1975,7 +1993,7 @@
     },
     {
       "id": "banded-push-up",
-      "name_tr": "Bantlı Şınav",
+      "name_tr": "Banded Push Up",
       "name_en": "Banded Push Up",
       "branch": "fitness",
       "category": "chest",
@@ -1986,12 +2004,12 @@
       "is_compound": true,
       "force_type": "push",
       "muscles": {
-        "chest": 8,
-        "front-shoulder": 6,
+        "pectoralis-sternal": 8,
+        "anterior-deltoid": 6,
         "triceps-long": 6,
-        "triceps-medial": 6,
-        "abs-upper": 4,
-        "upper-chest": 5
+        "triceps-lateral": 6,
+        "abs": 4,
+        "pectoralis-clavicular": 5
       },
       "contraindications": {
         "shoulder-injury": {
@@ -2027,7 +2045,7 @@
     },
     {
       "id": "barbell-ab-rollout",
-      "name_tr": "Halterli Karın Çarkı",
+      "name_tr": "Barbell Ab Rollout",
       "name_en": "Barbell Ab Rollout",
       "branch": "fitness",
       "category": "core",
@@ -2038,12 +2056,10 @@
       "is_compound": true,
       "force_type": "core",
       "muscles": {
-        "abs-upper": 9,
-        "abs-lower": 8,
-        "transverse-abs": 9,
+        "abs": 9,
         "obliques": 6,
         "lats": 5,
-        "front-shoulder": 4
+        "anterior-deltoid": 4
       },
       "contraindications": {
         "lower-back": {
@@ -2084,7 +2100,7 @@
     },
     {
       "id": "barbell-box-squat",
-      "name_tr": "Halterli Kutu Squat",
+      "name_tr": "Barbell Box Squat",
       "name_en": "Barbell Box Squat",
       "branch": "fitness",
       "category": "legs",
@@ -2097,10 +2113,10 @@
       "force_type": "legs",
       "muscles": {
         "quads": 8,
-        "glutes": 9,
+        "glute-max": 9,
         "hamstrings": 7,
-        "erector-spinae": 5,
-        "abs-upper": 4,
+        "spinal-erectors": 5,
+        "abs": 4,
         "adductors": 5
       },
       "contraindications": {
@@ -2142,7 +2158,7 @@
     },
     {
       "id": "barbell-floor-press",
-      "name_tr": "Halter Yer Press",
+      "name_tr": "Barbell Floor Press",
       "name_en": "Barbell Floor Press",
       "branch": "fitness",
       "category": "chest",
@@ -2153,12 +2169,11 @@
       "is_compound": true,
       "force_type": "push",
       "muscles": {
-        "chest": 7,
-        "upper-chest": 4,
+        "pectoralis-sternal": 7,
+        "pectoralis-clavicular": 4,
         "triceps-long": 8,
-        "triceps-medial": 7,
         "triceps-lateral": 7,
-        "front-shoulder": 6
+        "anterior-deltoid": 6
       },
       "contraindications": {
         "shoulder-injury": {
@@ -2194,7 +2209,7 @@
     },
     {
       "id": "barbell-front-squat",
-      "name_tr": "Front Squat",
+      "name_tr": "Barbell Front Squat",
       "name_en": "Barbell Front Squat",
       "branch": "fitness",
       "category": "legs",
@@ -2206,12 +2221,12 @@
       "force_type": "legs",
       "muscles": {
         "quads": 10,
-        "glutes": 7,
-        "abs-upper": 6,
-        "erector-spinae": 6,
+        "glute-max": 7,
+        "abs": 6,
+        "spinal-erectors": 6,
         "hamstrings": 4,
-        "front-shoulder": 5,
-        "upper-traps": 4
+        "anterior-deltoid": 5,
+        "traps": 4
       },
       "contraindications": {
         "knee-injury": {
@@ -2252,7 +2267,7 @@
     },
     {
       "id": "barbell-glute-bridge",
-      "name_tr": "Halterli Glut Köprüsü",
+      "name_tr": "Barbell Glute Bridge",
       "name_en": "Barbell Glute Bridge",
       "branch": "fitness",
       "category": "glutes",
@@ -2263,11 +2278,11 @@
       "is_compound": true,
       "force_type": "legs",
       "muscles": {
-        "glutes": 9,
+        "glute-max": 9,
         "hamstrings": 6,
-        "erector-spinae": 4,
+        "spinal-erectors": 4,
         "quads": 3,
-        "abs-upper": 3
+        "abs": 3
       },
       "contraindications": {
         "lower-back": {
@@ -2303,7 +2318,7 @@
     },
     {
       "id": "barbell-good-morning",
-      "name_tr": "Halterli Günaydın",
+      "name_tr": "Barbell Good Morning",
       "name_en": "Barbell Good Morning",
       "branch": "fitness",
       "category": "legs",
@@ -2315,10 +2330,10 @@
       "force_type": "legs",
       "muscles": {
         "hamstrings": 9,
-        "glutes": 8,
-        "erector-spinae": 8,
+        "glute-max": 8,
+        "spinal-erectors": 8,
         "lower-traps": 4,
-        "abs-upper": 4
+        "abs": 4
       },
       "contraindications": {
         "lower-back": {
@@ -2354,7 +2369,7 @@
     },
     {
       "id": "barbell-hip-thrust",
-      "name_tr": "Halter Hip Thrust",
+      "name_tr": "Barbell Hip Thrust",
       "name_en": "Barbell Hip Thrust",
       "branch": "fitness",
       "category": "glutes",
@@ -2366,11 +2381,11 @@
       "is_compound": true,
       "force_type": "legs",
       "muscles": {
-        "glutes": 10,
+        "glute-max": 10,
         "hamstrings": 6,
         "quads": 5,
-        "erector-spinae": 4,
-        "abs-upper": 4
+        "spinal-erectors": 4,
+        "abs": 4
       },
       "contraindications": {
         "lower-back": {
@@ -2406,7 +2421,7 @@
     },
     {
       "id": "barbell-hold",
-      "name_tr": "Halter Tutuş (Statik)",
+      "name_tr": "Barbell Hold",
       "name_en": "Barbell Hold",
       "branch": "fitness",
       "category": "back",
@@ -2417,11 +2432,9 @@
       "is_compound": false,
       "force_type": "pull",
       "muscles": {
-        "forearm-flexors": 9,
-        "forearm-extensors": 7,
-        "grip": 10,
-        "upper-traps": 5,
-        "erector-spinae": 4
+        "forearms": 10,
+        "traps": 5,
+        "spinal-erectors": 4
       },
       "contraindications": {
         "lower-back": {
@@ -2451,7 +2464,7 @@
     },
     {
       "id": "barbell-overhead-press",
-      "name_tr": "Halterli Baş Üstü Press",
+      "name_tr": "Barbell Overhead Press",
       "name_en": "Barbell Overhead Press / Military Press",
       "branch": "fitness",
       "category": "shoulders",
@@ -2462,14 +2475,14 @@
       "is_compound": true,
       "force_type": "push",
       "muscles": {
-        "front-shoulder": 9,
-        "mid-shoulder": 6,
+        "anterior-deltoid": 9,
+        "middle-deltoid": 6,
         "triceps-long": 7,
-        "triceps-medial": 7,
-        "upper-chest": 5,
-        "upper-traps": 5,
-        "abs-upper": 5,
-        "erector-spinae": 4
+        "triceps-lateral": 7,
+        "pectoralis-clavicular": 5,
+        "traps": 5,
+        "abs": 5,
+        "spinal-erectors": 4
       },
       "contraindications": {
         "shoulder-injury": {
@@ -2510,7 +2523,7 @@
     },
     {
       "id": "barbell-overhead-squat",
-      "name_tr": "Baş Üstü Halterli Squat",
+      "name_tr": "Barbell Overhead Squat",
       "name_en": "Barbell Overhead Squat",
       "branch": "fitness",
       "category": "legs",
@@ -2522,13 +2535,13 @@
       "force_type": "legs",
       "muscles": {
         "quads": 9,
-        "glutes": 7,
+        "glute-max": 7,
         "hamstrings": 5,
-        "front-shoulder": 6,
-        "mid-shoulder": 5,
-        "abs-upper": 7,
-        "erector-spinae": 7,
-        "upper-traps": 5
+        "anterior-deltoid": 6,
+        "middle-deltoid": 5,
+        "abs": 7,
+        "spinal-erectors": 7,
+        "traps": 5
       },
       "contraindications": {
         "shoulder-injury": {
@@ -2564,7 +2577,7 @@
     },
     {
       "id": "barbell-romanian-deadlift",
-      "name_tr": "Halterli Romanian Deadlift (RDL)",
+      "name_tr": "Barbell Romanian Deadlift",
       "name_en": "Barbell Romanian Deadlift",
       "branch": "fitness",
       "category": "legs",
@@ -2576,10 +2589,10 @@
       "force_type": "pull",
       "muscles": {
         "hamstrings": 10,
-        "glutes": 9,
-        "erector-spinae": 6,
-        "upper-traps": 4,
-        "grip": 5,
+        "glute-max": 9,
+        "spinal-erectors": 6,
+        "traps": 4,
+        "forearms": 5,
         "lats": 4
       },
       "contraindications": {
@@ -2616,7 +2629,7 @@
     },
     {
       "id": "barbell-row",
-      "name_tr": "Halterli Eğik Sırt Çekişi",
+      "name_tr": "Barbell Row",
       "name_en": "Barbell Bent Over Row",
       "branch": "fitness",
       "category": "back",
@@ -2628,11 +2641,10 @@
       "force_type": "pull",
       "muscles": {
         "lats": 9,
-        "rhomboids": 8,
-        "mid-traps": 8,
-        "rear-shoulder": 7,
+        "traps": 8,
+        "posterior-deltoid": 7,
         "biceps": 6,
-        "erector-spinae": 5,
+        "spinal-erectors": 5,
         "lower-traps": 5
       },
       "contraindications": {
@@ -2669,7 +2681,7 @@
     },
     {
       "id": "barbell-snatch-grip-shrug",
-      "name_tr": "Snatch Tutuş Shrug",
+      "name_tr": "Barbell Snatch Grip Shrug",
       "name_en": "Barbell Snatch Grip Shrug",
       "branch": "fitness",
       "category": "back",
@@ -2680,12 +2692,10 @@
       "is_compound": false,
       "force_type": "pull",
       "muscles": {
-        "upper-traps": 9,
-        "mid-traps": 7,
+        "traps": 9,
         "lower-traps": 5,
-        "rear-shoulder": 4,
-        "forearm-flexors": 5,
-        "grip": 6
+        "posterior-deltoid": 4,
+        "forearms": 6
       },
       "contraindications": {
         "shoulder-injury": {
@@ -2716,7 +2726,7 @@
     },
     {
       "id": "barbell-squat",
-      "name_tr": "Back Squat",
+      "name_tr": "Barbell Squat",
       "name_en": "Barbell Back Squat",
       "branch": "fitness",
       "category": "legs",
@@ -2728,12 +2738,12 @@
       "force_type": "legs",
       "muscles": {
         "quads": 10,
-        "glutes": 9,
+        "glute-max": 9,
         "hamstrings": 6,
-        "erector-spinae": 7,
-        "abs-upper": 5,
+        "spinal-erectors": 7,
+        "abs": 5,
         "adductors": 5,
-        "upper-traps": 4
+        "traps": 4
       },
       "contraindications": {
         "knee-injury": {
@@ -2779,7 +2789,7 @@
     },
     {
       "id": "barbell-stiff-leg-deadlift",
-      "name_tr": "Düz Bacak Deadlift",
+      "name_tr": "Barbell Stiff Leg Deadlift",
       "name_en": "Barbell Stiff Leg Deadlift",
       "branch": "fitness",
       "category": "legs",
@@ -2791,10 +2801,10 @@
       "force_type": "pull",
       "muscles": {
         "hamstrings": 10,
-        "glutes": 8,
-        "erector-spinae": 8,
-        "upper-traps": 4,
-        "grip": 5,
+        "glute-max": 8,
+        "spinal-erectors": 8,
+        "traps": 4,
+        "forearms": 5,
         "lats": 4
       },
       "contraindications": {
@@ -2831,7 +2841,7 @@
     },
     {
       "id": "barbell-sumo-deadlift",
-      "name_tr": "Sumo Deadlift",
+      "name_tr": "Barbell Sumo Deadlift",
       "name_en": "Barbell Sumo Deadlift",
       "branch": "fitness",
       "category": "legs",
@@ -2843,13 +2853,13 @@
       "force_type": "pull",
       "muscles": {
         "quads": 8,
-        "glutes": 9,
+        "glute-max": 9,
         "hamstrings": 7,
         "adductors": 8,
-        "erector-spinae": 7,
-        "upper-traps": 5,
+        "spinal-erectors": 7,
+        "traps": 5,
         "lats": 5,
-        "grip": 6
+        "forearms": 6
       },
       "contraindications": {
         "lower-back": {
@@ -2897,10 +2907,9 @@
       "force_type": "push",
       "muscles": {
         "triceps-long": 9,
-        "triceps-medial": 8,
         "triceps-lateral": 8,
-        "front-shoulder": 6,
-        "lower-chest": 4
+        "anterior-deltoid": 6,
+        "pectoralis-sternal": 4
       },
       "contraindications": {
         "shoulder-injury": {
@@ -2943,12 +2952,10 @@
       "is_compound": true,
       "force_type": "push",
       "muscles": {
-        "chest": 9,
-        "upper-chest": 6,
-        "lower-chest": 8,
-        "front-shoulder": 7,
+        "pectoralis-sternal": 9,
+        "pectoralis-clavicular": 6,
+        "anterior-deltoid": 7,
         "triceps-long": 6,
-        "triceps-medial": 7,
         "triceps-lateral": 7
       },
       "contraindications": {
@@ -2985,7 +2992,7 @@
     },
     {
       "id": "bike-ergo",
-      "name_tr": "Bike Ergometre",
+      "name_tr": "Bike Ergo",
       "name_en": "Bike Ergometer",
       "branch": "fitness",
       "category": "cardio",
@@ -2998,7 +3005,7 @@
       "muscles": {
         "quads": 7,
         "hamstrings": 5,
-        "glutes": 5,
+        "glute-max": 5,
         "calves": 4,
         "full-body": 5
       },
@@ -3035,7 +3042,7 @@
     },
     {
       "id": "block-deadlift",
-      "name_tr": "Bloklu Deadlift",
+      "name_tr": "Block Deadlift",
       "name_en": "Block Deadlift",
       "branch": "fitness",
       "category": "back",
@@ -3046,12 +3053,12 @@
       "is_compound": true,
       "force_type": "pull",
       "muscles": {
-        "erector-spinae": 8,
-        "glutes": 8,
+        "spinal-erectors": 8,
+        "glute-max": 8,
         "hamstrings": 7,
-        "upper-traps": 6,
+        "traps": 6,
         "lats": 6,
-        "grip": 7
+        "forearms": 7
       },
       "contraindications": {
         "lower-back": {
@@ -3087,7 +3094,7 @@
     },
     {
       "id": "block-sumo-deadlift",
-      "name_tr": "Bloklu Sumo Deadlift",
+      "name_tr": "Block Sumo Deadlift",
       "name_en": "Block Sumo Deadlift",
       "branch": "fitness",
       "category": "legs",
@@ -3099,13 +3106,13 @@
       "force_type": "pull",
       "muscles": {
         "quads": 8,
-        "glutes": 9,
+        "glute-max": 9,
         "hamstrings": 7,
         "adductors": 8,
-        "erector-spinae": 6,
-        "upper-traps": 5,
+        "spinal-erectors": 6,
+        "traps": 5,
         "lats": 5,
-        "grip": 6
+        "forearms": 6
       },
       "contraindications": {
         "lower-back": {
@@ -3141,7 +3148,7 @@
     },
     {
       "id": "bodyweight-deadlift",
-      "name_tr": "Vücut Ağırlığı Deadlift",
+      "name_tr": "Bodyweight Deadlift",
       "name_en": "Bodyweight Deadlift",
       "branch": "fitness",
       "category": "legs",
@@ -3151,9 +3158,9 @@
       "force_type": "pull",
       "muscles": {
         "hamstrings": 6,
-        "glutes": 6,
-        "erector-spinae": 5,
-        "abs-upper": 3
+        "glute-max": 6,
+        "spinal-erectors": 5,
+        "abs": 3
       },
       "contraindications": {
         "lower-back": {
@@ -3184,7 +3191,7 @@
     },
     {
       "id": "bodyweight-split-squat",
-      "name_tr": "Vücut Ağırlığı Split Squat",
+      "name_tr": "Bodyweight Split Squat",
       "name_en": "Bodyweight Split Squat",
       "branch": "fitness",
       "category": "legs",
@@ -3194,10 +3201,10 @@
       "force_type": "legs",
       "muscles": {
         "quads": 7,
-        "glutes": 7,
+        "glute-max": 7,
         "hamstrings": 4,
         "adductors": 5,
-        "abs-upper": 3
+        "abs": 3
       },
       "contraindications": {
         "knee-injury": {
@@ -3228,7 +3235,7 @@
     },
     {
       "id": "box-jump",
-      "name_tr": "Kutu Üstüne Sıçrama",
+      "name_tr": "Box Jump",
       "name_en": "Box Jump",
       "branch": "fitness",
       "category": "legs",
@@ -3240,10 +3247,10 @@
       "force_type": "legs",
       "muscles": {
         "quads": 8,
-        "glutes": 8,
+        "glute-max": 8,
         "hamstrings": 6,
         "calves": 7,
-        "abs-upper": 4
+        "abs": 4
       },
       "contraindications": {
         "knee-injury": {
@@ -3284,7 +3291,7 @@
     },
     {
       "id": "broad-jump",
-      "name_tr": "Uzun Atlama",
+      "name_tr": "Broad Jump",
       "name_en": "Broad Jump",
       "branch": "fitness",
       "category": "legs",
@@ -3294,11 +3301,11 @@
       "force_type": "legs",
       "muscles": {
         "quads": 8,
-        "glutes": 9,
+        "glute-max": 9,
         "hamstrings": 7,
         "calves": 7,
-        "abs-upper": 5,
-        "erector-spinae": 4
+        "abs": 5,
+        "spinal-erectors": 4
       },
       "contraindications": {
         "knee-injury": {
@@ -3352,10 +3359,10 @@
       "force_type": "legs",
       "muscles": {
         "quads": 9,
-        "glutes": 9,
+        "glute-max": 9,
         "hamstrings": 6,
         "adductors": 6,
-        "abs-upper": 5,
+        "abs": 5,
         "calves": 4
       },
       "contraindications": {
@@ -3402,11 +3409,11 @@
       "force_type": "push",
       "muscles": {
         "quads": 7,
-        "glutes": 7,
-        "chest": 6,
-        "front-shoulder": 6,
-        "triceps-medial": 6,
-        "abs-upper": 6,
+        "glute-max": 7,
+        "pectoralis-sternal": 6,
+        "anterior-deltoid": 6,
+        "triceps-lateral": 6,
+        "abs": 6,
         "calves": 5,
         "full-body": 9
       },
@@ -3459,7 +3466,7 @@
     },
     {
       "id": "cable-external-rotation",
-      "name_tr": "Kablo Dış Rotasyon",
+      "name_tr": "Cable External Rotation",
       "name_en": "Cable External Rotation",
       "branch": "fitness",
       "category": "shoulders",
@@ -3471,8 +3478,8 @@
       "force_type": "pull",
       "muscles": {
         "rotator-cuff": 9,
-        "rear-shoulder": 5,
-        "mid-traps": 3
+        "posterior-deltoid": 5,
+        "traps": 3
       },
       "contraindications": {
         "shoulder-injury": {
@@ -3503,7 +3510,7 @@
     },
     {
       "id": "cable-face-away-curl",
-      "name_tr": "Kablo Yüz Karşı Biceps Curl",
+      "name_tr": "Cable Face Away Curl",
       "name_en": "Cable Face Away Curl",
       "branch": "fitness",
       "category": "arms",
@@ -3515,9 +3522,8 @@
       "force_type": "pull",
       "muscles": {
         "biceps": 9,
-        "brachioradialis": 5,
-        "forearm-flexors": 4,
-        "front-shoulder": 3
+        "forearms": 5,
+        "anterior-deltoid": 3
       },
       "contraindications": {
         "shoulder-injury": {
@@ -3548,7 +3554,7 @@
     },
     {
       "id": "cable-face-pull",
-      "name_tr": "Kablo Face Pull",
+      "name_tr": "Cable Face Pull",
       "name_en": "Cable Face Pull",
       "branch": "fitness",
       "category": "shoulders",
@@ -3559,9 +3565,8 @@
       "is_compound": false,
       "force_type": "pull",
       "muscles": {
-        "rear-shoulder": 9,
-        "mid-traps": 8,
-        "rhomboids": 7,
+        "posterior-deltoid": 9,
+        "traps": 8,
         "rotator-cuff": 6,
         "lower-traps": 5
       },
@@ -3594,7 +3599,7 @@
     },
     {
       "id": "cable-fly",
-      "name_tr": "Kablo Fly",
+      "name_tr": "Cable Fly",
       "name_en": "Cable Fly",
       "branch": "fitness",
       "category": "chest",
@@ -3605,10 +3610,9 @@
       "is_compound": false,
       "force_type": "push",
       "muscles": {
-        "chest": 9,
-        "upper-chest": 6,
-        "lower-chest": 7,
-        "front-shoulder": 5
+        "pectoralis-sternal": 9,
+        "pectoralis-clavicular": 6,
+        "anterior-deltoid": 5
       },
       "contraindications": {
         "shoulder-injury": {
@@ -3639,7 +3643,7 @@
     },
     {
       "id": "cable-front-raise",
-      "name_tr": "Kablo Önden Kaldırma",
+      "name_tr": "Cable Front Raise",
       "name_en": "Cable Front Raise",
       "branch": "fitness",
       "category": "shoulders",
@@ -3650,10 +3654,10 @@
       "is_compound": false,
       "force_type": "push",
       "muscles": {
-        "front-shoulder": 9,
-        "mid-shoulder": 4,
-        "upper-chest": 4,
-        "upper-traps": 3
+        "anterior-deltoid": 9,
+        "middle-deltoid": 4,
+        "pectoralis-clavicular": 4,
+        "traps": 3
       },
       "contraindications": {
         "shoulder-injury": {
@@ -3684,7 +3688,7 @@
     },
     {
       "id": "cable-glute-pullthrough",
-      "name_tr": "Kablo Glut Pullthrough",
+      "name_tr": "Cable Glute Pullthrough",
       "name_en": "Cable Glute Pullthrough",
       "branch": "fitness",
       "category": "glutes",
@@ -3695,10 +3699,10 @@
       "is_compound": true,
       "force_type": "pull",
       "muscles": {
-        "glutes": 10,
+        "glute-max": 10,
         "hamstrings": 8,
-        "erector-spinae": 5,
-        "abs-upper": 4
+        "spinal-erectors": 5,
+        "abs": 4
       },
       "contraindications": {
         "lower-back": {
@@ -3729,7 +3733,7 @@
     },
     {
       "id": "cable-high-to-low-chop",
-      "name_tr": "Kablo Yukarıdan Aşağı Chop",
+      "name_tr": "Cable High to Low Chop",
       "name_en": "Cable High to Low Chop",
       "branch": "fitness",
       "category": "core",
@@ -3741,10 +3745,8 @@
       "force_type": "core",
       "muscles": {
         "obliques": 9,
-        "abs-upper": 7,
-        "abs-lower": 6,
-        "transverse-abs": 7,
-        "rear-shoulder": 4
+        "abs": 7,
+        "posterior-deltoid": 4
       },
       "contraindications": {
         "lower-back": {
@@ -3775,7 +3777,7 @@
     },
     {
       "id": "cable-hip-abduction",
-      "name_tr": "Kablo Kalça Açma",
+      "name_tr": "Cable Hip Abduction",
       "name_en": "Cable Hip Abduction",
       "branch": "fitness",
       "category": "glutes",
@@ -3786,8 +3788,7 @@
       "is_compound": false,
       "force_type": "legs",
       "muscles": {
-        "glutes": 8,
-        "abductors": 9,
+        "glute-med": 9,
         "obliques": 3
       },
       "contraindications": {
@@ -3819,7 +3820,7 @@
     },
     {
       "id": "cable-hip-adduction",
-      "name_tr": "Kablo Kalça Kapama",
+      "name_tr": "Cable Hip Adduction",
       "name_en": "Cable Hip Adduction",
       "branch": "fitness",
       "category": "legs",
@@ -3831,7 +3832,7 @@
       "force_type": "legs",
       "muscles": {
         "adductors": 9,
-        "glutes": 4,
+        "glute-max": 4,
         "quads": 3
       },
       "contraindications": {
@@ -3863,7 +3864,7 @@
     },
     {
       "id": "cable-kickback",
-      "name_tr": "Kablo Glut Kickback",
+      "name_tr": "Cable Kickback",
       "name_en": "Cable Kickback",
       "branch": "fitness",
       "category": "glutes",
@@ -3874,9 +3875,9 @@
       "is_compound": false,
       "force_type": "legs",
       "muscles": {
-        "glutes": 9,
+        "glute-max": 9,
         "hamstrings": 5,
-        "erector-spinae": 3
+        "spinal-erectors": 3
       },
       "contraindications": {
         "lower-back": {
@@ -3907,7 +3908,7 @@
     },
     {
       "id": "cable-lateral-raise",
-      "name_tr": "Kablo Yan Kaldırma",
+      "name_tr": "Cable Lateral Raise",
       "name_en": "Cable Lateral Raise",
       "branch": "fitness",
       "category": "shoulders",
@@ -3918,9 +3919,9 @@
       "is_compound": false,
       "force_type": "push",
       "muscles": {
-        "mid-shoulder": 9,
-        "front-shoulder": 4,
-        "upper-traps": 3
+        "middle-deltoid": 9,
+        "anterior-deltoid": 4,
+        "traps": 3
       },
       "contraindications": {
         "shoulder-injury": {
@@ -3951,7 +3952,7 @@
     },
     {
       "id": "cable-low-to-high-chop",
-      "name_tr": "Kablo Aşağıdan Yukarı Chop",
+      "name_tr": "Cable Low to High Chop",
       "name_en": "Cable Low to High Chop",
       "branch": "fitness",
       "category": "core",
@@ -3963,10 +3964,9 @@
       "force_type": "core",
       "muscles": {
         "obliques": 9,
-        "abs-upper": 6,
-        "front-shoulder": 5,
-        "transverse-abs": 6,
-        "glutes": 4
+        "abs": 6,
+        "anterior-deltoid": 5,
+        "glute-max": 4
       },
       "contraindications": {
         "lower-back": {
@@ -3997,7 +3997,7 @@
     },
     {
       "id": "cable-overhead-extension",
-      "name_tr": "Kablo Baş Üstü Triceps Ekstansiyon",
+      "name_tr": "Cable Overhead Extension",
       "name_en": "Cable Overhead Extension",
       "branch": "fitness",
       "category": "arms",
@@ -4009,7 +4009,6 @@
       "force_type": "push",
       "muscles": {
         "triceps-long": 10,
-        "triceps-medial": 6,
         "triceps-lateral": 6
       },
       "contraindications": {
@@ -4041,7 +4040,7 @@
     },
     {
       "id": "cable-pallof-hold",
-      "name_tr": "Kablo Pallof Tutuş",
+      "name_tr": "Cable Pallof Hold",
       "name_en": "Cable Pallof Hold",
       "branch": "fitness",
       "category": "core",
@@ -4053,9 +4052,7 @@
       "force_type": "core",
       "muscles": {
         "obliques": 9,
-        "transverse-abs": 8,
-        "abs-upper": 5,
-        "abs-lower": 5
+        "abs": 8
       },
       "contraindications": {
         "lower-back": {
@@ -4085,7 +4082,7 @@
     },
     {
       "id": "cable-pull-in",
-      "name_tr": "Kablo Karın Çekişi",
+      "name_tr": "Cable Pull In",
       "name_en": "Cable Pull In / Standing Cable Crunch",
       "branch": "fitness",
       "category": "core",
@@ -4096,10 +4093,8 @@
       "is_compound": false,
       "force_type": "core",
       "muscles": {
-        "abs-upper": 9,
-        "abs-lower": 6,
-        "obliques": 5,
-        "transverse-abs": 7
+        "abs": 9,
+        "obliques": 5
       },
       "contraindications": {
         "lower-back": {
@@ -4130,7 +4125,7 @@
     },
     {
       "id": "cable-pullover",
-      "name_tr": "Kablo Pullover",
+      "name_tr": "Cable Pullover",
       "name_en": "Cable Pullover / Straight Arm Pulldown",
       "branch": "fitness",
       "category": "back",
@@ -4142,10 +4137,9 @@
       "force_type": "pull",
       "muscles": {
         "lats": 10,
-        "lower-chest": 4,
+        "pectoralis-sternal": 4,
         "triceps-long": 4,
-        "teres-major": 6,
-        "abs-upper": 3
+        "abs": 3
       },
       "contraindications": {
         "shoulder-injury": {
@@ -4176,7 +4170,7 @@
     },
     {
       "id": "cable-reverse-fly",
-      "name_tr": "Kablo Ters Fly",
+      "name_tr": "Cable Reverse Fly",
       "name_en": "Cable Reverse Fly",
       "branch": "fitness",
       "category": "shoulders",
@@ -4187,9 +4181,8 @@
       "is_compound": false,
       "force_type": "pull",
       "muscles": {
-        "rear-shoulder": 9,
-        "mid-traps": 7,
-        "rhomboids": 7,
+        "posterior-deltoid": 9,
+        "traps": 7,
         "rotator-cuff": 5
       },
       "contraindications": {
@@ -4221,7 +4214,7 @@
     },
     {
       "id": "cable-rope-curl",
-      "name_tr": "Kablo İp Biceps Curl",
+      "name_tr": "Cable Rope Curl",
       "name_en": "Cable Rope Curl / Hammer Curl",
       "branch": "fitness",
       "category": "arms",
@@ -4233,8 +4226,7 @@
       "force_type": "pull",
       "muscles": {
         "biceps": 7,
-        "brachioradialis": 9,
-        "forearm-flexors": 7
+        "forearms": 9
       },
       "contraindications": {
         "shoulder-injury": {
@@ -4265,7 +4257,7 @@
     },
     {
       "id": "cable-shrug",
-      "name_tr": "Kablo Shrug",
+      "name_tr": "Cable Shrug",
       "name_en": "Cable Shrug",
       "branch": "fitness",
       "category": "back",
@@ -4276,10 +4268,8 @@
       "is_compound": false,
       "force_type": "pull",
       "muscles": {
-        "upper-traps": 9,
-        "mid-traps": 5,
-        "forearm-flexors": 4,
-        "grip": 5
+        "traps": 9,
+        "forearms": 5
       },
       "contraindications": {
         "shoulder-injury": {
@@ -4310,7 +4300,7 @@
     },
     {
       "id": "cable-side-bend",
-      "name_tr": "Kablo Yan Bel Bükme",
+      "name_tr": "Cable Side Bend",
       "name_en": "Cable Side Bend",
       "branch": "fitness",
       "category": "core",
@@ -4322,8 +4312,8 @@
       "force_type": "core",
       "muscles": {
         "obliques": 10,
-        "abs-upper": 4,
-        "erector-spinae": 4
+        "abs": 4,
+        "spinal-erectors": 4
       },
       "contraindications": {
         "lower-back": {
@@ -4359,7 +4349,7 @@
     },
     {
       "id": "cable-upright-row",
-      "name_tr": "Kablo Dik Çekiş",
+      "name_tr": "Cable Upright Row",
       "name_en": "Cable Upright Row",
       "branch": "fitness",
       "category": "shoulders",
@@ -4370,9 +4360,9 @@
       "is_compound": false,
       "force_type": "pull",
       "muscles": {
-        "mid-shoulder": 8,
-        "front-shoulder": 6,
-        "upper-traps": 7,
+        "middle-deltoid": 8,
+        "anterior-deltoid": 6,
+        "traps": 7,
         "biceps": 4
       },
       "contraindications": {
@@ -4416,11 +4406,10 @@
       "force_type": "pull",
       "muscles": {
         "lats": 10,
-        "rhomboids": 7,
-        "mid-traps": 7,
-        "rear-shoulder": 6,
+        "traps": 7,
+        "posterior-deltoid": 6,
         "biceps": 6,
-        "erector-spinae": 6
+        "spinal-erectors": 6
       },
       "contraindications": {
         "lower-back": {
@@ -4456,7 +4445,7 @@
     },
     {
       "id": "chest-press-machine",
-      "name_tr": "Göğüs Press Makinesi",
+      "name_tr": "Chest Press Machine",
       "name_en": "Chest Press Machine",
       "branch": "fitness",
       "category": "chest",
@@ -4467,12 +4456,10 @@
       "is_compound": true,
       "force_type": "push",
       "muscles": {
-        "chest": 8,
-        "upper-chest": 5,
-        "lower-chest": 6,
-        "front-shoulder": 5,
+        "pectoralis-sternal": 8,
+        "pectoralis-clavicular": 5,
+        "anterior-deltoid": 5,
         "triceps-long": 4,
-        "triceps-medial": 5,
         "triceps-lateral": 5
       },
       "contraindications": {
@@ -4504,7 +4491,7 @@
     },
     {
       "id": "chest-supported-db-lateral-raise",
-      "name_tr": "Bench Destekli DB Yan Kaldırma",
+      "name_tr": "Chest Supported Dumbbell Lateral Raise",
       "name_en": "Chest Supported Dumbbell Lateral Raise",
       "branch": "fitness",
       "category": "shoulders",
@@ -4516,9 +4503,9 @@
       "is_compound": false,
       "force_type": "push",
       "muscles": {
-        "mid-shoulder": 9,
-        "front-shoulder": 3,
-        "rear-shoulder": 3
+        "middle-deltoid": 9,
+        "anterior-deltoid": 3,
+        "posterior-deltoid": 3
       },
       "contraindications": {
         "shoulder-injury": {
@@ -4549,7 +4536,7 @@
     },
     {
       "id": "chest-supported-db-reverse-fly",
-      "name_tr": "Bench Destekli DB Ters Fly",
+      "name_tr": "Chest Supported Dumbbell Reverse Fly",
       "name_en": "Chest Supported Dumbbell Reverse Fly",
       "branch": "fitness",
       "category": "shoulders",
@@ -4561,9 +4548,8 @@
       "is_compound": false,
       "force_type": "pull",
       "muscles": {
-        "rear-shoulder": 9,
-        "mid-traps": 7,
-        "rhomboids": 7
+        "posterior-deltoid": 9,
+        "traps": 7
       },
       "contraindications": {
         "shoulder-injury": {
@@ -4594,7 +4580,7 @@
     },
     {
       "id": "chest-supported-db-row",
-      "name_tr": "Bench Destekli DB Row",
+      "name_tr": "Chest Supported Dumbbell Row",
       "name_en": "Chest Supported Dumbbell Row",
       "branch": "fitness",
       "category": "back",
@@ -4607,9 +4593,8 @@
       "force_type": "pull",
       "muscles": {
         "lats": 9,
-        "rhomboids": 7,
-        "mid-traps": 7,
-        "rear-shoulder": 6,
+        "traps": 7,
+        "posterior-deltoid": 6,
         "biceps": 6,
         "lower-traps": 4
       },
@@ -4642,7 +4627,7 @@
     },
     {
       "id": "chest-supported-elbowing-row",
-      "name_tr": "Bench Destekli Dirsek Çekiş",
+      "name_tr": "Chest Supported Elbowing Row",
       "name_en": "Chest Supported Elbowing Row",
       "branch": "fitness",
       "category": "back",
@@ -4654,9 +4639,8 @@
       "is_compound": true,
       "force_type": "pull",
       "muscles": {
-        "rear-shoulder": 8,
-        "mid-traps": 8,
-        "rhomboids": 8,
+        "posterior-deltoid": 8,
+        "traps": 8,
         "lats": 5,
         "biceps": 4
       },
@@ -4689,7 +4673,7 @@
     },
     {
       "id": "chest-supported-machine-row",
-      "name_tr": "Bench Destekli Makine Row",
+      "name_tr": "Chest Supported Machine Row",
       "name_en": "Chest Supported Machine Row",
       "branch": "fitness",
       "category": "back",
@@ -4701,9 +4685,8 @@
       "force_type": "pull",
       "muscles": {
         "lats": 9,
-        "rhomboids": 8,
-        "mid-traps": 8,
-        "rear-shoulder": 6,
+        "traps": 8,
+        "posterior-deltoid": 6,
         "biceps": 6
       },
       "contraindications": {
@@ -4735,7 +4718,7 @@
     },
     {
       "id": "chest-supported-t-bar-row",
-      "name_tr": "Bench Destekli T-Bar Row",
+      "name_tr": "Chest Supported T Bar Row",
       "name_en": "Chest Supported T Bar Row",
       "branch": "fitness",
       "category": "back",
@@ -4747,9 +4730,8 @@
       "force_type": "pull",
       "muscles": {
         "lats": 9,
-        "rhomboids": 8,
-        "mid-traps": 8,
-        "rear-shoulder": 7,
+        "traps": 8,
+        "posterior-deltoid": 7,
         "biceps": 6,
         "lower-traps": 5
       },
@@ -4782,7 +4764,7 @@
     },
     {
       "id": "chest-supported-wide-grip-row",
-      "name_tr": "Bench Destekli Geniş Tutuş Row",
+      "name_tr": "Chest Supported Wide Grip Row",
       "name_en": "Chest Supported Wide Grip Row",
       "branch": "fitness",
       "category": "back",
@@ -4794,9 +4776,8 @@
       "is_compound": true,
       "force_type": "pull",
       "muscles": {
-        "rear-shoulder": 9,
-        "mid-traps": 8,
-        "rhomboids": 8,
+        "posterior-deltoid": 9,
+        "traps": 8,
         "lats": 5,
         "biceps": 4
       },
@@ -4829,7 +4810,7 @@
     },
     {
       "id": "chest-supported-y-raise",
-      "name_tr": "Bench Destekli Y Kaldırma",
+      "name_tr": "Chest Supported Y Raise",
       "name_en": "Chest Supported Y Raise",
       "branch": "fitness",
       "category": "shoulders",
@@ -4842,8 +4823,8 @@
       "force_type": "pull",
       "muscles": {
         "lower-traps": 9,
-        "rear-shoulder": 7,
-        "mid-traps": 5,
+        "posterior-deltoid": 7,
+        "traps": 5,
         "rotator-cuff": 5
       },
       "contraindications": {
@@ -4875,7 +4856,7 @@
     },
     {
       "id": "chin-up",
-      "name_tr": "Chin-Up (Ters Kavrama)",
+      "name_tr": "Chin Up",
       "name_en": "Chin Up",
       "branch": "fitness",
       "category": "back",
@@ -4888,11 +4869,10 @@
       "muscles": {
         "lats": 9,
         "biceps": 9,
-        "rhomboids": 6,
-        "mid-traps": 6,
-        "rear-shoulder": 5,
-        "forearm-flexors": 6,
-        "abs-upper": 4
+        "traps": 6,
+        "posterior-deltoid": 5,
+        "forearms": 6,
+        "abs": 4
       },
       "contraindications": {
         "shoulder-injury": {
@@ -4934,13 +4914,13 @@
       "is_compound": true,
       "force_type": "pull",
       "muscles": {
-        "upper-traps": 9,
-        "rear-shoulder": 7,
+        "traps": 9,
+        "posterior-deltoid": 7,
         "lats": 5,
-        "glutes": 7,
+        "glute-max": 7,
         "hamstrings": 6,
         "quads": 5,
-        "erector-spinae": 6
+        "spinal-erectors": 6
       },
       "contraindications": {
         "lower-back": {
@@ -4976,7 +4956,7 @@
     },
     {
       "id": "close-grip-bench-press",
-      "name_tr": "Dar Tutuş Bench Press",
+      "name_tr": "Close Grip Bench Press",
       "name_en": "Close Grip Bench Press",
       "branch": "fitness",
       "category": "arms",
@@ -4989,10 +4969,9 @@
       "force_type": "push",
       "muscles": {
         "triceps-long": 9,
-        "triceps-medial": 9,
-        "triceps-lateral": 8,
-        "chest": 6,
-        "front-shoulder": 6
+        "triceps-lateral": 9,
+        "pectoralis-sternal": 6,
+        "anterior-deltoid": 6
       },
       "contraindications": {
         "shoulder-injury": {
@@ -5028,7 +5007,7 @@
     },
     {
       "id": "conventional-deadlift",
-      "name_tr": "Klasik Deadlift",
+      "name_tr": "Conventional Deadlift",
       "name_en": "Conventional Deadlift",
       "branch": "fitness",
       "category": "back",
@@ -5039,14 +5018,14 @@
       "is_compound": true,
       "force_type": "pull",
       "muscles": {
-        "erector-spinae": 9,
-        "glutes": 9,
+        "spinal-erectors": 9,
+        "glute-max": 9,
         "hamstrings": 8,
         "lats": 6,
-        "upper-traps": 6,
+        "traps": 6,
         "quads": 6,
-        "grip": 8,
-        "abs-upper": 5
+        "forearms": 8,
+        "abs": 5
       },
       "contraindications": {
         "lower-back": {
@@ -5100,8 +5079,8 @@
       "muscles": {
         "adductors": 10,
         "obliques": 6,
-        "abs-upper": 5,
-        "glutes": 4
+        "abs": 5,
+        "glute-max": 4
       },
       "contraindications": {
         "knee-injury": {
@@ -5137,7 +5116,7 @@
     },
     {
       "id": "countermovement-jump",
-      "name_tr": "Karşı Hareket Atlama",
+      "name_tr": "Countermovement Jump",
       "name_en": "Countermovement Jump",
       "branch": "fitness",
       "category": "legs",
@@ -5147,10 +5126,10 @@
       "force_type": "legs",
       "muscles": {
         "quads": 8,
-        "glutes": 9,
+        "glute-max": 9,
         "hamstrings": 6,
         "calves": 7,
-        "abs-upper": 4
+        "abs": 4
       },
       "contraindications": {
         "knee-injury": {
@@ -5186,7 +5165,7 @@
     },
     {
       "id": "crunch",
-      "name_tr": "Crunch (Karın Mekiği)",
+      "name_tr": "Crunch",
       "name_en": "Crunch",
       "branch": "fitness",
       "category": "core",
@@ -5195,8 +5174,7 @@
       "is_compound": false,
       "force_type": "core",
       "muscles": {
-        "abs-upper": 9,
-        "abs-lower": 4,
+        "abs": 9,
         "obliques": 3
       },
       "contraindications": {
@@ -5233,7 +5211,7 @@
     },
     {
       "id": "curl-up",
-      "name_tr": "McGill Curl-Up",
+      "name_tr": "Curl Up",
       "name_en": "Curl Up",
       "branch": "fitness",
       "category": "core",
@@ -5242,8 +5220,7 @@
       "is_compound": false,
       "force_type": "core",
       "muscles": {
-        "abs-upper": 8,
-        "transverse-abs": 7,
+        "abs": 8,
         "obliques": 5
       },
       "contraindications": {
@@ -5275,7 +5252,7 @@
     },
     {
       "id": "deadbugs",
-      "name_tr": "Ölü Böcek (Dead Bug)",
+      "name_tr": "Deadbugs",
       "name_en": "Deadbugs",
       "branch": "fitness",
       "category": "core",
@@ -5284,9 +5261,7 @@
       "is_compound": true,
       "force_type": "core",
       "muscles": {
-        "transverse-abs": 9,
-        "abs-upper": 6,
-        "abs-lower": 6,
+        "abs": 9,
         "obliques": 5
       },
       "contraindications": {
@@ -5318,7 +5293,7 @@
     },
     {
       "id": "decline-chest-press-machine",
-      "name_tr": "Decline Göğüs Press Makinesi",
+      "name_tr": "Decline Chest Press Machine",
       "name_en": "Decline Chest Press Machine",
       "branch": "fitness",
       "category": "chest",
@@ -5329,12 +5304,10 @@
       "is_compound": true,
       "force_type": "push",
       "muscles": {
-        "lower-chest": 9,
-        "chest": 7,
+        "pectoralis-sternal": 9,
         "triceps-long": 5,
-        "triceps-medial": 6,
         "triceps-lateral": 6,
-        "front-shoulder": 4
+        "anterior-deltoid": 4
       },
       "contraindications": {
         "shoulder-injury": {
@@ -5369,7 +5342,7 @@
     },
     {
       "id": "decline-push-up",
-      "name_tr": "Decline Şınav (Ayaklar Yüksekte)",
+      "name_tr": "Decline Push Up",
       "name_en": "Decline Push Up",
       "branch": "fitness",
       "category": "chest",
@@ -5378,13 +5351,12 @@
       "is_compound": true,
       "force_type": "push",
       "muscles": {
-        "upper-chest": 9,
-        "chest": 7,
-        "front-shoulder": 7,
+        "pectoralis-clavicular": 9,
+        "pectoralis-sternal": 7,
+        "anterior-deltoid": 7,
         "triceps-long": 5,
-        "triceps-medial": 6,
         "triceps-lateral": 6,
-        "abs-upper": 5
+        "abs": 5
       },
       "contraindications": {
         "shoulder-injury": {
@@ -5415,7 +5387,7 @@
     },
     {
       "id": "deficit-push-up",
-      "name_tr": "Yüksek ROM Şınav (Deficit)",
+      "name_tr": "Deficit Push Up",
       "name_en": "Deficit Push Up",
       "branch": "fitness",
       "category": "chest",
@@ -5426,12 +5398,10 @@
       "is_compound": true,
       "force_type": "push",
       "muscles": {
-        "chest": 9,
-        "upper-chest": 6,
-        "lower-chest": 7,
-        "front-shoulder": 6,
+        "pectoralis-sternal": 9,
+        "pectoralis-clavicular": 6,
+        "anterior-deltoid": 6,
         "triceps-long": 5,
-        "triceps-medial": 6,
         "triceps-lateral": 6
       },
       "contraindications": {
@@ -5473,13 +5443,13 @@
       "is_compound": true,
       "force_type": "push",
       "muscles": {
-        "glutes": 8,
+        "glute-max": 8,
         "quads": 7,
-        "front-shoulder": 8,
-        "chest": 6,
+        "anterior-deltoid": 8,
+        "pectoralis-sternal": 6,
         "lats": 5,
-        "abs-upper": 6,
-        "triceps-medial": 6,
+        "abs": 6,
+        "triceps-lateral": 6,
         "full-body": 10
       },
       "contraindications": {
@@ -5526,7 +5496,7 @@
     },
     {
       "id": "diagonal-jump",
-      "name_tr": "Diyagonal Atlama",
+      "name_tr": "Diagonal Jump",
       "name_en": "Diagonal Jump",
       "branch": "fitness",
       "category": "legs",
@@ -5536,11 +5506,11 @@
       "force_type": "legs",
       "muscles": {
         "quads": 7,
-        "glutes": 8,
-        "abductors": 6,
+        "glute-max": 8,
+        "glute-med": 6,
         "obliques": 6,
         "calves": 6,
-        "abs-upper": 4
+        "abs": 4
       },
       "contraindications": {
         "knee-injury": {
@@ -5575,7 +5545,7 @@
     },
     {
       "id": "dips",
-      "name_tr": "Dips (Paralel Bar İniş-Kalkış)",
+      "name_tr": "Dips",
       "name_en": "Dips",
       "branch": "fitness",
       "category": "chest",
@@ -5586,12 +5556,10 @@
       "is_compound": true,
       "force_type": "push",
       "muscles": {
-        "lower-chest": 9,
-        "chest": 8,
+        "pectoralis-sternal": 9,
         "triceps-long": 8,
-        "triceps-medial": 8,
         "triceps-lateral": 8,
-        "front-shoulder": 7
+        "anterior-deltoid": 7
       },
       "contraindications": {
         "shoulder-injury": {
@@ -5622,7 +5590,7 @@
     },
     {
       "id": "double-pause-bench-press",
-      "name_tr": "Çift Duraklamalı Bench Press",
+      "name_tr": "Double Pause Bench Press",
       "name_en": "Double Pause Bench Press",
       "branch": "fitness",
       "category": "chest",
@@ -5634,12 +5602,10 @@
       "is_compound": true,
       "force_type": "push",
       "muscles": {
-        "chest": 9,
-        "upper-chest": 6,
-        "lower-chest": 8,
-        "front-shoulder": 7,
+        "pectoralis-sternal": 9,
+        "pectoralis-clavicular": 6,
+        "anterior-deltoid": 7,
         "triceps-long": 6,
-        "triceps-medial": 7,
         "triceps-lateral": 7
       },
       "contraindications": {
