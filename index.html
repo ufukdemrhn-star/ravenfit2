@@ -703,8 +703,8 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
   <img src="logo.png" width="148">
 </div>
   <h1 class="splash-title">RAVEN<span style="color:var(--accent)">FIT</span></h1>
-  <div class="splash-tag">Versiyon 0.3.1.3(beta)</div>
-  <div class="splash-sub">Sen sadece antrenmanına odaklan diye</div>
+  <div class="splash-tag">Versiyon 0.3.0.1(beta)</div>
+  <div class="splash-sub">Sen sadece antrenmanına odaklan</div>
   <div class="pills">
     <div class="pill"><div class="pill-dot"></div>Çoklu Branş</div>
     <div class="pill"><div class="pill-dot"></div>Beslenme & Makro</div>
@@ -4336,6 +4336,24 @@ var CONDITIONS_GROUPS=[
   {id:'beslenme', label:'🥗 Beslenme & Diyet'}
 ];
 
+/* Condition ID → Türkçe etiket (icon dahil) */
+function _condLabelTr(id){
+  /* Önce JSON'dan, sonra BUILTIN'den ara */
+  var list=(CONDITIONS_DATA && CONDITIONS_DATA.conditions) || BUILTIN_CONDITIONS || [];
+  for(var i=0;i<list.length;i++){
+    if(list[i].id===id){
+      var icon=list[i].icon||'';
+      var label=list[i].label_tr||list[i].name_tr||list[i].label||id;
+      return (icon?icon+' ':'')+label;
+    }
+  }
+  /* Bulunamazsa BUILTIN'den son şans */
+  for(var j=0;j<BUILTIN_CONDITIONS.length;j++){
+    if(BUILTIN_CONDITIONS[j].id===id) return BUILTIN_CONDITIONS[j].icon+' '+BUILTIN_CONDITIONS[j].label_tr;
+  }
+  return id;
+}
+
 function renderConditionsStep(){
   var rawList=CONDITIONS_DATA&&CONDITIONS_DATA.conditions?CONDITIONS_DATA.conditions:BUILTIN_CONDITIONS;
   /* JSON'dan gelen condition'larda 'group' alanı yok — BUILTIN'den fallback ekle */
@@ -4969,14 +4987,86 @@ function renderExerciseDetail(exId){
     html+='</div>';
   }
 
-  /* Özel durum uyarıları */
+  /* Özel durum uyarıları — yeni detaylı format + eski array fallback */
   var userConds=U.conditions||[];
-  if(ex.contraindications&&ex.contraindications.length&&userConds.length){
-    var matches=ex.contraindications.filter(function(c){return userConds.indexOf(c)>=0;});
+  if(ex.contraindications && userConds.length){
+    var contras=ex.contraindications;
+    var matches=[]; /* {condId, severity, reason, alternative, condLabel} */
+
+    /* Yeni format: obje { condId: {severity, reason, alternative} } */
+    if(typeof contras === 'object' && !Array.isArray(contras)){
+      Object.keys(contras).forEach(function(condId){
+        if(userConds.indexOf(condId)>=0){
+          var d=contras[condId]||{};
+          matches.push({
+            condId: condId,
+            severity: d.severity||'medium',
+            reason: d.reason||'Bu durum için bu egzersiz risk taşıyabilir.',
+            alternative: d.alternative||null,
+            condLabel: _condLabelTr(condId)
+          });
+        }
+      });
+    } else if(Array.isArray(contras)){
+      /* Eski format: ["shoulder-injury", "cardiovascular"] */
+      contras.forEach(function(condId){
+        if(userConds.indexOf(condId)>=0){
+          matches.push({
+            condId: condId,
+            severity: 'medium',
+            reason: 'Bu egzersiz beyan ettiğin bu durumla çakışıyor.',
+            alternative: null,
+            condLabel: _condLabelTr(condId)
+          });
+        }
+      });
+    }
+
     if(matches.length){
-      html+='<div style="background:rgba(230,57,70,.1);border:1px solid var(--accent);border-radius:11px;padding:10px 14px;margin-bottom:8px">'+
-        '<div style="font-size:12px;color:var(--accent);font-weight:700;margin-bottom:4px">⚠️ Dikkat — Özel Durumun</div>'+
-        '<div style="font-size:11px;color:var(--text2)">Bu egzersiz beyan ettiğin bir durumla çakışıyor. Devam etmeden önce doktorunuza danışın.</div></div>';
+      /* En yüksek severity'ye göre ana renk */
+      var sevOrder={low:1, medium:2, high:3};
+      var maxSev='low';
+      matches.forEach(function(m){ if(sevOrder[m.severity]>sevOrder[maxSev]) maxSev=m.severity; });
+      var sevColors={
+        low:    {bg:'rgba(76,201,240,.08)',  border:'#4cc9f0', text:'#4cc9f0', label:'Dikkat'},
+        medium: {bg:'rgba(255,159,28,.08)',  border:'#ff9f1c', text:'#ff9f1c', label:'Uyarı'},
+        high:   {bg:'rgba(230,57,70,.12)',   border:'#e63946', text:'#e63946', label:'Yüksek Risk'}
+      };
+      var sevIcons={low:'ℹ️', medium:'⚠️', high:'🚨'};
+      var mainCol=sevColors[maxSev];
+
+      html+='<div style="background:'+mainCol.bg+';border:1.5px solid '+mainCol.border+';border-radius:12px;padding:14px;margin-bottom:10px">';
+      html+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">';
+      html+='<div style="font-size:22px">'+sevIcons[maxSev]+'</div>';
+      html+='<div>';
+      html+='<div style="font-size:13px;font-weight:700;color:'+mainCol.text+'">'+mainCol.label+' — Beyan Ettiğin Durum'+(matches.length>1?'lar':'')+'</div>';
+      html+='<div style="font-size:10px;color:var(--text2);margin-top:1px">Bu egzersiz '+matches.length+' özel durumunla çakışıyor</div>';
+      html+='</div></div>';
+
+      /* Her bir condition için detay kartı */
+      matches.forEach(function(m){
+        var c=sevColors[m.severity];
+        var sevBadgeText={low:'Düşük', medium:'Orta', high:'Yüksek'}[m.severity];
+        html+='<div style="background:var(--card);border:1px solid '+c.border+'33;border-left:3px solid '+c.border+';border-radius:8px;padding:10px 12px;margin-bottom:8px">';
+        /* Başlık + severity badge */
+        html+='<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap">';
+        html+='<span style="font-size:13px;font-weight:700;color:var(--text)">'+m.condLabel+'</span>';
+        html+='<span style="font-size:9px;font-weight:700;color:#fff;background:'+c.border+';padding:2px 6px;border-radius:4px;letter-spacing:.3px">'+sevBadgeText.toUpperCase()+' RİSK</span>';
+        html+='</div>';
+        /* Sebep */
+        html+='<div style="font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:6px"><strong style="color:var(--text)">Neden riskli?</strong> '+m.reason+'</div>';
+        /* Alternatif */
+        if(m.alternative){
+          html+='<div style="font-size:11px;color:var(--text2);line-height:1.5;padding:6px 8px;background:rgba(46,196,182,.06);border-radius:6px;border-left:2px solid var(--success)">';
+          html+='<strong style="color:var(--success)">💡 Alternatif:</strong> '+m.alternative;
+          html+='</div>';
+        }
+        html+='</div>';
+      });
+
+      /* Genel uyarı altı */
+      html+='<div style="font-size:10px;color:var(--text3);font-style:italic;margin-top:6px;text-align:center">Bu uygulama tıbbi tavsiye yerine geçmez. Şüpheniz varsa doktorunuza danışın.</div>';
+      html+='</div>';
     }
   }
 
