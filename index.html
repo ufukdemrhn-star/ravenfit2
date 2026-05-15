@@ -384,6 +384,36 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 .ex-item-name{font-size:13px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ex-item-meta{font-size:10px;color:var(--text2)}
 .ex-item-arrow{color:var(--text3);font-size:16px;flex-shrink:0}
+/* Filtre butonu ve overlay */
+.ex-filter-btn{flex-shrink:0;background:var(--card);border:1.5px solid var(--border);border-radius:11px;padding:0 14px;height:42px;display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text);cursor:pointer;font-family:'Outfit',sans-serif;font-weight:600;-webkit-tap-highlight-color:transparent;transition:all .2s;position:relative}
+.ex-filter-btn:active{transform:scale(.96)}
+.ex-filter-btn.has-active{border-color:var(--accent);color:var(--accent)}
+.ex-filter-btn .badge{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;border-radius:9px;background:var(--accent);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 5px}
+.ex-active-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.ex-active-chip{background:rgba(230,57,70,.1);border:1px solid var(--accent);border-radius:100px;padding:4px 10px;font-size:11px;color:var(--accent);font-weight:600;display:inline-flex;align-items:center;gap:5px;cursor:pointer}
+.ex-active-chip:hover{background:rgba(230,57,70,.18)}
+.ex-active-chip .x{font-size:13px;opacity:.7;line-height:1}
+.ex-clear-all{background:none;border:none;color:var(--text3);font-size:11px;font-weight:600;cursor:pointer;padding:4px 8px;text-decoration:underline}
+/* Filtre sheet (slide-up overlay) */
+.ex-filter-sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:700;display:none;opacity:0;transition:opacity .25s}
+.ex-filter-sheet-bg.open{display:block;opacity:1}
+.ex-filter-sheet{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);width:100%;max-width:640px;background:var(--card);border-top:1px solid var(--border);border-left:1px solid var(--border);border-right:1px solid var(--border);border-radius:20px 20px 0 0;z-index:701;transition:transform .32s cubic-bezier(.4,0,.2,1);padding:0 0 env(safe-area-inset-bottom,0px);max-height:85vh;overflow-y:auto;box-sizing:border-box}
+.ex-filter-sheet.open{transform:translateX(-50%) translateY(0)}
+.ex-filter-sheet-head{position:sticky;top:0;background:var(--card);padding:16px 18px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;z-index:2}
+.ex-filter-sheet-title{flex:1;font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:1.5px}
+.ex-filter-sheet-x{background:none;border:none;color:var(--text2);cursor:pointer;font-size:22px;padding:4px 8px}
+.ex-filter-section{padding:14px 18px;border-bottom:1px solid var(--border)}
+.ex-filter-section:last-of-type{border-bottom:none}
+.ex-filter-section-title{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+.ex-filter-grid{display:grid;grid-template-columns:repeat(2, 1fr);gap:7px}
+.ex-filter-opt{background:var(--card2);border:1.5px solid var(--border);border-radius:10px;padding:11px 10px;display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--text);cursor:pointer;transition:all .18s;-webkit-tap-highlight-color:transparent;min-height:42px}
+.ex-filter-opt:active{transform:scale(.97)}
+.ex-filter-opt.sel{background:rgba(230,57,70,.1);border-color:var(--accent);color:var(--accent)}
+.ex-filter-opt .ico{font-size:16px;line-height:1;flex-shrink:0}
+.ex-filter-opt .check{margin-left:auto;color:var(--accent);font-size:14px}
+.ex-filter-footer{position:sticky;bottom:0;background:var(--card);border-top:1px solid var(--border);padding:12px 18px;padding-bottom:max(12px,env(safe-area-inset-bottom));display:flex;gap:10px}
+.ex-filter-clear{flex:1;background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:12px;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;font-family:'Outfit',sans-serif}
+.ex-filter-apply{flex:2;background:var(--accent);border:none;border-radius:11px;padding:12px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:'Outfit',sans-serif;letter-spacing:.5px}
 /* Egzersiz detay */
 .ex-detail-muscle{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)}
 .ex-detail-muscle:last-child{border-bottom:none}
@@ -1423,6 +1453,20 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
     </div>
   </div>
   <div class="calc-body" id="calc-body"></div>
+</div>
+
+<!-- ══ EGZERSİZ FİLTRE SHEET ═══════════════════════════════════ -->
+<div class="ex-filter-sheet-bg" id="ex-filter-bg" onclick="closeExFilter()"></div>
+<div class="ex-filter-sheet" id="ex-filter-sheet">
+  <div class="ex-filter-sheet-head">
+    <div class="ex-filter-sheet-title">🎛 FİLTRELE</div>
+    <button class="ex-filter-sheet-x" onclick="closeExFilter()">✕</button>
+  </div>
+  <div id="ex-filter-content"></div>
+  <div class="ex-filter-footer">
+    <button class="ex-filter-clear" onclick="clearExFilters()">Temizle</button>
+    <button class="ex-filter-apply" onclick="applyExFilters()">UYGULA</button>
+  </div>
 </div>
 
 <!-- ══ HEDEF HIZLI DÜZENLEME OVERLAY ══════════════════════════ -->
@@ -4433,51 +4477,61 @@ function switchMain(id){
 
 /* ── Kas grubu etiketleri ────────────────────────────────── */
 var MUSCLE_TR={
-  /* Boyun */
-  'neck-flexors':'Boyun Fleksörleri',
-  /* Omuz */
-  'anterior-deltoid':'Ön Omuz',
-  'middle-deltoid':'Yan Omuz',
-  'posterior-deltoid':'Arka Omuz',
-  /* Sırt */
-  'traps':'Trapez',
-  'lower-traps':'Alt Trapez',
-  'rotator-cuff':'Rotator Manşet',
-  'lats':'Sırt (Lats)',
-  'spinal-erectors':'Spinal Erektörler',
-  /* Kol */
-  'biceps':'Biceps',
-  'triceps-long':'Triceps Uzun Baş',
-  'triceps-lateral':'Triceps Yan Baş',
-  'forearms':'Önkollar',
-  /* Göğüs */
-  'pectoralis-sternal':'Göğüs (Sternal)',
-  'pectoralis-clavicular':'Üst Göğüs (Clavicular)',
-  /* Core */
-  'abs':'Karın',
-  'obliques':'Yan Karın (Obliques)',
-  /* Kalça */
-  'glute-max':'Büyük Glut',
-  'glute-med':'Yan Glut',
-  /* Bacak */
-  'quads':'Quadriceps',
-  'hamstrings':'Hamstring',
-  'adductors':'İç Bacak (Adduktör)',
-  'hip-flexors':'Kalça Fleksörleri',
-  /* Kalf */
-  'calves':'Baldır',
-  /* Genel */
-  'full-body':'Tüm Vücut',
-  /* Geriye dönük uyum (eski anahtarlar varsa) */
-  'chest':'Göğüs','upper-chest':'Üst Göğüs','lower-chest':'Alt Göğüs',
-  'front-shoulder':'Ön Omuz','mid-shoulder':'Yan Omuz','rear-shoulder':'Arka Omuz',
-  'rear-delt':'Arka Omuz','triceps-medial':'Triceps Yan Baş',
-  'forearm-flexors':'Önkollar','forearm-extensors':'Önkollar','brachioradialis':'Önkollar',
-  'mid-traps':'Trapez','upper-traps':'Trapez','rhomboids':'Trapez',
-  'erector-spinae':'Spinal Erektörler','teres-major':'Sırt (Lats)',
-  'abs-upper':'Karın','abs-lower':'Karın','transverse-abs':'Karın',
-  'glutes':'Büyük Glut','abductors':'Yan Glut',
-  'gastrocnemius':'Baldır','soleus':'Baldır','grip':'Önkollar'
+  /* Yeni anatomik isimler (İngilizce) */
+  'neck-flexors':           'Neck Flexors',
+  'anterior-deltoid':       'Anterior Deltoid',
+  'middle-deltoid':         'Middle Deltoid',
+  'posterior-deltoid':      'Posterior Deltoid',
+  'traps':                  'Trapezius',
+  'lower-traps':            'Lower Trapezius',
+  'rotator-cuff':           'Rotator Cuff',
+  'lats':                   'Latissimus Dorsi',
+  'spinal-erectors':        'Spinal Erectors',
+  'biceps':                 'Biceps',
+  'triceps-long':           'Triceps Long Head',
+  'triceps-lateral':        'Triceps Lateral Head',
+  'forearms':               'Forearms',
+  'pectoralis-sternal':     'Pectoralis Sternal',
+  'pectoralis-clavicular':  'Pectoralis Clavicular',
+  'abs':                    'Abs',
+  'obliques':               'Obliques',
+  'glute-max':              'Gluteus Maximus',
+  'glute-med':              'Gluteus Medius',
+  'quads':                  'Quadriceps',
+  'hamstrings':             'Hamstrings',
+  'adductors':              'Adductors',
+  'hip-flexors':            'Hip Flexors',
+  'calves':                 'Calves',
+  'full-body':              'Full Body',
+  /* Eski anahtar fallback (eski JSON kalıntıları için) */
+  'chest':'Pectoralis','upper-chest':'Pectoralis Clavicular','lower-chest':'Pectoralis Sternal',
+  'front-shoulder':'Anterior Deltoid','mid-shoulder':'Middle Deltoid','rear-shoulder':'Posterior Deltoid',
+  'rear-delt':'Posterior Deltoid','triceps-medial':'Triceps Lateral Head',
+  'forearm-flexors':'Forearms','forearm-extensors':'Forearms','brachioradialis':'Forearms',
+  'mid-traps':'Trapezius','upper-traps':'Trapezius','rhomboids':'Trapezius',
+  'erector-spinae':'Spinal Erectors','teres-major':'Latissimus Dorsi',
+  'abs-upper':'Abs','abs-lower':'Abs','transverse-abs':'Abs',
+  'glutes':'Gluteus Maximus','abductors':'Gluteus Medius',
+  'gastrocnemius':'Calves','soleus':'Calves','grip':'Forearms'
+};
+
+/* Filtre kategori → kas anahtarları mapping */
+var MUSCLE_CATEGORY_MAP={
+  'chest':     ['pectoralis-sternal','pectoralis-clavicular','chest','upper-chest','lower-chest'],
+  'back':      ['lats','traps','lower-traps','spinal-erectors','rotator-cuff','mid-traps','upper-traps','rhomboids','erector-spinae','teres-major'],
+  'shoulders': ['anterior-deltoid','middle-deltoid','posterior-deltoid','front-shoulder','mid-shoulder','rear-shoulder','rear-delt'],
+  'arms':      ['biceps','triceps-long','triceps-lateral','forearms','triceps-medial','forearm-flexors','forearm-extensors','brachioradialis','grip'],
+  'core':      ['abs','obliques','abs-upper','abs-lower','transverse-abs'],
+  'glutes':    ['glute-max','glute-med','glutes','abductors'],
+  'legs':      ['quads','hamstrings','adductors','hip-flexors','calves','gastrocnemius','soleus'],
+  'neck':      ['neck-flexors'],
+  'full-body': ['full-body']
+};
+
+/* Filtre kategori etiketleri (UI'da gösterilir) */
+var MUSCLE_CATEGORY_LABELS={
+  'chest':'Chest','back':'Back','shoulders':'Shoulders','arms':'Arms',
+  'core':'Core','glutes':'Glutes','legs':'Legs','neck':'Neck','full-body':'Full Body'
 };
 var CATEGORY_TR={
   'chest':'Göğüs','back':'Sırt','shoulders':'Omuzlar','arms':'Kollar',
@@ -4492,15 +4546,45 @@ var CATEGORY_TR={
   'scoliosis-support':'Skolyoz Destek','mobility':'Genel Mobilite'
 };
 var EQUIPMENT_TR={
-  'barbell':'Halter','dumbbell':'Dumbbell','cable':'Kablo',
-  'machine':'Makine','bench':'Bench','pullup-bar':'Çekiş Barı',
-  'kettlebell':'Kettlebell','resistance-band':'Direnç Bandı',
-  'dip-bar':'Paralel Bar','ez-bar':'EZ Bar','smith-machine':'Smith',
+  'bodyweight':       'Vücut Ağırlığı',
+  'barbell':          'Barbell',
+  'dumbbell':         'Dumbbell',
+  'kettlebell':       'Kettlebell',
+  'ez-bar':           'EZ Bar',
+  'trap-bar':         'Trap Bar',
+  'cable':            'Kablo',
+  'machine':          'Makine',
+  'smith-machine':    'Smith Machine',
+  'med-ball':         'Sağlık Topu',
+  'resistance-band':  'Bant',
+  'pullup-bar':       'Barfiks',
+  'bench':            'Bench',
+  'dip-bar':          'Dip Bar',
+  'ab-wheel':         'Ab Wheel',
   /* Yüzme ekipmanları */
   'kickboard':'Tahta','pull-buoy':'Şamandıra','fins':'Palet',
-  'paddles':'El Paleti','snorkel':'Şnorkel','band':'Direnç Bandı',
+  'paddles':'El Paleti','snorkel':'Şnorkel','band':'Bant',
   'none':'Ekipmansız'
 };
+
+/* Filtre UI'sinde gösterilecek ekipmanlar (sıralı) */
+var EQUIPMENT_FILTER_LIST=[
+  {id:'bodyweight',      label:'Vücut Ağırlığı',  icon:'🧍'},
+  {id:'barbell',         label:'Barbell',          icon:'🏋️'},
+  {id:'dumbbell',        label:'Dumbbell',         icon:'💪'},
+  {id:'kettlebell',      label:'Kettlebell',       icon:'⚫'},
+  {id:'ez-bar',          label:'EZ Bar',           icon:'〰️'},
+  {id:'trap-bar',        label:'Trap Bar',         icon:'⬡'},
+  {id:'cable',           label:'Kablo',            icon:'🔗'},
+  {id:'machine',         label:'Makine',           icon:'⚙️'},
+  {id:'smith-machine',   label:'Smith Machine',    icon:'🔧'},
+  {id:'med-ball',        label:'Sağlık Topu',      icon:'🏐'},
+  {id:'resistance-band', label:'Bant',             icon:'➰'},
+  {id:'pullup-bar',      label:'Barfiks',          icon:'─'},
+  {id:'bench',           label:'Bench',            icon:'🪑'},
+  {id:'dip-bar',         label:'Dip Bar',          icon:'⫼'},
+  {id:'ab-wheel',        label:'Ab Wheel',         icon:'🎡'}
+];
 var CATEGORY_EMOJI={
   'chest':'💪','back':'🦅','shoulders':'🏋️','arms':'💪',
   'legs':'🦵','core':'⚡','full-body':'🔥','glutes':'🍑','cardio':'🏃','posture':'🧘',
@@ -4564,22 +4648,26 @@ function renderExerciseLibrary(){
   }
   var exercises=dataSource.exercises||[];
 
+  /* Fitness için: yeni filtre sistemi (ekipman çoklu + tek kas kategorisi) */
+  var _fitMuscleCat = window._exMuscleCat || null;  /* tek kas kategorisi: chest, back, vb. */
+  var _fitEquips    = window._exEquips || [];        /* çoklu ekipman seçimi */
+
   /* Filtrele */
   var filtered=exercises.filter(function(e){
-    /* Kategori filtresi */
+    /* Kategori filtresi (yüzme/postür için klasik chip) */
     var matchCat=true;
     if(_curCat!=='all'){
       if(isSwim){
-        /* Yüzme grup eşleştirmesi (bazı gruplar birden fazla kategori içerir) */
         var grp=SWIM_CATEGORY_GROUPS.find(function(g){return g.id===_curCat;});
         if(grp&&grp.match){
           matchCat=grp.match.indexOf(e.category)>=0;
         } else {
           matchCat=e.category===_curCat;
         }
-      } else {
+      } else if(isPosture){
         matchCat=e.category===_curCat;
       }
+      /* Fitness için _curCat artık kullanılmıyor — _fitMuscleCat var */
     }
     /* Stil filtresi (sadece yüzme) */
     var matchStroke=true;
@@ -4588,10 +4676,42 @@ function renderExerciseLibrary(){
     }
     /* Arama */
     var matchSearch=!_curSearch||
-      e.name_tr.toLowerCase().indexOf(_curSearch.toLowerCase())>=0||
+      (e.name_tr||'').toLowerCase().indexOf(_curSearch.toLowerCase())>=0||
       (e.name_en||'').toLowerCase().indexOf(_curSearch.toLowerCase())>=0;
-    return matchCat&&matchStroke&&matchSearch;
+
+    /* Fitness: ekipman filtresi (çoklu, OR — egzersizdeki ekipmanların en az biri seçili olmalı) */
+    var matchEquip=true;
+    if(!isSwim && !isPosture && _fitEquips.length){
+      var exEq = e.equipment || [];
+      /* Egzersiz seçilen ekipmanlardan en az birini içermeli */
+      matchEquip = exEq.some(function(eq){return _fitEquips.indexOf(eq)>=0;});
+    }
+
+    /* Fitness: kas kategorisi filtresi (tek seçim) */
+    var matchMuscle=true;
+    if(!isSwim && !isPosture && _fitMuscleCat){
+      var keys = (typeof MUSCLE_CATEGORY_MAP!=='undefined') ? (MUSCLE_CATEGORY_MAP[_fitMuscleCat]||[]) : [];
+      var exM = e.muscles||{};
+      /* Egzersizde bu kategoriye ait kaslardan en az biri varsa eşleşir */
+      matchMuscle = keys.some(function(k){return exM[k]!==undefined && exM[k]>0;});
+    }
+
+    return matchCat && matchStroke && matchSearch && matchEquip && matchMuscle;
   });
+
+  /* Fitness + kas kategorisi seçilmişse → o kategorinin maksimum puanına göre sırala (yüksekten düşüğe) */
+  if(!isSwim && !isPosture && _fitMuscleCat){
+    var muscleKeys = (typeof MUSCLE_CATEGORY_MAP!=='undefined') ? (MUSCLE_CATEGORY_MAP[_fitMuscleCat]||[]) : [];
+    filtered.sort(function(a,b){
+      var aM = a.muscles||{}, bM = b.muscles||{};
+      var aMax = 0, bMax = 0;
+      muscleKeys.forEach(function(k){
+        if(aM[k]>aMax) aMax = aM[k];
+        if(bM[k]>bMax) bMax = bM[k];
+      });
+      return bMax - aMax;
+    });
+  }
 
   /* Geri butonu — özel builder'dan mı geliyoruz? */
   var backFn=window._cwReturnToBuilder?'renderCustomWorkoutBuilder()':'renderWorkoutHome()';
@@ -4615,28 +4735,50 @@ function renderExerciseLibrary(){
     html+='</div>';
   }
 
-  /* Arama */
-  html+='<input class="ex-search" type="text" placeholder="🔍 Egzersiz ara..." value="'+_curSearch+'" oninput="window._exSearch=this.value;renderExerciseLibrary()">';
+  /* Arama + Filtre butonu (fitness için) */
+  if(!isSwim && !isPosture){
+    var activeCount = (_fitMuscleCat?1:0) + _fitEquips.length;
+    html+='<div style="display:flex;gap:8px;margin-bottom:10px">';
+    html+='<input class="ex-search" type="text" placeholder="🔍 Egzersiz ara..." value="'+_curSearch+'" oninput="window._exSearch=this.value;renderExerciseLibrary()" style="margin-bottom:0;flex:1">';
+    html+='<button class="ex-filter-btn'+(activeCount?' has-active':'')+'" onclick="openExFilter()">';
+    html+='🎛 Filtre';
+    if(activeCount) html+='<span class="badge">'+activeCount+'</span>';
+    html+='</button>';
+    html+='</div>';
 
-  /* ── Kategori filtreleri ── */
-  html+='<div class="ex-filter-row">';
+    /* Aktif filtre chip'leri */
+    if(activeCount){
+      html+='<div class="ex-active-chips">';
+      if(_fitMuscleCat){
+        var catLbl = (typeof MUSCLE_CATEGORY_LABELS!=='undefined' && MUSCLE_CATEGORY_LABELS[_fitMuscleCat]) ? MUSCLE_CATEGORY_LABELS[_fitMuscleCat] : _fitMuscleCat;
+        html+='<span class="ex-active-chip" onclick="_removeExFilter(\'muscle\')">💪 '+catLbl+'<span class="x">✕</span></span>';
+      }
+      _fitEquips.forEach(function(eq){
+        var lbl = EQUIPMENT_TR[eq] || eq;
+        html+='<span class="ex-active-chip" onclick="_removeExFilter(\'eq\',\''+eq+'\')">'+lbl+'<span class="x">✕</span></span>';
+      });
+      html+='<button class="ex-clear-all" onclick="clearExFilters()">Hepsini temizle</button>';
+      html+='</div>';
+    }
+  } else {
+    /* Yüzme/Postür için klasik arama */
+    html+='<input class="ex-search" type="text" placeholder="🔍 Egzersiz ara..." value="'+_curSearch+'" oninput="window._exSearch=this.value;renderExerciseLibrary()">';
+  }
+
+  /* ── Kategori filtreleri (sadece yüzme/postür için chip) ── */
   if(isSwim){
+    html+='<div class="ex-filter-row">';
     SWIM_CATEGORY_GROUPS.forEach(function(g){
       html+='<div class="ex-chip'+(_curCat===g.id?' sel':'')+'" onclick="window._exCat=\''+g.id+'\';renderExerciseLibrary()">'+g.label+'</div>';
     });
+    html+='</div>';
   } else if(isPosture){
+    html+='<div class="ex-filter-row">';
     POSTURE_CATEGORY_GROUPS.forEach(function(g){
       html+='<div class="ex-chip'+(_curCat===g.id?' sel':'')+'" onclick="window._exCat=\''+g.id+'\';renderExerciseLibrary()">'+g.label+'</div>';
     });
-  } else {
-    var fitCats=['all'];
-    exercises.forEach(function(e){if(fitCats.indexOf(e.category)<0)fitCats.push(e.category);});
-    fitCats.forEach(function(c){
-      var lbl=c==='all'?'Tümü':(CATEGORY_TR[c]||c);
-      html+='<div class="ex-chip'+(_curCat===c?' sel':'')+'" onclick="window._exCat=\''+c+'\';renderExerciseLibrary()">'+lbl+'</div>';
-    });
+    html+='</div>';
   }
-  html+='</div>';
 
   /* ── Stil filtresi (yüzme) ── */
   if(isSwim){
@@ -4697,12 +4839,130 @@ function renderExerciseLibrary(){
   if(inp&&_curSearch)inp.setSelectionRange(inp.value.length,inp.value.length);
 }
 
-/* ══════════════════════════════════════════════════════════
-   🏋️ ANATOMİK KAS HARİTASI (SVG)
-   ══════════════════════════════════════════════════════════ */
+/* ──────────────────────────────────────────────────────────
+   🎛 EGZERSİZ FİLTRE SHEET FONKSİYONLARI
+   ────────────────────────────────────────────────────────── */
 
-/* Kas key → SVG element ID eşleştirmesi */
-/* ── Egzersiz Detay ──────────────────────────────────────── */
+/* Geçici state: sheet kapanırken yapılan değişiklikler buradan ana state'e taşınır */
+var _exFilterDraft = { muscle:null, equips:[] };
+
+function openExFilter(){
+  /* Mevcut state'i geçici drafta kopyala */
+  _exFilterDraft.muscle = window._exMuscleCat || null;
+  _exFilterDraft.equips = (window._exEquips||[]).slice();
+  _renderExFilterContent();
+  document.getElementById('ex-filter-bg').classList.add('open');
+  document.getElementById('ex-filter-sheet').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeExFilter(){
+  document.getElementById('ex-filter-bg').classList.remove('open');
+  document.getElementById('ex-filter-sheet').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function applyExFilters(){
+  /* Drafttan ana state'e yaz */
+  window._exMuscleCat = _exFilterDraft.muscle;
+  window._exEquips    = _exFilterDraft.equips.slice();
+  closeExFilter();
+  renderExerciseLibrary();
+}
+
+function clearExFilters(){
+  _exFilterDraft.muscle = null;
+  _exFilterDraft.equips = [];
+  window._exMuscleCat = null;
+  window._exEquips = [];
+  /* Eğer sheet açıksa yenile, değilse direkt liste yenile */
+  var sheet=document.getElementById('ex-filter-sheet');
+  if(sheet && sheet.classList.contains('open')){
+    _renderExFilterContent();
+  } else {
+    renderExerciseLibrary();
+  }
+}
+
+function _removeExFilter(kind, value){
+  if(kind==='muscle'){
+    window._exMuscleCat = null;
+  } else if(kind==='eq'){
+    var arr = window._exEquips||[];
+    var i = arr.indexOf(value);
+    if(i>=0) arr.splice(i,1);
+    window._exEquips = arr;
+  }
+  renderExerciseLibrary();
+}
+
+/* Drafttaki seçimi toggle et */
+function _toggleExFilterMuscle(catId){
+  if(_exFilterDraft.muscle === catId){
+    _exFilterDraft.muscle = null;
+  } else {
+    _exFilterDraft.muscle = catId;
+  }
+  _renderExFilterContent();
+}
+
+function _toggleExFilterEquip(eqId){
+  var arr = _exFilterDraft.equips;
+  var i = arr.indexOf(eqId);
+  if(i>=0) arr.splice(i,1);
+  else arr.push(eqId);
+  _renderExFilterContent();
+}
+
+function _renderExFilterContent(){
+  var el = document.getElementById('ex-filter-content');
+  if(!el) return;
+  var html = '';
+
+  /* ─ Hedef Kas (tek seçim) ─ */
+  html+='<div class="ex-filter-section">';
+  html+='<div class="ex-filter-section-title">💪 Hedef Kas Grubu (Tek Seçim)</div>';
+  html+='<div class="ex-filter-grid">';
+  var catList = [
+    {id:'chest',     label:'Chest',     icon:'💪'},
+    {id:'back',      label:'Back',      icon:'🦅'},
+    {id:'shoulders', label:'Shoulders', icon:'🏋️'},
+    {id:'arms',      label:'Arms',      icon:'💪'},
+    {id:'legs',      label:'Legs',      icon:'🦵'},
+    {id:'glutes',    label:'Glutes',    icon:'🍑'},
+    {id:'core',      label:'Core',      icon:'⚡'},
+    {id:'full-body', label:'Full Body', icon:'🔥'}
+  ];
+  catList.forEach(function(c){
+    var sel = _exFilterDraft.muscle === c.id;
+    html+='<div class="ex-filter-opt'+(sel?' sel':'')+'" onclick="_toggleExFilterMuscle(\''+c.id+'\')">';
+    html+='<span class="ico">'+c.icon+'</span>';
+    html+='<span>'+c.label+'</span>';
+    if(sel) html+='<span class="check">✓</span>';
+    html+='</div>';
+  });
+  html+='</div>';
+  html+='<div style="font-size:10px;color:var(--text3);margin-top:8px;font-style:italic">Bir kas grubu seçtiğinde, egzersizler o gruba olan etki puanına göre sıralanır.</div>';
+  html+='</div>';
+
+  /* ─ Ekipman (çoklu seçim) ─ */
+  html+='<div class="ex-filter-section">';
+  html+='<div class="ex-filter-section-title">🏋️ Ekipman (Çoklu Seçim)</div>';
+  html+='<div class="ex-filter-grid">';
+  EQUIPMENT_FILTER_LIST.forEach(function(eq){
+    var sel = _exFilterDraft.equips.indexOf(eq.id)>=0;
+    html+='<div class="ex-filter-opt'+(sel?' sel':'')+'" onclick="_toggleExFilterEquip(\''+eq.id+'\')">';
+    html+='<span class="ico">'+eq.icon+'</span>';
+    html+='<span style="flex:1">'+eq.label+'</span>';
+    if(sel) html+='<span class="check">✓</span>';
+    html+='</div>';
+  });
+  html+='</div>';
+  html+='</div>';
+
+  el.innerHTML = html;
+}
+
 function renderExerciseDetail(exId){
   var el=document.getElementById('workout-main');
   if(!el)return;
