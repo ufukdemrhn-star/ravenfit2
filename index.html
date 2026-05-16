@@ -743,6 +743,13 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
   <div id="splash-cont" style="display:none;margin-top:11px">
     <button class="btn btn-s" onclick="showResults()">📊 Önceki Sonuçlarım</button>
   </div>
+  <!-- Daima görünen: ana menüye git (analiz varsa erişilebilir) -->
+  <button id="splash-home-btn" type="button" onclick="goToMainMenu()" style="display:none;margin-top:14px;background:transparent;border:1.5px solid var(--border);border-radius:50%;width:48px;height:48px;cursor:pointer;align-items:center;justify-content:center;transition:all .2s;-webkit-tap-highlight-color:transparent" onmousedown="this.style.transform='scale(.92)'" onmouseup="this.style.transform=''" ontouchstart="this.style.transform='scale(.92)'" ontouchend="this.style.transform=''" title="Ana Menüye Dön">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text2)">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+      <polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+  </button>
 </div>
 
 <div class="screen" id="wizard">
@@ -1680,7 +1687,33 @@ function applyTheme(t){
 
 /* ── SCREENS ──────────────────────────────────────────── */
 function showScreen(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
-function goHome(){showScreen('splash');document.getElementById('bottom-nav').classList.remove('visible');}
+function goHome(){
+  showScreen('splash');
+  document.getElementById('bottom-nav').classList.remove('visible');
+  /* Eğer kullanıcı analizini tamamladıysa "Ana Menüye Dön" butonunu göster */
+  var hb=document.getElementById('splash-home-btn');
+  if(hb){
+    if(R && R.tdee){ hb.style.display='flex'; }
+    else { hb.style.display='none'; }
+  }
+}
+
+/* Splash → Ana menü (Vücudum > Analiz) */
+function goToMainMenu(){
+  if(!R || !R.tdee){
+    /* Analiz yoksa wizard'a yönlendir */
+    if(typeof startWizard==='function') startWizard();
+    return;
+  }
+  showScreen('results');
+  document.getElementById('bottom-nav').classList.add('visible');
+  switchMain('vucudum');
+  /* Vücudum içinde 'Analiz' alt sekmesini aç (id='vc') */
+  try {
+    var analizBtn=document.querySelector('button.tb[onclick*="switchTab(\'vc\'"]');
+    if(analizBtn && typeof switchTab==='function') switchTab('vc', analizBtn);
+  } catch(e){ console.warn('Analiz tab geçiş hatası:',e); }
+}
 /* switchMain tanımı aşağıda (FAZ 3 bölümünde) */
 function showResults(){showScreen('results');document.getElementById('bottom-nav').classList.add('visible');switchMain('vucudum');renderAll();if(_isGuest){var nickEl=document.getElementById('user-email-display');if(nickEl)nickEl.textContent='Misafir';var note=document.getElementById('guest-mode-note');if(note)note.style.display='block';setAvatarInitials('MI');}setTimeout(checkAndAwardBadges,1000);}
 function startWizard(){step=0;selST=null;selGL=null;showScreen('wizard');document.getElementById('bottom-nav').classList.remove('visible');updWizStep();updGenderUI();restoreWiz();}
@@ -3147,15 +3180,16 @@ function renderIlerleme(){
   var w3 = last4.length >= 4 ? last4[last4.length-4] : null;
   var male = U.gender==='male';
 
-  /* Dinamik tarih etiketi — referans: en güncel ölçüm (w0)
+  /* Dinamik tarih etiketi — referans: BUGÜN (now), son ölçüm değil
      1-13 gün → "X gün önce", 14-29 gün → "X hafta önce", 30+ gün → "X ay önce" */
-  function _relDateLbl(entry, ref){
+  function _relDateLbl(entry){
     if(!entry || !entry.timestamp) return '—';
-    if(!ref || !ref.timestamp) return '—';
-    var diffMs = ref.timestamp - entry.timestamp;
-    var days = Math.round(diffMs / 86400000);  /* 24*60*60*1000 */
+    var now = Date.now();
+    var diffMs = now - entry.timestamp;
+    var days = Math.round(diffMs / 86400000);
     if(days < 0) days = 0;
-    if(days === 0) return 'Aynı gün';
+    if(days === 0) return 'Bugün';
+    if(days === 1) return 'Dün';
     if(days <= 13) return days + ' gün önce';
     if(days <= 29){
       var weeks = Math.round(days / 7);
@@ -3169,11 +3203,11 @@ function renderIlerleme(){
     return years + ' yıl önce';
   }
 
-  /* Her sütun için başlık etiketi */
-  var lblW0 = '<span style="color:var(--success)">●</span> GÜNCEL';
-  var lblW1 = w1 ? _relDateLbl(w1, w0) : '—';
-  var lblW2 = w2 ? _relDateLbl(w2, w0) : '—';
-  var lblW3 = w3 ? _relDateLbl(w3, w0) : '—';
+  /* Her sütun için başlık etiketi — w0 (güncel) bile bugünden farkıyla işaretlenir */
+  var lblW0 = '<span style="color:var(--success)">●</span> ' + (w0 ? _relDateLbl(w0).toUpperCase() : 'GÜNCEL');
+  var lblW1 = w1 ? _relDateLbl(w1) : '—';
+  var lblW2 = w2 ? _relDateLbl(w2) : '—';
+  var lblW3 = w3 ? _relDateLbl(w3) : '—';
 
   function mkRow(lbl, key, lowerBetter) {
     function fmt(e){ return e&&e[key]!=null?parseFloat(e[key]):null; }
@@ -4538,12 +4572,12 @@ function openConditionsEdit(){
   /* Mevcut seçimleri draft'a kopyala */
   _condEditDraft = (U.conditions||[]).slice();
   _renderConditionsEditGrid();
-  document.getElementById('conditions-edit-overlay').classList.add('open');
+  document.getElementById('conditions-edit-overlay').classList.add('active');
   document.body.style.overflow='hidden';
 }
 
 function closeConditionsEdit(){
-  document.getElementById('conditions-edit-overlay').classList.remove('open');
+  document.getElementById('conditions-edit-overlay').classList.remove('active');
   document.body.style.overflow='';
 }
 
@@ -4897,7 +4931,7 @@ function renderExerciseLibrary(){
   if(!isSwim && !isPosture){
     var activeCount = (_fitMuscleCat?1:0) + _fitEquips.length;
     html+='<div style="display:flex;gap:8px;margin-bottom:10px">';
-    html+='<input class="ex-search" type="text" placeholder="🔍 Egzersiz ara..." value="'+_curSearch+'" oninput="window._exSearch=this.value;renderExerciseLibrary()" style="margin-bottom:0;flex:1">';
+    html+='<input class="ex-search" type="text" placeholder="🔍 Egzersiz ara..." value="'+_curSearch+'" oninput="window._exSearch=this.value;window._exSearchCursor=this.selectionStart;window._exSearchFocused=true;renderExerciseLibrary()" onfocus="window._exSearchFocused=true" onblur="window._exSearchFocused=false" style="margin-bottom:0;flex:1">';
     html+='<button class="ex-filter-btn'+(activeCount?' has-active':'')+'" onclick="openExFilter()">';
     html+='🎛 Filtre';
     if(activeCount) html+='<span class="badge">'+activeCount+'</span>';
@@ -4920,7 +4954,7 @@ function renderExerciseLibrary(){
     }
   } else {
     /* Yüzme/Postür için klasik arama */
-    html+='<input class="ex-search" type="text" placeholder="🔍 Egzersiz ara..." value="'+_curSearch+'" oninput="window._exSearch=this.value;renderExerciseLibrary()">';
+    html+='<input class="ex-search" type="text" placeholder="🔍 Egzersiz ara..." value="'+_curSearch+'" oninput="window._exSearch=this.value;window._exSearchCursor=this.selectionStart;window._exSearchFocused=true;renderExerciseLibrary()" onfocus="window._exSearchFocused=true" onblur="window._exSearchFocused=false">';
   }
 
   /* ── Kategori filtreleri (sadece yüzme/postür için chip) ── */
@@ -4994,7 +5028,18 @@ function renderExerciseLibrary(){
 
   el.innerHTML=html;
   var inp=el.querySelector('.ex-search');
-  if(inp&&_curSearch)inp.setSelectionRange(inp.value.length,inp.value.length);
+  if(inp){
+    /* Focus + cursor pozisyonunu koru — yazmaya devam edebilsin */
+    if(window._exSearchFocused){
+      inp.focus();
+      try {
+        var pos = (window._exSearchCursor != null) ? window._exSearchCursor : inp.value.length;
+        inp.setSelectionRange(pos, pos);
+      } catch(e){}
+    } else if(_curSearch){
+      try { inp.setSelectionRange(inp.value.length, inp.value.length); } catch(e){}
+    }
+  }
 }
 
 /* ──────────────────────────────────────────────────────────
@@ -9351,10 +9396,18 @@ function _clearUserLocalData(){
   if(note) note.style.display='none';
   /* Aktif ekranları gizle */
   try {
-    var splash=document.getElementById('splash');if(splash) splash.style.display='none';
-    var results=document.getElementById('results');if(results) results.style.display='none';
-    var wizard=document.getElementById('wizard');if(wizard) wizard.style.display='none';
+    var splash=document.getElementById('splash');if(splash){splash.style.display='none';splash.classList.remove('active');}
+    var results=document.getElementById('results');if(results){results.style.display='none';results.classList.remove('active');}
+    var wizard=document.getElementById('wizard');if(wizard){wizard.style.display='none';wizard.classList.remove('active');}
     var bnav=document.getElementById('bottom-nav');if(bnav) bnav.classList.remove('visible');
+    /* main-screen aktif kalmasın (vucudum/antrenman vb) */
+    document.querySelectorAll('.main-screen').forEach(function(m){m.classList.remove('active');});
+    document.querySelectorAll('.bnav-btn').forEach(function(b){b.classList.remove('active');});
+    /* Açık overlay/drawer varsa kapat */
+    document.querySelectorAll('.calc-overlay.active').forEach(function(o){o.classList.remove('active');});
+    var sd=document.getElementById('settings-drawer');if(sd){sd.classList.remove('open');}
+    var sb=document.getElementById('settings-bg');if(sb){sb.classList.remove('open');}
+    document.body.style.overflow='';
   } catch(e){}
   /* Wizard input'larını temizle */
   try {
@@ -9375,6 +9428,16 @@ function _clearUserLocalData(){
 /* ── Giriş Sonrası: Firebase'den Veri Yükle + Eski Veri Migrasyonu ── */
 function onUserLoggedIn(user){
   hideAuthScreen();
+  /* Onceki kullanıcıdan kalan inline display:none ve aktif sınıfları temizle */
+  try {
+    ['splash','results','wizard'].forEach(function(id){
+      var el=document.getElementById(id);
+      if(el){ el.style.display=''; el.classList.remove('active'); }
+    });
+    document.querySelectorAll('.main-screen').forEach(function(m){m.classList.remove('active');});
+    document.querySelectorAll('.bnav-btn').forEach(function(b){b.classList.remove('active');});
+    document.body.style.overflow='';
+  } catch(e){}
   _fbDb.collection('users').doc(user.uid).get()
     .then(function(doc){
       var fbHasData=false;
