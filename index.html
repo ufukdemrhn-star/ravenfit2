@@ -547,6 +547,22 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 .supp-result-ico{font-size:22px;flex-shrink:0}
 .supp-result-name{font-size:14px;font-weight:700}
 .supp-result-why{font-size:11px;color:var(--text3);line-height:1.4;margin-top:2px}
+/* — Supplement Detail Accordion (v3) — */
+.supp-acc{margin-top:8px;border:1px solid var(--border);border-radius:9px;background:var(--card2);overflow:hidden}
+.supp-acc-trigger{width:100%;padding:9px 12px;background:transparent;border:none;font-family:'Outfit',sans-serif;font-size:11px;font-weight:600;color:var(--accent);cursor:pointer;display:flex;align-items:center;justify-content:space-between;text-align:left}
+.supp-acc-trigger:hover{background:rgba(155,114,255,.05)}
+.supp-acc-chev{display:inline-block;transition:transform .25s ease;font-size:9px;color:var(--text2)}
+.supp-acc.open .supp-acc-chev{transform:rotate(90deg)}
+.supp-acc-body{max-height:0;overflow:hidden;transition:max-height .3s ease;padding:0 12px}
+.supp-acc.open .supp-acc-body{max-height:1500px;padding:0 12px 12px}
+.supp-acc-row{padding:8px 0;border-top:1px solid var(--border);font-size:11px;line-height:1.5}
+.supp-acc-row:first-child{border-top:none}
+.supp-acc-label{font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;display:flex;align-items:center;gap:4px}
+.supp-acc-val{color:var(--text)}
+.evidence-rosette{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:5px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.evidence-high{background:rgba(46,196,182,.15);color:#2EC4B6;border:1px solid rgba(46,196,182,.4)}
+.evidence-mid{background:rgba(255,183,3,.15);color:#FFB703;border:1px solid rgba(255,183,3,.4)}
+.evidence-low{background:rgba(230,57,70,.15);color:#E63946;border:1px solid rgba(230,57,70,.4)}
 /* progress dots aktif rengi */
 .supp-ps.act{background:var(--accent);opacity:.5}
 .supp-progress{display:flex;gap:3px;margin-bottom:12px}
@@ -711,6 +727,15 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
         Misafir Olarak Devam Et
       </button>
       <div style="font-size:10px;color:var(--text3);margin-top:7px;text-align:center;line-height:1.5">Kayıt olmadan keşfet. Veriler yalnızca bu cihazda saklanır,<br>hesap oluşturulana kadar buluta yüklenmez.</div>
+      
+      <!-- 🧪 GEÇİCİ TEST PROFİLLERİ BUTONU — yayında ADMIN_TEST_MODE=false yapılarak gizlenir -->
+      <div id="admin-test-btn-wrap" style="display:none;margin-top:18px;padding-top:14px;border-top:1px dashed var(--border)">
+        <button onclick="openAdminTestPanel()" style="width:100%;background:rgba(155,114,255,.08);border:1px dashed var(--purple);border-radius:9px;padding:10px;font-family:'Outfit',sans-serif;font-size:11px;font-weight:600;color:var(--purple);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:.3px">
+          <span style="font-size:14px">🧪</span>
+          <span>Test Profilleri (Geliştirici)</span>
+        </button>
+        <div style="font-size:9px;color:var(--text3);margin-top:5px;text-align:center;line-height:1.5;font-style:italic">Sadece geliştirme aşamasında görünür</div>
+      </div>
     </div>
   </div>
 </div>
@@ -750,6 +775,13 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
       <polyline points="9 22 9 12 15 12 15 22"/>
     </svg>
   </button>
+  <!-- ⚕️ MEDICO-LEGAL DISCLAIMER -->
+  <div style="margin-top:24px;padding:12px 16px;background:rgba(76,201,240,.05);border:1px solid rgba(76,201,240,.2);border-left:3px solid var(--info);border-radius:9px;max-width:380px;text-align:left">
+    <div style="font-size:10px;font-weight:700;color:var(--info);margin-bottom:5px;display:flex;align-items:center;gap:5px">⚕️ Önemli Bilgilendirme</div>
+    <div style="font-size:10px;color:var(--text2);line-height:1.55">
+      RavenFit bir <strong style="color:var(--text)">bilgi/eğitim aracıdır</strong>; tıbbi tavsiye, teşhis veya tedavi yerine geçmez. Hesaplamalar tahmin niteliğindedir. Mevcut sağlık durumun, ilaç kullanımı, gebelik veya yaralanma durumunda <strong style="color:var(--text)">mutlaka uzman görüşü</strong> al.
+    </div>
+  </div>
 </div>
 
 <div class="screen" id="wizard">
@@ -1044,6 +1076,9 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
         </div>
         <div class="mbar"><div class="bar-trk"><div class="bar-mrk" id="ffmi-mrk" style="left:0%"></div></div></div>
         <div class="ib"><span>ℹ️</span><span id="ffmi-info">—</span></div>
+        <div style="margin-top:10px;text-align:center">
+          <button onclick="openFFMIDetail()" style="background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-family:'Outfit',sans-serif;font-size:11px;font-weight:600;color:var(--accent);cursor:pointer">📖 Detaylı Açıklama</button>
+        </div>
       </div>
       <div class="rc">
         <div class="rct">⚖️ Vücut Kitle Endeksi (VKİ)</div>
@@ -1067,7 +1102,7 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
         <div id="ratio-content"></div>
       </div>
       <div class="rc">
-        <div class="rct">⚖️ İdeal Kilo Aralığı (BMI 18.5–24.9)</div>
+        <div class="rct">⚖️ BMI Referans Aralığı (18.5–24.9)</div>
         <div style="display:flex;align-items:flex-end;gap:5px;margin-bottom:4px">
           <span style="font-size:13px;color:var(--text2)">Alt:</span><div style="font-family:'Bebas Neue';font-size:30px;color:var(--success);line-height:1" id="iw-lo-v">—</div>
           <span style="font-size:13px;color:var(--text2);margin-left:10px">Üst:</span><div style="font-family:'Bebas Neue';font-size:30px;color:var(--warn);line-height:1" id="iw-hi-v">—</div>
@@ -1154,7 +1189,10 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
         <div class="water-d">
           <div style="font-size:34px">💧</div>
           <div><div class="water-v" id="water-v">—<span class="water-u"> lt</span></div>
-          <div style="font-size:11px;color:var(--text2);margin-top:3px" id="water-cups">—</div></div>
+          <div style="font-size:11px;color:var(--text2);margin-top:3px" id="water-cups">—</div>
+          <div id="water-bonus-info" style="display:none;font-size:10px;color:var(--success);margin-top:4px;font-weight:600"></div>
+          <div id="water-hypo-warn" style="display:none;font-size:10px;color:var(--danger);margin-top:4px;font-weight:600;line-height:1.4"></div>
+          </div>
         </div>
         <div class="water-progress"><div class="water-progress-fill" id="water-prog-fill" style="width:0%"></div></div>
         <div id="water-cups-grid" class="water-cups-grid"></div>
@@ -1215,10 +1253,17 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
             <div style="font-size:11px;color:var(--text2);margin-bottom:2px">Giriş yapılan hesap</div>
             <div id="user-email-display" style="font-size:14px;font-weight:600;color:var(--text)">—</div>
             <div id="guest-mode-note" style="display:none;font-size:10px;color:var(--warn);margin-top:2px">👀 Misafir Modu — veriler buluta kaydedilmiyor</div>
+            <div id="admin-test-badge" style="display:none;margin-top:6px">
+              <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(155,114,255,.12);border:1px solid var(--purple);border-radius:7px;padding:4px 9px">
+                <span style="font-size:11px">🧪</span>
+                <span style="font-size:10px;font-weight:700;color:var(--purple);letter-spacing:.3px">TEST PROFİLİ AKTİF</span>
+              </div>
+              <div id="admin-test-name" style="font-size:10px;color:var(--text2);margin-top:3px"></div>
+            </div>
           </div>
           <div style="display:flex;gap:8px">
             <button onclick="openSettingsDrawer()" style="background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:8px 14px;font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer">⚙️ Ayarlar</button>
-            <button onclick="doLogout()" style="background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:8px 14px;font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer">🚪 Çıkış</button>
+            <button id="hesabim-logout-btn" onclick="_smartLogout()" style="background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:8px 14px;font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer">🚪 Çıkış</button>
           </div>
         </div>
         <!-- Özel Durumlar düzenle butonu -->
@@ -1517,6 +1562,68 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
     <div style="margin-top:18px;display:flex;gap:10px">
       <button onclick="closeConditionsEdit()" style="flex:1;background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:13px;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;font-family:'Outfit',sans-serif">İptal</button>
       <button onclick="saveConditionsEdit()" style="flex:2;background:var(--accent);border:none;border-radius:11px;padding:13px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:'Outfit',sans-serif;letter-spacing:.5px">KAYDET</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FFMI DETAYLI AÇIKLAMA OVERLAY ════════════════════════ -->
+<div class="calc-overlay" id="ffmi-detail-overlay">
+  <div class="calc-header">
+    <button class="calc-close" onclick="closeFFMIDetail()">✕</button>
+    <div>
+      <div class="calc-header-sub">YAĞSIZ KÜTLE ENDEKSİ</div>
+      <div class="calc-header-title">📊 FFMI DETAYI</div>
+    </div>
+  </div>
+  <div class="calc-body" id="ffmi-detail-body">
+    <!-- İçerik openFFMIDetail() ile dolduruluyor -->
+  </div>
+</div>
+
+<!-- ══ RED-S UYARI MODAL (Cut + Düşük BF) ══════════════════ -->
+<div id="reds-warning-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:900;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)">
+  <div style="background:var(--card);border:2px solid var(--danger);border-radius:16px;padding:24px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(230,57,70,.3)">
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-size:42px;margin-bottom:8px">⚠️</div>
+      <div style="font-size:18px;font-weight:800;color:var(--danger);letter-spacing:.5px">SAĞLIK UYARISI</div>
+      <div style="font-size:11px;color:var(--text2);margin-top:4px;text-transform:uppercase;letter-spacing:1px">RED-S Riski</div>
+    </div>
+    <div id="reds-warning-body" style="font-size:13px;color:var(--text);line-height:1.6;margin-bottom:18px">
+      <!-- İçerik openRedsWarning() ile dolduruluyor -->
+    </div>
+    <div style="background:rgba(230,57,70,.08);border-left:3px solid var(--danger);border-radius:8px;padding:12px 14px;margin-bottom:18px">
+      <div style="font-size:12px;color:var(--text);line-height:1.5">
+        <strong>RED-S (Relative Energy Deficiency in Sport):</strong> Düşük enerji alımı + düşük yağ oranı kombinasyonu hormonal bozukluk, performans düşüşü, kemik yoğunluğu kaybı, libido azalması ve psikolojik sorunlara yol açabilir.
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--text2);text-align:center;margin-bottom:14px;font-style:italic">
+      Bu sadece bir bilgilendirmedir; tıbbi tavsiye değildir. Sağlık profesyoneline danışmanı öneririz.
+    </div>
+    <div style="display:flex;gap:10px">
+      <button onclick="redsWarningCancel()" style="flex:1;background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:13px;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;font-family:'Outfit',sans-serif">İptal</button>
+      <button onclick="redsWarningProceed()" style="flex:2;background:var(--danger);border:none;border-radius:11px;padding:13px;font-size:12px;font-weight:700;color:#fff;cursor:pointer;font-family:'Outfit',sans-serif;letter-spacing:.5px">Riskleri Anladım, Devam Et</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 🧪 ADMIN TEST PANEL OVERLAY (geçici) ════════════════ -->
+<div class="calc-overlay" id="admin-test-overlay">
+  <div class="calc-header" style="background:linear-gradient(135deg,rgba(155,114,255,.15),rgba(155,114,255,.05))">
+    <button class="calc-close" onclick="closeAdminTestPanel()">✕</button>
+    <div>
+      <div class="calc-header-sub" style="color:var(--purple)">GELİŞTİRİCİ MODU</div>
+      <div class="calc-header-title">🧪 TEST PROFİLLERİ</div>
+    </div>
+  </div>
+  <div class="calc-body" id="admin-test-body">
+    <div style="background:rgba(255,183,3,.08);border:1px solid var(--warn);border-left:3px solid var(--warn);border-radius:9px;padding:11px 13px;margin-bottom:16px;font-size:11px;color:var(--text2);line-height:1.5">
+      ⚠️ <strong style="color:var(--warn)">Test Modu:</strong> Seçtiğin profil tüm wizard'ı doldurmuş olarak yüklenir ve sen step 7'de başlarsın. Sayfa yenilenince veriler temizlenir. Yayında bu panel kaldırılacak.
+    </div>
+    
+    <div id="admin-profiles-list"></div>
+    
+    <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);text-align:center">
+      <div style="font-size:10px;color:var(--text3);line-height:1.5;font-style:italic">İleride daha fazla profil eklenecek</div>
     </div>
   </div>
 </div>
@@ -1900,6 +2007,19 @@ function selOpt(el,grp){
   }
   if(grp==='gl'){
     selGL=el.dataset.v;
+    
+    /* RED-S kontrolü: Cut + çok düşük BF → güçlü uyarı */
+    if(_checkRedsRisk(selGL)){
+      openRedsWarning(function(){
+        /* Onaylandıysa normal akış devam etsin — selGL zaten cut */
+        try {
+          if(typeof renderGoalStep==='function') renderGoalStep();
+          if(typeof renderAll==='function') renderAll();
+        } catch(e){}
+      });
+      return; /* Modal açıldı, gerisini bekle */
+    }
+    
     /* Risky gate kontrolü — sadece tıklanan kart riskliyse uyar */
     try {
       var gates=_calcGoalGates();
@@ -2063,8 +2183,9 @@ function calcGoalCalories(tdee, gl, bf, male){
   var band=_bfBand(bf, male);
   var pct=0;
   if(gl==='cut'){
-    /* Açık % aralıkları → orta nokta */
-    var cutMap={highest:-22.5, high:-17.5, mid:-12.5, low:-7.5};
+    /* Açık % aralıkları → orta nokta (ACSM 2025+ rehberi uyarınca güvenli sınırlar) */
+    /* En agresif cut bile -20% ile sınırlı tutulur (RED-S ve hormonal sağlığı korumak için) */
+    var cutMap={highest:-20, high:-17.5, mid:-12.5, low:-7.5};
     pct=cutMap[band]||-15;
   } else if(gl==='recomp'){
     var recompMap={highest:-10, high:-5, mid:0, low:5};
@@ -2119,18 +2240,39 @@ function _fatPerKg(gl, recompMode){
   return 0.9;
 }
 
-/* Yeni makro hesabı */
+/* Yeni makro hesabı
+   - BF ≥ %30 (obesite eşiği) için protein hesabı LM-bazlı yapılır (ISSN Position Stand 2023).
+     Sebep: Yağ dokusunun protein ihtiyacı çok düşüktür; toplam vücut ağırlığı bazlı hesap
+     obez bireylerde protein hedefini gereksiz şişirir ve cut sürdürülebilirliğini bozar.
+   - Geri kalan kullanıcılar için klasik bodyweight-bazlı hesap (mevcut kurgu) korunur. */
 function calcMacros(cals, gl, st, lm, bw, bf, male, recompMode){
   bw=bw||lm; /* fallback */
   var prKg=_proteinPerKg(gl, bf, male);
   var fatKg=_fatPerKg(gl, recompMode);
-  var pg=Math.round(bw*prKg);
+  
+  /* LM-bazlı protein switch — yüksek yağ oranında (≥%30) */
+  var pg, proteinSource;
+  if(bf != null && bf >= 30 && lm && lm > 0){
+    /* LM bazlı protein: kas dokusunu korumak için yağsız kütle × 2.4 g/kg */
+    pg = Math.round(lm * 2.4);
+    proteinSource = 'lm';
+  } else {
+    /* Standart bodyweight-bazlı */
+    pg = Math.round(bw * prKg);
+    proteinSource = 'bw';
+  }
+  
   var fg=Math.round(bw*fatKg);
   var pc=pg*4;
   var fc=fg*9;
   var cc=Math.max(0, cals-pc-fc);
   var cg=Math.round(cc/4);
-  return {pg:pg, fg:fg, cg:cg, pc:pc, fc:Math.round(fc), cc:Math.round(cc)};
+  return {
+    pg:pg, fg:fg, cg:cg, pc:pc, fc:Math.round(fc), cc:Math.round(cc),
+    proteinSource: proteinSource,  /* 'lm' veya 'bw' — UI bilgisi için */
+    proteinPerKg: proteinSource==='lm' ? 2.4 : prKg,
+    proteinBase: proteinSource==='lm' ? lm : bw
+  };
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -2511,8 +2653,106 @@ function getSmartWorkoutAdvice(goalOverride) {
   return msg;
 }
 
+/* ──────────────────────────────────────────────────────────
+   GÜVENLİ MATEMATİK YARDIMCILARI
+   - _safeRound: Yuvarlama sırasında oluşabilecek
+     IEEE 754 hassasiyet sorununu önler (1.005 → 1.00 hatası)
+     Banker's rounding değil, half-away-from-zero kullanır.
+   - _safeDiv: 0'a bölme korumalı
+   ────────────────────────────────────────────────────────── */
+function _safeRound(value, decimals){
+  if(value == null || isNaN(value) || !isFinite(value)) return 0;
+  decimals = decimals || 0;
+  var m = Math.pow(10, decimals);
+  /* IEEE 754 hassasiyet için epsilon ekle */
+  return Math.round((value + Number.EPSILON) * m) / m;
+}
+function _safeDiv(a, b, fallback){
+  if(b == null || b === 0 || isNaN(b) || !isFinite(b)) return fallback != null ? fallback : 0;
+  if(a == null || isNaN(a)) return fallback != null ? fallback : 0;
+  return a / b;
+}
+
+/* ──────────────────────────────────────────────────────────
+   INPUT VALIDASYON KATMANI
+   Hesaplamalar başlamadan önce U objesindeki temel değerleri
+   sanitize eder. NaN, negatif veya anlamsız değerleri yakalayıp
+   güvenli varsayılana çekerek hesaplama sırasında oluşacak
+   ölçek hatalarını önler.
+   ────────────────────────────────────────────────────────── */
+function _sanitizeUserInputs(){
+  var warnings = [];
+  
+  /* Kilo: 25-300 kg arası */
+  if(U.weight != null){
+    var w = parseFloat(U.weight);
+    if(isNaN(w) || w <= 0){ U.weight = 70; warnings.push('weight invalid → 70'); }
+    else if(w < 25){ U.weight = 25; warnings.push('weight <25 → 25'); }
+    else if(w > 300){ U.weight = 300; warnings.push('weight >300 → 300'); }
+    else U.weight = w;
+  }
+  
+  /* Boy: 120-230 cm arası */
+  if(U.height != null){
+    var h = parseFloat(U.height);
+    if(isNaN(h) || h <= 0){ U.height = 170; warnings.push('height invalid → 170'); }
+    else if(h < 120){ U.height = 120; warnings.push('height <120 → 120'); }
+    else if(h > 230){ U.height = 230; warnings.push('height >230 → 230'); }
+    else U.height = h;
+  }
+  
+  /* Yaş: 12-100 arası */
+  if(U.age != null){
+    var a = parseFloat(U.age);
+    if(isNaN(a) || a <= 0){ U.age = 30; warnings.push('age invalid → 30'); }
+    else if(a < 12){ U.age = 12; warnings.push('age <12 → 12'); }
+    else if(a > 100){ U.age = 100; warnings.push('age >100 → 100'); }
+    else U.age = a;
+  }
+  
+  /* Bel: 40-200 cm arası */
+  if(U.waist != null){
+    var ws = parseFloat(U.waist);
+    if(isNaN(ws) || ws <= 0){ U.waist = null; warnings.push('waist invalid → null'); }
+    else if(ws < 40 || ws > 200){ warnings.push('waist out of range ['+ws+']'); /* tut, kullanıcıya görünür uyarı olarak bırak */ }
+    else U.waist = ws;
+  }
+  
+  /* Boyun: 25-70 cm arası */
+  if(U.neck != null){
+    var nk = parseFloat(U.neck);
+    if(isNaN(nk) || nk <= 0){ U.neck = null; warnings.push('neck invalid → null'); }
+    else if(nk < 25 || nk > 70){ warnings.push('neck out of range ['+nk+']'); }
+    else U.neck = nk;
+  }
+  
+  /* Kalça: 50-200 cm arası (kadınlar için) */
+  if(U.hip != null){
+    var hp = parseFloat(U.hip);
+    if(isNaN(hp) || hp <= 0){ U.hip = null; warnings.push('hip invalid → null'); }
+    else if(hp < 50 || hp > 200){ warnings.push('hip out of range ['+hp+']'); }
+    else U.hip = hp;
+  }
+  
+  /* Omuz: 70-170 cm arası (erkekler için) */
+  if(U.shoulder != null){
+    var sh = parseFloat(U.shoulder);
+    if(isNaN(sh) || sh <= 0){ U.shoulder = null; warnings.push('shoulder invalid → null'); }
+    else if(sh < 70 || sh > 170){ warnings.push('shoulder out of range ['+sh+']'); }
+    else U.shoulder = sh;
+  }
+  
+  if(warnings.length > 0){
+    console.warn('🛡️ Input sanitize:', warnings.join(', '));
+  }
+  return warnings;
+}
+
 function calcAll(){
   try {
+    /* ── INPUT SANITIZATION ── */
+    _sanitizeUserInputs();
+    
     /* Temel hesaplar */
     R.bf=calcBF();
     if(!R.bf || isNaN(R.bf)) R.bf=20; /* fallback */
@@ -2526,7 +2766,25 @@ function calcAll(){
     R.tdee=Math.round(R.bmr*R.actMult);
     R.bt=calcBT();
     R.iw=calcIdealRange(U.height);
-    R.water=Math.round(U.weight*35)/1000;
+    /* ──────────────────────────────────────────────────
+       SU İHTİYACI HESABI (Geliştirilmiş)
+       Base: 35 ml/kg
+       + Antrenman günü bonusu: +500 ml (otomatik, U.activityLevel'a göre)
+       + Hiponatremia uyarısı: > 5 L için (renderWaterTracker'da gösterilir)
+       Referans: ACSM 2024 hidrasyon rehberi
+       ────────────────────────────────────────────────── */
+    var waterBaseML = U.weight * 35;
+    var waterBonusML = 0;
+    /* Aktivite düzeyi yüksekse antrenman bonusu (otomatik) */
+    var actLvl = U.activityLevel || '';
+    if(actLvl === 'high' || actLvl === 'very-high' || actLvl === 'extreme' || 
+       (R.actMult && R.actMult >= 1.55)){
+      waterBonusML = 500;
+    }
+    R.water = Math.round(waterBaseML + waterBonusML) / 1000;
+    R.waterBase = Math.round(waterBaseML) / 1000;
+    R.waterBonus = waterBonusML / 1000;
+    R.waterHasTrainingBonus = waterBonusML > 0;
     R.minProt=Math.round(U.weight*1.6);
     R.maxProt=Math.round(U.weight*2.4);
     R.recGoal=recGoal();
@@ -2736,19 +2994,23 @@ function renderVucudum(){
   setTimeout(function(){document.getElementById('ffmi-mrk').style.left=ffmiPct+'%';},250);
   var ffmiCat,ffmiCls,ffmiTxt;
   if(male){
-    if(ffmi<18){ffmiCat='Ortalama';ffmiCls='bb';ffmiTxt='Kas kütlesi ortalama. Düzenli antrenman ve doğru beslenmeyle geliştirebilirsin.';}
-    else if(ffmi<20){ffmiCat='İyi';ffmiCls='bg';ffmiTxt='Ortalamanın üzerinde kas kütlesi. İyi bir gelişim sürecindeydin.';}
-    else if(ffmi<22){ffmiCat='Atletik 💪';ffmiCls='bg';ffmiTxt='Atletik kas kütlesi seviyesi. Güçlü ve dengeli bir fiziğe sahipsin.';}
-    else if(ffmi<25){ffmiCat='Kaslı 🏆';ffmiCls='bp';ffmiTxt='İleri düzey kas gelişimi. Doğal sınırların üst kısmındasın!';}
-    else{ffmiCat='Elit 🔥';ffmiCls='br';ffmiTxt='Bu FFMI değerine doğal yollarla ulaşmak çok nadir. Tebrikler!';}
-    document.getElementById('ffmi-lo-lbl').textContent='Ort.(<18)';
+    /* ERKEK FFMI 6-BAND SİSTEMİ — Kouri et al. 1995 + Schoenfeld güncel referansları */
+    if(ffmi<18){ffmiCat='Zayıf';ffmiCls='bb';ffmiTxt='Yağsız kütlen ortalamanın altında. Düzenli direnç antrenmanı ve yeterli protein alımıyla geliştirebilirsin.';}
+    else if(ffmi<20){ffmiCat='Ortalama';ffmiCls='bb';ffmiTxt='Yetişkin erkekler için ortalama kas kütlesi seviyesindesin. Sağlıklı bir başlangıç noktası.';}
+    else if(ffmi<22){ffmiCat='İyi 💪';ffmiCls='bg';ffmiTxt='Ortalamanın üzerinde kas gelişimi. Düzenli antrenmanın etkisi belli oluyor.';}
+    else if(ffmi<24){ffmiCat='Çok İyi 🏆';ffmiCls='bg';ffmiTxt='Atletik kas kütlesi seviyesi. Güçlü ve dengeli bir fiziğe sahipsin.';}
+    else if(ffmi<26){ffmiCat='Elit 🔥';ffmiCls='bp';ffmiTxt='İleri düzey kas gelişimi. Yıllarca disiplinli antrenmanın sonucu.';}
+    else{ffmiCat='İstisnai ⭐';ffmiCls='br';ffmiTxt='Bu FFMI değerine doğal yollarla ulaşmak son derece nadir bir başarıdır.';}
+    document.getElementById('ffmi-lo-lbl').textContent='Zayıf(<18)';
   } else {
-    if(ffmi<14){ffmiCat='Ortalamanın Altı';ffmiCls='bb';ffmiTxt='Yağsız kütlen gelişime açık. Antrenman ve beslenmeyle ilerleyebilirsin.';}
-    else if(ffmi<17){ffmiCat='Ortalama';ffmiCls='bg';ffmiTxt='Kadınlar için ortalama yağsız kütle seviyesi.';}
-    else if(ffmi<20){ffmiCat='Atletik 💪';ffmiCls='bg';ffmiTxt='Kadınlar için atletik kas kütlesi. Harika bir seviye!';}
-    else if(ffmi<22){ffmiCat='Güçlü 🏆';ffmiCls='bp';ffmiTxt='Üst düzey kas gelişimi. Güçlü fiziğin var!';}
-    else{ffmiCat='Elit 🔥';ffmiCls='br';ffmiTxt='Bu FFMI değerine doğal yollarla ulaşmak kadınlar için oldukça nadir.';}
-    document.getElementById('ffmi-lo-lbl').textContent='Ort.(<14)';
+    /* KADIN FFMI 6-BAND SİSTEMİ */
+    if(ffmi<14){ffmiCat='Zayıf';ffmiCls='bb';ffmiTxt='Yağsız kütlen ortalamanın altında. Direnç antrenmanı ve protein alımıyla geliştirebilirsin.';}
+    else if(ffmi<16){ffmiCat='Ortalama';ffmiCls='bb';ffmiTxt='Yetişkin kadınlar için ortalama yağsız kütle seviyesindesin.';}
+    else if(ffmi<18){ffmiCat='İyi 💪';ffmiCls='bg';ffmiTxt='Ortalamanın üzerinde kas gelişimi. Antrenmanın etkisi belli.';}
+    else if(ffmi<20){ffmiCat='Çok İyi 🏆';ffmiCls='bg';ffmiTxt='Atletik kas kütlesi. Harika bir gelişim göstergesi.';}
+    else if(ffmi<22){ffmiCat='Elit 🔥';ffmiCls='bp';ffmiTxt='İleri düzey kas gelişimi. Güçlü bir fizik.';}
+    else{ffmiCat='İstisnai ⭐';ffmiCls='br';ffmiTxt='Bu FFMI değerine doğal yollarla ulaşmak kadınlar için son derece nadirdir.';}
+    document.getElementById('ffmi-lo-lbl').textContent='Zayıf(<14)';
   }
   document.getElementById('ffmi-badge').innerHTML='<div class="badge '+ffmiCls+'" style="margin-top:6px">● '+ffmiCat+'</div>';
   document.getElementById('ffmi-info').textContent=ffmiTxt;
@@ -2809,8 +3071,36 @@ function renderBeslenme(){
   document.getElementById('mp-c').textContent=m.pc+' kcal';document.getElementById('mc-c').textContent=m.cc+' kcal';document.getElementById('mf-c').textContent=m.fc+' kcal';
   document.getElementById('water-v').innerHTML=R.water.toFixed(1)+'<span class="water-u"> lt</span>';
   document.getElementById('water-cups').textContent='≈ '+Math.round(R.water/0.25)+' bardak su';
+  /* Su bonus bilgisi (antrenman günü) */
+  try {
+    var wBonus = document.getElementById('water-bonus-info');
+    if(wBonus){
+      if(R.waterHasTrainingBonus && R.waterBonus > 0){
+        wBonus.textContent = '🏋️ Aktivite düzeyin yüksek olduğundan antrenman bonusu eklendi (+'+(R.waterBonus*1000).toFixed(0)+' ml)';
+        wBonus.style.display = 'block';
+      } else {
+        wBonus.style.display = 'none';
+      }
+    }
+    /* Hiponatremia uyarısı — günde >5 L su tehlikeli olabilir */
+    var wHypo = document.getElementById('water-hypo-warn');
+    if(wHypo){
+      if(R.water > 5){
+        wHypo.innerHTML = '⚠️ <strong>Dikkat:</strong> Günde 5 litre üzerinde su tüketimi hiponatremia (kan sodyum düşüklüğü) riskini artırır. Yoğun terlemelerde elektrolit takviyesi önerilir.';
+        wHypo.style.display = 'block';
+      } else {
+        wHypo.style.display = 'none';
+      }
+    }
+  } catch(e){ console.warn('water UI:', e); }
   document.getElementById('prot-v').textContent=R.minProt;
-  document.getElementById('prot-info').textContent='Yağsız kütlene ('+R.lm.toFixed(2)+' kg) göre minimum '+R.minProt+'g – maksimum '+R.maxProt+'g/gün protein hedeflemelisin.';
+  /* Protein hesabı LM-bazlı mı? Görünür bilgi ver */
+  if(m && m.proteinSource === 'lm'){
+    document.getElementById('prot-info').innerHTML=
+      '💡 <strong>Yağ oranın yüksek olduğundan</strong> (%'+R.bf.toFixed(1)+'), protein ihtiyacın yağsız kütle (LM) bazlı hesaplandı: <strong>'+R.lm.toFixed(1)+' kg × 2.4 g = '+m.pg+'g/gün</strong>. Bu, kas korumayı en üst düzeyde tutar ve diyeti sürdürülebilir kılar.';
+  } else {
+    document.getElementById('prot-info').textContent='Yağsız kütlene ('+R.lm.toFixed(2)+' kg) göre minimum '+R.minProt+'g – maksimum '+R.maxProt+'g/gün protein hedeflemelisin.';
+  }
   renderWaterTracker();
   renderBeslenmeToolsGrid();
   // Antrenman tavsiyesi
@@ -3479,92 +3769,216 @@ function drawCharts(){var e=getEntries();drawSvgChart('chart-bf',e,'bf','📊 Ya
 
 /* ── SUPPLEMENT ÖNERİ SİSTEMİ ─────────────────────────── */
 /* ══════════════════════════════════════════════════════
-   💊 SUPPLEMENT SİSTEMİ v2
+   💊 SUPPLEMENT SİSTEMİ v3 — Detaylı Bilgi + Kanıt Seviyesi
+
+   Her supplement için 7 alan:
+   1. dose       — Önerilen doz (gün/seans)
+   2. timing     — Ne zaman / nasıl alınır
+   3. purpose    — Neden alınmalı (amaç)
+   4. effect     — Ne işe yarar (mekanizma/etki)
+   5. evidence   — Kanıt seviyesi: 'high' | 'mid' | 'low'
+   6. sideEffects— Bilinen yan etkiler (yoksa null)
+   7. interactions— Bilinen ilaç/sup etkileşimleri (yoksa null)
+
+   Kanıt seviyeleri:
+   🟢 high — Birden fazla iyi tasarlanmış randomize kontrollü çalışma (RCT) ve meta-analizle desteklenen
+   🟡 mid  — Sınırlı sayıda RCT, karışık veya orta kalitede kanıt
+   🔴 low  — Yetersiz/karışık kanıt, üretici iddiası ağırlıklı
+
+   Referanslar: ISSN Position Stand, IOC Consensus, Examine.com syntheses
    ══════════════════════════════════════════════════════ */
 var SUPPS={
   protein:{
     name:'Protein Tozu', emoji:'🥛', priority:0,
-    dose:'30g (1 ölçek)',
-    desc:'Kas gelişimi ve onarımı için günlük protein hedefini karşılamanın pratik yolu.',
+    dose:'20–40 g/öğün, toplam günlük protein hedefini tamamlayacak kadar',
+    timing:'Antrenmandan 1-2 saat içinde veya öğünler arası. Tek başına bir öğün yerine geçmemeli.',
+    purpose:'Günlük protein hedefini pratik şekilde karşılamak; özellikle kas onarımı/inşası için.',
+    effect:'Whey hızlı sindirilir → kan aminoasit seviyesini hızlı yükseltir. Kas protein sentezini tetikler. Kazein yavaş sindirilir → uzun süreli aminoasit salınımı.',
+    evidence:'high',
+    sideEffects:'Yüksek dozda sindirim sorunu (şişkinlik, gaz) olabilir. Laktoz intoleransı olanlar için izolat veya bitkisel tercih edilmeli.',
+    interactions:null,
     note:'⚠️ Protein tozu iyidir ancak diyetinin yetersiz olduğunun da bir işareti. Önce gerçek gıdalarla proteini karşılamaya çalış!',
     color:'var(--info)'
   },
   kreatin:{
-    name:'Kreatin', emoji:'⚡', priority:0,
-    dose:'3–5g/gün (yükleme gerekmez)',
-    desc:'Güç, patlayıcı performans ve kas hacmi için en iyi araştırılmış supplement.',
+    name:'Kreatin Monohidrat', emoji:'⚡', priority:0,
+    dose:'3–5 g/gün (yükleme dönemi gerekmez)',
+    timing:'Günün herhangi bir saatinde, tutarlı şekilde. Suda/sütte/protein içeceğinde çözüp iç.',
+    purpose:'Kısa süreli, yüksek yoğunluklu performansı (1-30 sn patlamalar) artırmak ve kas hacmini desteklemek.',
+    effect:'Kreatin fosfat depolarını artırır → ATP üretimini hızlandırır. Patlayıcı güç, sprint, ağırlık antrenmanı performansı artar. İntrasellüler suyu artırarak hücre hacmini büyütür.',
+    evidence:'high',
+    sideEffects:'İlk haftalarda 1-2 kg su tutulması (kas içi, yağ değil). Nadiren mide rahatsızlığı (yemekle alınmalı).',
+    interactions:null,
     note:'💡 Bütçen kısıtlıysa yalnızca kreatin al — spor yaptığın her gün, geri kalanını sonraya bırak!',
     color:'var(--warn)'
   },
   omega3:{
-    name:'Omega-3', emoji:'🐟', priority:0,
-    dose:'1.200mg EPA+DHA',
-    desc:'Anti-enflamatuar etki, kalp sağlığı ve beyin fonksiyonu için temel yağ asitleri.',
-    note:'Doz EPA ve DHA toplamına göredir. Daha yüksek doz da alınabilir.',
+    name:'Omega-3 (EPA+DHA)', emoji:'🐟', priority:0,
+    dose:'1.000–3.000 mg EPA+DHA toplamı/gün',
+    timing:'Yağ içeren bir öğünle birlikte (emilim artar). Sabah veya öğlen tercih edilir.',
+    purpose:'Anti-enflamatuar etki, kardiyovasküler sağlık, beyin fonksiyonu ve toparlanma desteği.',
+    effect:'EPA inflamasyon mediatörlerini (prostaglandin, lökotrien) azaltır. DHA beyin/sinir hücre zarlarının yapı taşı. Triglisrit ve kan basıncını düşürür.',
+    evidence:'high',
+    sideEffects:'Yüksek dozda balık nefes/geğirme, hafif mide bulantısı. Kan sulandırıcı etki nadiren (3g+/gün).',
+    interactions:'Kan sulandırıcı ilaçlar (warfarin, aspirin) ile birlikte kullanılırken doktora danışılmalı.',
+    note:'Doz EPA ve DHA toplamına göredir. Etiket "1000 mg balık yağı" yerine "EPA + DHA toplamı" göstermelidir.',
     color:'var(--success)'
   },
   vitD:{
-    name:'D Vitamini', emoji:'☀️', priority:0,
-    dose:'3.000 IU/gün',
-    desc:'Hormon dengesi, bağışıklık ve kas fonksiyonu için kritik. Çoğu insan eksik.',
-    note:'💡 Doz sana yüksek gelebilir — aslında daha da yüksek olabilir. Kan testi yaptırarak seviyeni ölç!',
+    name:'D Vitamini (D3)', emoji:'☀️', priority:0,
+    dose:'1.000–4.000 IU/gün (kan seviyesine göre ayarlanmalı)',
+    timing:'Yağ içeren bir öğünle birlikte. Sabah veya öğlen.',
+    purpose:'Kemik sağlığı, bağışıklık, kas fonksiyonu, hormon dengesi ve genel sağlık desteği.',
+    effect:'İnce bağırsakta kalsiyum emilimini artırır. Kemik mineralizasyonu için kritik. Hücresel düzeyde 200+ gen ifadesini etkiler. Düşük seviye → testosteron, kas gücü ve bağışıklık düşüşü.',
+    evidence:'high',
+    sideEffects:'Aşırı doz (>10.000 IU/gün uzun süre) kalsiyum birikimi, böbrek taşı riski. Düşük doz güvenli.',
+    interactions:'Tiazid diüretikler ile kalsiyum yükselebilir. Doktora danışılmalı.',
+    note:'💡 Kan testi (25-OH D) yaptırarak seviyeni öğren — 30-50 ng/mL hedef. Eksiklikte daha yüksek doz gerekebilir.',
     color:'var(--warn)'
+  },
+  magnezyum:{
+    name:'Magnezyum', emoji:'🌙', priority:0,
+    dose:'200–400 mg/gün (elementer magnezyum)',
+    timing:'Akşam yatmadan 30-60 dk önce (uyku için) veya yemekle.',
+    purpose:'Kas-sinir fonksiyonu, uyku kalitesi, stres yönetimi ve kalp ritmi desteği.',
+    effect:'300+ enzimde kofaktör. ATP üretimi, sinir iletimi, kas kasılması/gevşemesi için kritik. GABA reseptörlerini destekler → sakinleştirici etki.',
+    evidence:'high',
+    sideEffects:'Yüksek dozda (>500 mg) ishal yapabilir — özellikle magnezyum oksit. Glisinat veya sitrat formu daha tolere edilebilir.',
+    interactions:'Antibiyotikler (kinolon, tetrasiklin) ile en az 2 saat ara verilmeli.',
+    note:'💡 Form önemli: Glisinat (uyku/stres), Sitrat (kabızlık), Malat (enerji), L-Threonate (beyin) farklı amaçlar için.',
+    color:'var(--success)'
   },
   kafein:{
     name:'Kafein', emoji:'☕', priority:0,
-    dose:'200–400mg',
-    desc:'Odaklanma, güç ve performans için kanıtlanmış etki. Antrenman öncesi 30-60dk.',
-    note:'Kafein hapı, kahve veya pre-workout supplementlerinden alınabilir. Öğleden sonra kullanımından kaçın.',
+    dose:'3–6 mg/kg vücut ağırlığı (200–400 mg)',
+    timing:'Antrenmandan 30-60 dk önce. Öğleden sonra alınması uykuyu bozabilir.',
+    purpose:'Performans, odak, dayanıklılık ve algılanan eforu düşürmek için.',
+    effect:'Adenosin reseptörlerini bloke eder → yorgunluk algısı azalır. Adrenalin salınımı artar. Yağ oksidasyonu hafif artar. Reaksiyon hızı, güç ve dayanıklılık iyileşir.',
+    evidence:'high',
+    sideEffects:'Çarpıntı, anksiyete, uyku bozukluğu, sindirim sorunu. Yüksek dozda titreme. Tolerans gelişir.',
+    interactions:'Bazı ilaçlarla (efedrin, MAOI) etkileşim. Hipertansiyonda dikkat.',
+    note:'Kafein hapı, kahve veya pre-workout içinden alınabilir. Öğleden sonra (15:00+) kullanımdan kaçın — uyku bozulur.',
     color:'var(--accent)'
   },
+  betaalanin:{
+    name:'Beta-Alanin', emoji:'🔋', priority:0,
+    dose:'3.2–6.4 g/gün (2-4 doza bölünmüş)',
+    timing:'Günün herhangi bir saatinde, antrenmandan bağımsız. 4-6 hafta yüklenme döneminden sonra etki belirir.',
+    purpose:'Yüksek yoğunluklu çabalarda (60-240 sn aralığı) yorgunluğu geciktirmek.',
+    effect:'Karnosin sentezinin sınırlayıcısıdır. Karnosin kas asitliğini tamponlar → laktik asit birikimini geciktirir. Özellikle CrossFit, dövüş, sprint için.',
+    evidence:'mid',
+    sideEffects:'Parestezi (deride karıncalanma/iğne batma) — zararsız, dozu bölmek azaltır. 1.6 g üstünde yaygın.',
+    interactions:null,
+    note:'Tek doz etki vermez — günlük tutarlı kullanımla 4 haftada karnosin depoları dolar.',
+    color:'var(--purple)'
+  },
+  citrulline:{
+    name:'L-Sitrülin Malat', emoji:'💨', priority:0,
+    dose:'6–8 g (sitrülin malat) veya 3–5 g (saf sitrülin)',
+    timing:'Antrenmandan 30-60 dk önce.',
+    purpose:'Pompa (vasküler genişleme), endurance ve antrenman sonrası kas ağrısını azaltmak.',
+    effect:'Vücutta arginine dönüşür → nitrik oksit (NO) üretimi artar → damar genişler → kan akışı artar. Amonyak temizliğine yardım → yorgunluk geç.',
+    evidence:'mid',
+    sideEffects:'Genelde iyi tolere edilir. Çok yüksek dozda hafif sindirim sorunu.',
+    interactions:'Tansiyon ilaçları ile kombine kullanımda doktora danışılmalı (tansiyon düşürebilir).',
+    note:'Çoğu pre-workout içeriğinde mevcuttur. Saf sitrülin > sitrülin malat dozaj açısından daha standart.',
+    color:'var(--info)'
+  },
   zma:{
-    name:'ZMA', emoji:'🌙', priority:0,
-    dose:'1 ölçek (üretici dozuna göre)',
-    desc:'Çinko, Magnezyum ve B6 kombinasyonu. Uyku kalitesi ve toparlanma için.',
-    note:'Çinko ya da Magnezyum ayrı ayrı da alınabilir. Yatmadan 30-60dk önce aç karnına.',
+    name:'ZMA (Çinko+Magnezyum+B6)', emoji:'🌙', priority:0,
+    dose:'1 ölçek (üretici dozajına göre, genelde Zn 30mg + Mg 450mg + B6 10mg)',
+    timing:'Yatmadan 30-60 dk önce, aç karnına. Süt/kalsiyumla almaktan kaçın (emilim düşer).',
+    purpose:'Toparlanma, uyku kalitesi ve hormonal sağlık desteği (özellikle testosteron eksikliği olanlarda).',
+    effect:'Çinko testosteron üretiminde kofaktör. Magnezyum uyku ve sinir sistemi için. B6 nörotransmitter üretimi.',
+    evidence:'mid',
+    sideEffects:'Çinko yüksek dozda bakır eksikliğine yol açabilir. Mide bulantısı (yemekle alınırsa azalır).',
+    interactions:'Antibiyotik ve diüretiklerle etkileşim. Doktora danışılmalı.',
+    note:'Eksikliği olmayanlarda testosteron artışı kanıtı zayıf. Çinko veya magnezyum ayrı ayrı da alınabilir.',
     color:'var(--purple)'
   },
   preworkout:{
-    name:'Pre-Workout', emoji:'🚀', priority:0,
-    dose:'1 ölçek (antrenman öncesi)',
-    desc:'Enerji, odak ve pompa için formüle edilmiş kombine supplement.',
-    note:'İçeriğine dikkat et: kafein, beta-alanin, sitrülin içerenleri tercih et. Her antrenman için kullanma, tolerans gelişir.',
+    name:'Pre-Workout (kombine)', emoji:'🚀', priority:0,
+    dose:'1 ölçek (üretici dozajına göre)',
+    timing:'Antrenmandan 20-30 dk önce. Geç saatlerde kullanma — uyku bozulur.',
+    purpose:'Enerji, odak, pompa ve performans için birden fazla aktif maddeyi birleştirir.',
+    effect:'Genellikle kafein + beta-alanin + sitrülin + tiroin/L-DOPA bileşenleri içerir. Her birinin ayrı etkisi var.',
+    evidence:'mid',
+    sideEffects:'Aktif maddelere bağlı. Çarpıntı, anksiyete, parestezi. Her gün kullanmak tolerans yaratır.',
+    interactions:'Kafein içerdiği için tansiyon/kalp ilaçları ile dikkat.',
+    note:'İçeriğine dikkat et — etiket aydınlatıcı olmalı (proprietary blend sakıncalı). Her antrenmanda kullanma, tolerans gelişir.',
     color:'var(--accent)'
   },
   malto:{
     name:'Maltodekstrin', emoji:'⚗️', priority:0,
-    dose:'50–100g (antrenman etrafı)',
-    desc:'Hızlı sindirilen karbonhidrat. Ağır hacim dönemlerinde kalori artırmak için.',
-    note:'100g\'dan fazla alınacaksa öğünlere böl. Sadece bulk döneminde gerekli.',
+    dose:'40–80 g (antrenman içi/sonrası)',
+    timing:'Antrenmandan 30 dk önce veya antrenman sırasında. Bulk döneminde fazladan kalori için.',
+    purpose:'Hızlı sindirilen karbonhidrat — antrenman performansı ve kalori artışı.',
+    effect:'Kan şekerini hızlı yükseltir → glikojen depolarını besler. Sürekli enerji sağlar. Antrenman sonrası insülin yanıtı protein sentezini destekler.',
+    evidence:'mid',
+    sideEffects:'Diyabetliler için uygun değil. Yüksek dozda sindirim sorunu, şişkinlik.',
+    interactions:null,
+    note:'Sadece bulk ve uzun süreli endurance için gerekli. Cut döneminde tercih edilmez.',
     color:'var(--info)'
   },
   melatonin:{
     name:'Melatonin', emoji:'😴', priority:0,
-    dose:'0.5–3mg (yatmadan 30dk önce)',
-    desc:'Uyku düzeni ve kalitesi için. Jet lag ve vardiyalı çalışmada özellikle etkili.',
-    note:'⚕️ Reçeteli olup olmadığı bölgeye göre değişir. Düşük dozdan başla (0.5mg), gerekirse artır.',
+    dose:'0.5–3 mg (düşük dozdan başla)',
+    timing:'Yatmadan 30-60 dk önce. Karanlık ortamda alınmalı.',
+    purpose:'Uyku düzeni problemleri, jet lag ve sirkadiyen ritim bozukluklarında yardımcı.',
+    effect:'Endojen melatonin hormonunu taklit eder → vücut "uyku zamanı" sinyali algılar. Sirkadiyen ritmi düzenler.',
+    evidence:'mid',
+    sideEffects:'Sabah uyku hali, baş ağrısı, canlı rüyalar. Yüksek dozda etki azalabilir (paradoks).',
+    interactions:'Antikoagülanlar, antidepresanlar, immün bastırıcılarla etkileşim. Doktora danışılmalı.',
+    note:'⚕️ Düşük doz (0.5 mg) genelde yeterli — yüksek doz daha etkili DEĞİL. Türkiye\'de reçeteli, diğer ülkelerde değişir.',
     color:'var(--purple)'
   },
   probiyotik:{
     name:'Probiyotik', emoji:'🦠', priority:0,
-    dose:'Ürüne göre değişir',
-    desc:'Sindirim sağlığı, bağırsak mikrobiyomu ve bağışıklık sistemi desteği.',
-    note:'⚕️ Doktorunuza danışarak almanızı öneririz. Formüle göre etki farklılaşır.',
+    dose:'10–50 milyar CFU/gün (ürüne göre)',
+    timing:'Aç karnına veya yemekle (etiketteki talimata göre).',
+    purpose:'Bağırsak florasını desteklemek, sindirim sağlığı ve bağışıklık.',
+    effect:'Faydalı bakteri popülasyonunu artırır → patojenleri baskılar. Kısa zincirli yağ asitleri üretir → bağırsak duvarı sağlığı.',
+    evidence:'mid',
+    sideEffects:'İlk haftalarda hafif gaz/şişkinlik. Bağışıklığı baskılanmış kişilerde dikkat.',
+    interactions:'Antibiyotik kullanırken 2 saat ara ile alınmalı.',
+    note:'⚕️ Doktorunuza danışarak almanızı öneririz. Suş çeşitliliği önemli — tek tür yerine çoklu suş tercih edilebilir.',
     color:'var(--success)'
   },
   relax:{
-    name:'Relax / Adaptogen', emoji:'🌿', priority:0,
-    dose:'Ürüne göre değişir',
-    desc:'Stres yönetimi, kortizol düzenlemesi. Ashwagandha, L-theanine içerenler önerilir.',
-    note:'Uyku için bu ürünü, genel stres için ise adaptogen formülleri tercih et.',
+    name:'Ashwagandha (Adaptogen)', emoji:'🌿', priority:0,
+    dose:'300–600 mg KSM-66 standardize ekstrakt / gün',
+    timing:'Sabah veya öğleden sonra. Yemekle alınabilir.',
+    purpose:'Stres yönetimi, kortizol regülasyonu, uyku kalitesi ve anksiyete azaltma.',
+    effect:'Adaptojenik bitki — kortizolü baskılayan etki. HPA aksisini düzenler. Uyku kalitesi ve stres tepkisini iyileştirebilir.',
+    evidence:'mid',
+    sideEffects:'Genelde iyi tolere edilir. Nadiren tiroid uyarısı, sindirim sorunu, uyku hali.',
+    interactions:'Tiroid ilaçları, sedatifler ile etkileşim. Doktora danışılmalı.',
+    note:'Standardize ekstrakt (KSM-66, Sensoril) tercih edilmeli — kalitesiz tozun etkisi düşük.',
     color:'var(--success)'
   },
   superfoods:{
-    name:'Superfoods / Yeşil Karışım', emoji:'🌱', priority:0,
-    dose:'1 ölçek/gün',
-    desc:'Spirulina, chlorella, yeşil sebze özleri. Mikro besin desteği.',
-    note:'Aromalı karışım ürünleri veya doğrudan spirulina takviyesi öneririz. Denemek ve çeşitlendirmek iyi bir destek.',
+    name:'Yeşil Karışım / Superfoods', emoji:'🌱', priority:0,
+    dose:'1 ölçek (üretici dozajına göre)',
+    timing:'Sabah veya öğleden sonra, suya/smoothie\'ye karıştırarak.',
+    purpose:'Sebze tüketimi yetersiz olduğunda mikronutrient (vitamin/mineral) desteği.',
+    effect:'Spirulina, chlorella, kuru sebze tozları → klorofil, antioksidan, mineral. Gerçek sebzelerin yerini TUTAMAZ ama destekleyebilir.',
+    evidence:'low',
+    sideEffects:'Yüksek dozda sindirim sorunu. Bazı sportifik tatlar.',
+    interactions:'K vitamini içeriği yüksek (warfarin ile etkileşim).',
+    note:'⚠️ Pazarlamada abartılır. Gerçek sebze/meyve ASLA yerine geçmez. Eksik diyetin yedek planı.',
     color:'var(--success)'
+  },
+  bcaa:{
+    name:'BCAA / EAA', emoji:'🔗', priority:0,
+    dose:'5–10 g BCAA veya EAA tercih edilirse aynı doz',
+    timing:'Antrenman sırasında veya öncesinde.',
+    purpose:'Yetersiz protein alımında kas korumayı amaçlamak.',
+    effect:'Lösin protein sentezini tetikler. Ancak yeterli toplam protein (>1.6 g/kg) alan kişilerde EK fayda kanıtlanmadı. EAA daha geniş aminoasit profili sunar.',
+    evidence:'low',
+    sideEffects:'Genelde güvenli. Yüksek dozda hafif sindirim sorunu.',
+    interactions:null,
+    note:'⚠️ Yeterli protein alıyorsan BCAA gereksiz. Proteine yatırım yap.',
+    color:'var(--text2)'
   }
 };
 
@@ -3959,6 +4373,13 @@ function calcSuppScores(a){
   });
 }
 
+/* Supplement accordion toggle */
+function _toggleSuppAcc(accId){
+  var el = document.getElementById(accId);
+  if(!el) return;
+  el.classList.toggle('open');
+}
+
 function renderSuppResults(){
   var results=calcSuppScores(_suppAnswers);
   results.sort(function(a,b){return b.score-a.score;});
@@ -3968,27 +4389,111 @@ function renderSuppResults(){
   var shown=results.filter(function(s){return s.score>0;}).slice(0,maxShow);
 
   var html='<div style="font-size:13px;font-weight:700;margin-bottom:4px">📋 '+shown.length+' supplement önerisi</div>'+
-    '<div style="font-size:11px;color:var(--text2);margin-bottom:12px">Bütçe ve profiline göre optimize edildi.</div>';
+    '<div style="font-size:11px;color:var(--text2);margin-bottom:14px">Bütçe ve profiline göre optimize edildi. Detaylı bilgi için her supplementin altındaki "Detayları Gör" butonuna tık.</div>';
+
+  /* Kanıt seviyesi rozet HTML üretici */
+  function _evRosette(ev){
+    if(ev === 'high') return '<span class="evidence-rosette evidence-high">🟢 Yüksek Kanıt</span>';
+    if(ev === 'mid')  return '<span class="evidence-rosette evidence-mid">🟡 Orta Kanıt</span>';
+    if(ev === 'low')  return '<span class="evidence-rosette evidence-low">🔴 Sınırlı Kanıt</span>';
+    return '';
+  }
 
   shown.forEach(function(s,i){
     var priority=i===0?'🥇 En Öncelikli':i===1?'🥈 İkinci Öncelik':i===2?'🥉 Üçüncü Öncelik':'Destekleyici';
     var pCls=i===0?'bg':i<=2?'by':'bb';
     var alreadyUsing=userSupps.indexOf(s.id)>=0;
+    /* Geriye dönük uyum: s.desc yoksa s.purpose veya s.effect kullan */
+    var summary = s.desc || s.purpose || s.effect || '';
+    
     html+='<div class="supp-result" style="border-left:3px solid '+s.color+(alreadyUsing?';background:rgba(46,196,182,.05)':'')+'">';
     html+='<div class="supp-result-head"><span class="supp-result-ico">'+s.emoji+'</span>';
-    html+='<div><span class="supp-result-name">'+s.name+'</span>';
+    html+='<div style="flex:1"><span class="supp-result-name">'+s.name+'</span>';
     if(alreadyUsing){
       html+='<span style="display:inline-block;margin-left:6px;font-size:9px;font-weight:700;color:var(--success);background:rgba(46,196,182,.15);border-radius:5px;padding:2px 6px;vertical-align:middle">✓ Zaten Kullanıyorsun</span>';
     }
-    html+='<div style="font-size:10px;color:var(--text3);margin-top:1px">💊 '+s.dose+'</div></div>';
-    html+='<span class="badge '+pCls+'" style="margin:0 0 0 auto;white-space:nowrap">'+priority+'</span></div>';
-    html+='<div style="font-size:11px;color:var(--text2);margin:6px 0 4px">'+s.desc+'</div>';
-    if(s.note)html+='<div style="font-size:10px;background:var(--card2);border-radius:7px;padding:6px 8px;color:var(--text2);margin-bottom:6px;line-height:1.4">'+s.note+'</div>';
+    /* Doz + Kanıt rozet aynı satırda */
+    html+='<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px">';
+    html+='<div style="font-size:10px;color:var(--text3)">💊 '+(s.dose||'—')+'</div>';
+    if(s.evidence) html+=_evRosette(s.evidence);
+    html+='</div></div>';
+    html+='<span class="badge '+pCls+'" style="margin:0 0 0 auto;white-space:nowrap;flex-shrink:0">'+priority+'</span></div>';
+    
+    /* Kısa açıklama (purpose/effect/desc) */
+    html+='<div style="font-size:11px;color:var(--text2);margin:8px 0 4px;line-height:1.5">'+summary+'</div>';
+    
+    /* Neden seçildi? */
     if(s.reasons&&s.reasons.length){
-      html+='<div style="font-size:10px;color:var(--text3)">📊 <strong style="color:var(--text2)">Neden:</strong> '+s.reasons.slice(0,3).join(' · ')+'</div>';
+      html+='<div style="font-size:10px;color:var(--text3);margin-bottom:6px">📊 <strong style="color:var(--text2)">Neden:</strong> '+s.reasons.slice(0,3).join(' · ')+'</div>';
     }
-    html+='</div>';
+    
+    /* Accordion: Detayları Gör */
+    var accId = 'acc-supp-'+s.id+'-'+i;
+    html+='<div class="supp-acc" id="'+accId+'">';
+    html+='<button type="button" class="supp-acc-trigger" onclick="_toggleSuppAcc(\''+accId+'\')">';
+    html+='<span>📖 Detayları Gör</span><span class="supp-acc-chev">▶</span>';
+    html+='</button>';
+    html+='<div class="supp-acc-body">';
+    
+    /* 7 alan içeriği — sırasıyla */
+    /* 1. Doz */
+    if(s.dose){
+      html+='<div class="supp-acc-row"><div class="supp-acc-label">💊 Doz</div><div class="supp-acc-val">'+s.dose+'</div></div>';
+    }
+    /* 2. Zamanlama */
+    if(s.timing){
+      html+='<div class="supp-acc-row"><div class="supp-acc-label">⏰ Zamanlama</div><div class="supp-acc-val">'+s.timing+'</div></div>';
+    }
+    /* 3. Amaç */
+    if(s.purpose){
+      html+='<div class="supp-acc-row"><div class="supp-acc-label">🎯 Neden Alınmalı</div><div class="supp-acc-val">'+s.purpose+'</div></div>';
+    }
+    /* 4. Etki */
+    if(s.effect){
+      html+='<div class="supp-acc-row"><div class="supp-acc-label">⚙️ Ne İşe Yarar (Mekanizma)</div><div class="supp-acc-val">'+s.effect+'</div></div>';
+    }
+    /* 5. Kanıt seviyesi (detaylı açıklama) */
+    if(s.evidence){
+      var evDescMap = {
+        high: 'Birden fazla iyi tasarlanmış randomize kontrollü çalışma (RCT) ve meta-analizle desteklenir. Spor bilimi camiasında geniş kabul görür.',
+        mid:  'Sınırlı sayıda RCT veya karışık sonuçlar. Bazı kullanıcılarda etkili, bazılarında etkisiz. Bireysel yanıt değişebilir.',
+        low:  'Yetersiz veya karışık kanıt. Üretici iddiası ağırlıklı. Yararı tartışmalı, plasebo etkisi de olabilir.'
+      };
+      html+='<div class="supp-acc-row"><div class="supp-acc-label">🔬 Kanıt Seviyesi '+_evRosette(s.evidence)+'</div><div class="supp-acc-val">'+(evDescMap[s.evidence]||'')+'</div></div>';
+    }
+    /* 6. Yan etkiler */
+    if(s.sideEffects){
+      html+='<div class="supp-acc-row"><div class="supp-acc-label" style="color:var(--warn)">⚠️ Yan Etkiler</div><div class="supp-acc-val">'+s.sideEffects+'</div></div>';
+    }
+    /* 7. İlaç etkileşimleri */
+    if(s.interactions){
+      html+='<div class="supp-acc-row"><div class="supp-acc-label" style="color:var(--danger)">💊 İlaç Etkileşimleri</div><div class="supp-acc-val">'+s.interactions+'</div></div>';
+    }
+    /* Ekstra not (varsa) */
+    if(s.note){
+      html+='<div class="supp-acc-row"><div class="supp-acc-label">💡 Pratik Not</div><div class="supp-acc-val">'+s.note+'</div></div>';
+    }
+    
+    html+='</div></div>'; /* /supp-acc-body /supp-acc */
+    
+    html+='</div>'; /* /supp-result */
   });
+
+  /* MEDICO-LEGAL DISCLAIMER */
+  html+='<div style="margin-top:18px;padding:14px;background:rgba(230,57,70,.05);border:1px solid rgba(230,57,70,.25);border-left:4px solid var(--danger);border-radius:10px">';
+  html+='<div style="font-size:12px;font-weight:700;color:var(--danger);margin-bottom:6px;display:flex;align-items:center;gap:6px">⚕️ Önemli Sağlık Uyarısı</div>';
+  html+='<div style="font-size:11px;color:var(--text2);line-height:1.55">';
+  html+='Bu öneriler <strong style="color:var(--text)">genel bilgilendirme</strong> amacıyla sunulmuştur ve <strong style="color:var(--text)">tıbbi tavsiye yerine geçmez</strong>. Supplement kullanımı; mevcut sağlık durumun, kullandığın ilaçlar, gebelik/emzirme durumu ve bireysel ihtiyaçlar değerlendirilerek belirlenmelidir.';
+  html+='<br><br><strong style="color:var(--text)">Mutlaka bir doktor, diyetisyen veya spor hekimine danışın:</strong>';
+  html+='<ul style="margin:6px 0 6px 18px;padding:0">';
+  html+='<li>Düzenli ilaç kullanıyorsan</li>';
+  html+='<li>Kronik bir hastalığın varsa (kalp, böbrek, karaciğer, tiroid, diyabet vb.)</li>';
+  html+='<li>Gebelik veya emzirme döneminde isen</li>';
+  html+='<li>18 yaşından küçüksen</li>';
+  html+='<li>Herhangi bir yeni belirti veya yan etki yaşıyorsan</li>';
+  html+='</ul>';
+  html+='Supplementler dengeli beslenmenin <strong style="color:var(--text)">yerine geçmez</strong>; sadece destek olabilirler.';
+  html+='</div></div>';
 
   html+='<div style="margin-top:14px;display:flex;gap:8px">'+
     '<button class="btn btn-s btn-full" onclick="resetSuppSurvey()">🔄 Tekrar Analiz Et</button>'+
@@ -4645,7 +5150,493 @@ function _renderConditionsEditGrid(){
   grid.innerHTML=html;
 }
 
-/* ── ANTRENMAN MENÜSÜ ─────────────────────────────────── */
+/* ──────────────────────────────────────────────────────────
+   FFMI DETAYLI AÇIKLAMA OVERLAY
+   Kullanıcıya FFMI bantlarını, anlamlarını ve referansları açıklar.
+   ────────────────────────────────────────────────────────── */
+
+function openFFMIDetail(){
+  var body=document.getElementById('ffmi-detail-body');
+  if(!body) return;
+  var male = U && U.gender === 'male';
+  var ffmi = (R && R.ffmi) ? R.ffmi : null;
+  
+  /* Cinsiyet bazlı bantlar */
+  var bands;
+  if(male){
+    bands = [
+      {min:0,    max:18, label:'Zayıf',     cls:'bb', desc:'Ortalamanın altında. Düzenli direnç antrenmanı ve protein alımıyla geliştirilebilir.'},
+      {min:18,   max:20, label:'Ortalama',  cls:'bb', desc:'Yetişkin erkekler için ortalama kas kütlesi seviyesi.'},
+      {min:20,   max:22, label:'İyi',       cls:'bg', desc:'Ortalamanın üzerinde kas gelişimi. Düzenli antrenmanın etkisi görülüyor.'},
+      {min:22,   max:24, label:'Çok İyi',   cls:'bg', desc:'Atletik seviyede kas kütlesi. Güçlü ve dengeli bir fizik.'},
+      {min:24,   max:26, label:'Elit',      cls:'bp', desc:'İleri düzey kas gelişimi. Yıllarca disiplinli antrenmanın sonucu.'},
+      {min:26,   max:99, label:'İstisnai',  cls:'br', desc:'Doğal yollarla ulaşılması son derece nadir. Olağanüstü bir seviye.'}
+    ];
+  } else {
+    bands = [
+      {min:0,    max:14, label:'Zayıf',     cls:'bb', desc:'Ortalamanın altında. Direnç antrenmanı ve protein alımıyla geliştirilebilir.'},
+      {min:14,   max:16, label:'Ortalama',  cls:'bb', desc:'Yetişkin kadınlar için ortalama yağsız kütle seviyesi.'},
+      {min:16,   max:18, label:'İyi',       cls:'bg', desc:'Ortalamanın üzerinde kas gelişimi.'},
+      {min:18,   max:20, label:'Çok İyi',   cls:'bg', desc:'Atletik seviyede kas kütlesi.'},
+      {min:20,   max:22, label:'Elit',      cls:'bp', desc:'İleri düzey kas gelişimi.'},
+      {min:22,   max:99, label:'İstisnai',  cls:'br', desc:'Doğal yollarla ulaşılması son derece nadir.'}
+    ];
+  }
+  
+  /* Mevcut FFMI hangi banta düşüyor? */
+  var currentBand = null;
+  if(ffmi != null){
+    for(var i=0; i<bands.length; i++){
+      if(ffmi >= bands[i].min && ffmi < bands[i].max){
+        currentBand = i;
+        break;
+      }
+    }
+  }
+  
+  var html = '';
+  
+  /* Şu anki değer */
+  if(ffmi != null){
+    html += '<div style="background:rgba(76,201,240,.06);border:1px solid var(--info);border-radius:12px;padding:14px;margin-bottom:18px">';
+    html += '<div style="font-size:11px;color:var(--text2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">Senin Değerin</div>';
+    html += '<div style="display:flex;align-items:baseline;gap:10px"><div style="font-size:32px;font-weight:800;color:var(--info)">'+ffmi.toFixed(2)+'</div>';
+    if(currentBand !== null){
+      html += '<div style="font-size:13px;font-weight:600;color:var(--text)">'+bands[currentBand].label+'</div>';
+    }
+    html += '</div></div>';
+  }
+  
+  /* FFMI nedir? */
+  html += '<div style="margin-bottom:18px"><div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px">📖 FFMI Nedir?</div>';
+  html += '<div style="font-size:12px;color:var(--text2);line-height:1.6">FFMI (Fat-Free Mass Index / Yağsız Kütle Endeksi), vücudundaki yağsız kütleyi (kas, kemik, organ vb.) boyuna göre normalize eden bir göstergedir. <strong style="color:var(--text)">BMI\'nin yapamadığı</strong> şeyi yapar: kas-yağ ayrımı. Sporcular ve düzenli antrenman yapanlar için kas gelişiminin daha doğru bir göstergesidir.</div></div>';
+  
+  /* Bant tablosu */
+  html += '<div style="margin-bottom:18px"><div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px">📊 '+(male?'Erkek':'Kadın')+' FFMI Bantları</div>';
+  for(var i=0; i<bands.length; i++){
+    var b = bands[i];
+    var isCurrent = (i === currentBand);
+    var rangeStr;
+    if(i === bands.length-1) rangeStr = b.min+'+';
+    else rangeStr = b.min+' - '+b.max;
+    
+    html += '<div style="display:flex;align-items:flex-start;gap:10px;padding:10px;border-radius:10px;margin-bottom:6px;'+(isCurrent?'background:rgba(76,201,240,.08);border:1.5px solid var(--info)':'background:var(--card2);border:1px solid var(--border)')+'">';
+    html += '<div style="flex-shrink:0;min-width:75px"><div class="badge '+b.cls+'" style="font-size:10px">'+b.label+'</div><div style="font-size:10px;color:var(--text2);margin-top:3px;font-weight:600">FFMI '+rangeStr+'</div></div>';
+    html += '<div style="font-size:11px;color:'+(isCurrent?'var(--text)':'var(--text2)')+';line-height:1.5;flex:1">'+b.desc+(isCurrent?' <span style="color:var(--info);font-weight:700">← Sen buradasın</span>':'')+'</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+  
+  /* Bilgi notu */
+  html += '<div style="background:rgba(76,201,240,.06);border-left:3px solid var(--info);border-radius:8px;padding:12px 14px;margin-bottom:12px">';
+  html += '<div style="font-size:11px;font-weight:700;color:var(--info);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">ℹ️ Önemli Not</div>';
+  html += '<div style="font-size:11px;color:var(--text2);line-height:1.5">FFMI bir tahmin metriğidir. Hesaplama, Navy vücut yağı formülünden türetilen yağsız kütle üzerinden yapılır. Ölçüm protokolüne bağlı olarak gerçek değerden ±%5-10 sapabilir. Tek ölçüme değil, trend ve düzenli takibe odaklan.</div></div>';
+  
+  /* Referans */
+  html += '<div style="font-size:10px;color:var(--text3);text-align:center;line-height:1.5;padding:8px"><em>Referanslar: Kouri et al. 1995, ISSN Position Stand. Boy normalize formülü uygulanmıştır (1.80m baz alınır).</em></div>';
+  
+  body.innerHTML = html;
+  document.getElementById('ffmi-detail-overlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeFFMIDetail(){
+  document.getElementById('ffmi-detail-overlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+/* ──────────────────────────────────────────────────────────
+   RED-S UYARI SİSTEMİ
+   Cut seçiminde yağ oranı çok düşükse uyarı çıkarır.
+   ────────────────────────────────────────────────────────── */
+
+/* Bekleyen cut seçimi callback'i — kullanıcı onayladığında çalışacak */
+var _redsPendingCallback = null;
+
+/* Kullanıcı bu oturum için RED-S uyarısını kabul etti mi? */
+var _redsAcknowledged = false;
+
+/**
+ * Kullanıcının seçim yapmak istediği hedef için RED-S riski kontrolü yapar.
+ * @param {string} gl - 'cut' | 'recomp' | 'maintain' | 'bulk'
+ * @returns {boolean} true = riskli (uyarı gerekli), false = güvenli
+ */
+function _checkRedsRisk(gl){
+  if(gl !== 'cut') return false;
+  if(_redsAcknowledged) return false; /* zaten kabul etti */
+  var bf = R.bf;
+  if(bf == null) return false;
+  var male = U.gender === 'male';
+  if(male && bf < 6) return true;
+  if(!male && bf < 14) return true;
+  return false;
+}
+
+/**
+ * RED-S uyarı modalını açar.
+ * @param {Function} proceedCallback - Kullanıcı "devam et" derse çağrılacak fn
+ */
+function openRedsWarning(proceedCallback){
+  _redsPendingCallback = proceedCallback || null;
+  var body = document.getElementById('reds-warning-body');
+  if(!body) return;
+  
+  var male = U.gender === 'male';
+  var bf = R.bf;
+  var threshold = male ? 6 : 14;
+  
+  body.innerHTML = 
+    '<p style="margin:0 0 12px 0">Mevcut vücut yağ oranın <strong style="color:var(--danger)">%'+bf.toFixed(1)+'</strong>. '+(male?'Erkekler':'Kadınlar')+' için <strong>%'+threshold+'</strong> altı yağ oranında <strong>kalori açığı</strong> oluşturmak ciddi sağlık riskleri taşır:</p>'+
+    '<ul style="margin:0 0 12px 18px;padding:0;font-size:12px;color:var(--text2);line-height:1.7">'+
+      '<li>'+(male?'Testosteron düşüşü':'Menstrual döngü bozuklukları (amenore)')+'</li>'+
+      '<li>Tiroid hormonu düşüşü, metabolik yavaşlama</li>'+
+      '<li>Kas kütlesi kaybı (anabolik direncin azalması)'+'</li>'+
+      '<li>Performans ve toparlanma düşüşü</li>'+
+      '<li>Kemik yoğunluğu kaybı (osteoporoz riski)</li>'+
+      '<li>Bağışıklık sistemi zayıflaması</li>'+
+      '<li>Uyku ve ruh hali bozuklukları</li>'+
+    '</ul>'+
+    '<p style="margin:0;font-size:12px;color:var(--text2)">Bu yağ oranında <strong style="color:var(--text)">maintain</strong> veya <strong style="color:var(--text)">recomp</strong> hedefini seçmek daha güvenli olabilir.</p>';
+  
+  document.getElementById('reds-warning-overlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function redsWarningProceed(){
+  _redsAcknowledged = true;
+  document.getElementById('reds-warning-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+  if(typeof _redsPendingCallback === 'function'){
+    var cb = _redsPendingCallback;
+    _redsPendingCallback = null;
+    cb();
+  }
+}
+
+function redsWarningCancel(){
+  document.getElementById('reds-warning-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+  _redsPendingCallback = null;
+  /* selGL'i resetle veya maintain'e çek */
+  if(typeof selGL !== 'undefined'){
+    selGL = 'maintain';
+    /* UI butonlarını yenile */
+    try {
+      document.querySelectorAll('[data-g="gl"]').forEach(function(b){
+        b.classList.remove('sel');
+        if(b.getAttribute('data-v')==='maintain') b.classList.add('sel');
+      });
+      if(typeof renderGoalStep === 'function') renderGoalStep();
+      if(typeof renderAll === 'function') renderAll();
+    } catch(e){ console.warn('RED-S cancel UI sync:',e); }
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   🧪 ADMIN TEST PANEL SİSTEMİ — GEÇİCİ
+   
+   Yayın için ADMIN_TEST_MODE = false yapılınca tüm sistem
+   devre dışı kalır, butonlar görünmez, fonksiyonlar pasif olur.
+   
+   Test profilleri sadece in-memory (U, R, A, BT) doldurur,
+   3 haftalık entry'leri localStorage'a yazar (chart için).
+   Çıkışta tüm veri tamamen temizlenir.
+   ══════════════════════════════════════════════════════════ */
+
+var ADMIN_TEST_MODE = true;  /* ⚠️ Yayında bu satırı false yap */
+
+/* Test profili aktif mi? */
+var _adminTestActive = false;
+var _adminTestProfileId = null;
+
+/* Test profilleri kataloğu */
+var ADMIN_TEST_PROFILES = [
+  {
+    id: 'ufuk',
+    name: 'Ufuk',
+    age: 27,
+    gender: 'male',
+    desc: '27y · Erkek · 180cm/80kg · Ektomorf · Sedanter (ayakta iş) · Cut hedefi · Bel/Diz/Omuz/Kalp+HT',
+    color: 'var(--purple)',
+    avatar: '👤',
+    user: {
+      gender: 'male',
+      age: 27,
+      height: 180,
+      weight: 80,
+      neck: 39,
+      waist: 96.5,
+      shoulder: 118,
+      hip: 99,
+      chest: 102,
+      arm: 35,
+      forearm: 29,
+      thigh: 58,
+      calf: 35,
+      activityLevel: 'low',     /* hiç spor yapmıyor */
+      jobActivity: 'active',     /* ayakta aktif iş */
+      trainingExperience: 'beginner',
+      extraActivity: 'none'
+    },
+    bt: {
+      /* Vücut tipi testi sıralı cevaplar — Ektomorf profili */
+      q1: 'overlap',          /* parmaklar üst üste */
+      q2: 'visible-bones',    /* kemikleri belirgin */
+      q3: 'pencil',           /* kalem gibi (bilekler) */
+      q4: 'long-narrow',      /* ince uzun */
+      q5: 'hard-gain',        /* kütle kazanmakta zorlanıyor */
+      q6: 'minimal',          /* pek değişmiyor */
+      q7: 'fit-easy',         /* rahatça giriyor (giysi) */
+      q8: 'both'              /* veririm de alırım da */
+    },
+    goal: 'cut',
+    sportType: 'hybrid',
+    conditions: ['lower-back','knee-injury','shoulder-injury','cardiovascular','hypertension'],
+    /* 3 haftalık geçmiş ölçüm */
+    entries: [
+      /* En eski — 05.05.2026 */
+      { date:'2026-05-05', timestamp: new Date('2026-05-05T10:00:00').getTime(),
+        weight:83, neck:39, waist:97.5, shoulder:117, hip:96, chest:101, arm:35, forearm:28, thigh:57, calf:34, bf:null, ffmi:null, bmi:null },
+      /* Orta — 12.05.2026 */
+      { date:'2026-05-12', timestamp: new Date('2026-05-12T10:00:00').getTime(),
+        weight:81.4, neck:39, waist:97.5, shoulder:117, hip:97, chest:102, arm:35, forearm:29, thigh:57, calf:35, bf:null, ffmi:null, bmi:null },
+      /* En güncel — 19.05.2026 (bugün) */
+      { date:'2026-05-19', timestamp: new Date('2026-05-19T10:00:00').getTime(),
+        weight:80, neck:39, waist:96.5, shoulder:118, hip:99, chest:102, arm:35, forearm:29, thigh:58, calf:35, bf:null, ffmi:null, bmi:null }
+    ]
+  }
+];
+
+/* Admin panel açılış — auth ekranındaki butondan çağrılır */
+function openAdminTestPanel(){
+  if(!ADMIN_TEST_MODE) return;
+  _renderAdminProfilesList();
+  document.getElementById('admin-test-overlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAdminTestPanel(){
+  document.getElementById('admin-test-overlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function _renderAdminProfilesList(){
+  var listEl = document.getElementById('admin-profiles-list');
+  if(!listEl) return;
+  
+  var html = '';
+  ADMIN_TEST_PROFILES.forEach(function(p){
+    /* Conditions kısa özetini hazırla */
+    var condCount = (p.conditions || []).length;
+    var condBadge = condCount > 0 
+      ? '<span style="display:inline-block;background:rgba(230,57,70,.12);color:var(--danger);font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;margin-top:4px">🩺 '+condCount+' Özel Durum</span>'
+      : '';
+    
+    html += '<div style="background:var(--card2);border:1.5px solid '+p.color+';border-radius:12px;padding:14px;margin-bottom:12px;cursor:pointer;transition:all .2s" onclick="loadAdminTestProfile(\''+p.id+'\')" onmousedown="this.style.transform=\'scale(.98)\'" onmouseup="this.style.transform=\'\'" ontouchstart="this.style.transform=\'scale(.98)\'" ontouchend="this.style.transform=\'\'">';
+    html += '<div style="display:flex;align-items:center;gap:12px">';
+    html += '<div style="font-size:32px">'+p.avatar+'</div>';
+    html += '<div style="flex:1;min-width:0">';
+    html += '<div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:3px">'+p.name+'</div>';
+    html += '<div style="font-size:11px;color:var(--text2);line-height:1.4">'+p.desc+'</div>';
+    if(condBadge) html += '<div style="margin-top:3px">'+condBadge+'</div>';
+    html += '</div>';
+    html += '<div style="font-size:18px;color:var(--purple);flex-shrink:0">⚡</div>';
+    html += '</div>';
+    html += '</div>';
+  });
+  
+  listEl.innerHTML = html;
+}
+
+/**
+ * Test profilini yükler:
+ * 1. U, A, BT objelerini doldurur
+ * 2. 3 haftalık entry'leri localStorage'a yazar
+ * 3. selGL ve selST seçimlerini ayarlar
+ * 4. Wizard'ı step 7'de açar — kullanıcı 1-7 arası gezebilir
+ */
+function loadAdminTestProfile(profileId){
+  if(!ADMIN_TEST_MODE) return;
+  var profile = ADMIN_TEST_PROFILES.find(function(p){return p.id===profileId;});
+  if(!profile){ console.warn('Profil bulunamadı:', profileId); return; }
+  
+  console.log('%c🧪 Test profili yükleniyor: '+profile.name, 'color:#9B72FF;font-weight:bold');
+  
+  /* 1. U objesini doldur */
+  Object.keys(profile.user).forEach(function(k){
+    U[k] = profile.user[k];
+  });
+  
+  /* 2. BT objesini doldur (vücut tipi cevapları) */
+  if(profile.bt){
+    Object.keys(profile.bt).forEach(function(k){
+      BT[k] = profile.bt[k];
+    });
+  }
+  
+  /* 3. A objesini başlat (recomp vs için boş) */
+  if(typeof A === 'undefined') window.A = {};
+  
+  /* 4. Conditions */
+  U.conditions = (profile.conditions || []).slice();
+  
+  /* 5. Hedef + spor türü (startWizard sonrası tekrar set edilecek) */
+  var _goalToSet = profile.goal || 'maintain';
+  var _stToSet = profile.sportType || 'hybrid';
+  selGL = _goalToSet;
+  selST = _stToSet;
+  
+  /* 6. 3 haftalık entry'leri localStorage'a yaz */
+  if(profile.entries && profile.entries.length){
+    try {
+      localStorage.setItem('rf_entries', JSON.stringify(profile.entries));
+    } catch(e){ console.warn('Entry kaydetme hatası:', e); }
+  }
+  
+  /* 7. A objesine training_age ve hedef yaz (wizard restore için) */
+  A.gl = _goalToSet;
+  A.st = _stToSet;
+  A.ta = U.trainingExperience || 'beginner';
+  /* Aktivite (job + extra) */
+  A.job = U.jobActivity || 'sedentary';
+  A.act = U.activityLevel || 'low';
+  
+  /* 8. Admin test aktif olarak işaretle */
+  _adminTestActive = true;
+  _adminTestProfileId = profileId;
+  
+  /* 9. Auth ekranını kapat, wizard'ı aç */
+  try {
+    if(typeof hideAuthScreen === 'function') hideAuthScreen();
+    /* Misafir modunu aktive et — Firebase'e dokunulmasın */
+    _isGuest = true;
+  } catch(e){}
+  closeAdminTestPanel();
+  
+  /* 10. Wizard'ı step 7'de aç (özel durumlar) */
+  /* startWizard selST/selGL'i null yapar, sonra restoreWiz ile A'dan geri alır */
+  try {
+    if(typeof startWizard === 'function'){
+      startWizard();
+      /* selST/selGL'i tekrar set et (startWizard null'a çekti, A.gl/A.st üzerinden restore olmuş olabilir) */
+      selGL = _goalToSet;
+      selST = _stToSet;
+      /* Adımı 6'ya getir (özel durumlar = step 7/7) */
+      step = 6;
+      if(typeof updWizStep === 'function') updWizStep();
+    }
+  } catch(e){ console.warn('Wizard başlatma hatası:', e); }
+  
+  /* 10. Bildirim */
+  setTimeout(function(){
+    if(typeof showToast === 'function'){
+      showToast('🧪 Test profili yüklendi: '+profile.name, 'success');
+    }
+  }, 300);
+}
+
+/**
+ * Admin test profilinden çıkış:
+ * - Tüm in-memory veriyi temizler
+ * - localStorage'daki test entry'lerini siler
+ * - Firebase oturumu (varsa) kapatır
+ * - Auth ekranına döner (hiç giriş yapmamış gibi)
+ */
+function exitAdminTestProfile(){
+  if(!confirm('Test profilinden çıkmak istediğinden emin misin?\n\nTüm test verisi silinecek ve giriş ekranına döneceksin.')) return;
+  
+  console.log('%c🧪 Test profilinden çıkılıyor...', 'color:#9B72FF;font-weight:bold');
+  
+  try {
+    /* 1. Tüm localStorage anahtarlarını temizle (RavenFit'e ait) */
+    var rfKeys = ['rf_data','rf_entries','rf_water_today','rf_workout_logs',
+                  'rf_custom_workouts','rf_supplements_used','rf_badges',
+                  'rf_avatar','rf_last_supp_results','rf_active_session'];
+    rfKeys.forEach(function(k){ try{ localStorage.removeItem(k); }catch(e){} });
+    
+    /* 2. In-memory state temizle */
+    U = {}; R = {}; A = {}; BT = {};
+    selGL = null; selST = null;
+    step = 0;
+    _adminTestActive = false;
+    _adminTestProfileId = null;
+    _isGuest = false;
+    
+    /* 3. UI state temizle */
+    document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+    document.querySelectorAll('.main-screen').forEach(function(m){m.classList.remove('active');});
+    document.querySelectorAll('.bnav-btn').forEach(function(b){b.classList.remove('active');});
+    document.querySelectorAll('.calc-overlay.active').forEach(function(o){o.classList.remove('active');});
+    document.body.style.overflow = '';
+    
+    /* 4. Bottom nav gizle */
+    var bnav = document.getElementById('bottom-nav');
+    if(bnav) bnav.classList.remove('visible');
+    
+    /* 5. Inline display style'larını temizle */
+    ['splash','results','wizard'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el){ el.style.display = ''; }
+    });
+    
+    /* 6. Firebase oturumunu kapat (varsa) */
+    try { if(_fbAuth && _fbAuth.currentUser) _fbAuth.signOut(); } catch(e){}
+    _fbUser = null;
+    
+    /* 7. Auth ekranına dön */
+    if(typeof showAuthScreen === 'function') showAuthScreen();
+    
+    console.log('%c✓ Çıkış tamamlandı, auth ekranına dönüldü', 'color:#2EC4B6');
+  } catch(err){
+    console.error('Test çıkış hatası:', err);
+    alert('Çıkış sırasında bir sorun oluştu. Sayfayı yenile.');
+  }
+}
+
+/**
+ * Akıllı çıkış — test profili aktifse exitAdminTestProfile, değilse doLogout çağırır.
+ */
+function _smartLogout(){
+  if(ADMIN_TEST_MODE && _adminTestActive){
+    exitAdminTestProfile();
+  } else {
+    doLogout();
+  }
+}
+
+/**
+ * Profil > Hesabım'daki test rozetini günceller.
+ * renderConditionsSummary ile birlikte çağrılır.
+ */
+function _renderAdminTestBadge(){
+  var badge = document.getElementById('admin-test-badge');
+  var nameEl = document.getElementById('admin-test-name');
+  if(!badge) return;
+  if(ADMIN_TEST_MODE && _adminTestActive && _adminTestProfileId){
+    var prof = ADMIN_TEST_PROFILES.find(function(p){return p.id===_adminTestProfileId;});
+    badge.style.display = 'block';
+    if(nameEl) nameEl.textContent = prof ? ('📋 ' + prof.name + ' profili yüklü') : '';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+/* Buton görünürlüğünü ADMIN_TEST_MODE'a göre ayarla — DOM ready sonrası */
+function _initAdminTestUI(){
+  if(!ADMIN_TEST_MODE) return;
+  var btnWrap = document.getElementById('admin-test-btn-wrap');
+  if(btnWrap) btnWrap.style.display = 'block';
+}
+/* Sayfa yüklendiğinde otomatik göster */
+if(typeof document !== 'undefined'){
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', _initAdminTestUI);
+  } else {
+    setTimeout(_initAdminTestUI, 100);
+  }
+}
+
 
 /* Antrenman menüsü görünümü: 'home' | 'browse' | 'detail' | 'active' */
 var _wrkView='home';
@@ -4657,7 +5648,7 @@ function switchMain(id){
   document.querySelectorAll('.bnav-btn').forEach(function(b){b.classList.remove('active');});
   document.getElementById('ms-'+id).classList.add('active');
   document.getElementById('bnav-'+id).classList.add('active');
-  if(id==='profil'){renderProfilMlist();renderProfileBadges();renderConditionsSummary();}
+  if(id==='profil'){renderProfilMlist();renderProfileBadges();renderConditionsSummary();_renderAdminTestBadge();}
   if(id==='vucudum')setTimeout(drawCharts,100);
   if(id==='antrenman')renderWorkoutHome();
   window.scrollTo(0,0);
@@ -9646,6 +10637,193 @@ function importData(){
   };
   inp.click();
 }
+
+/* ──────────────────────────────────────────────────────────
+   🔬 RAVENFIT SELF-TEST SİSTEMİ
+   
+   Geliştirici aracı — kritik hesaplamaların doğru çalıştığını
+   doğrular. Browser console'dan çalıştırılır:
+       _ravenfitSelfTest()
+   
+   ⚠️ DİKKAT: Test sırasında U ve R objeleri geçici olarak
+   değiştirilir, sonra eski hallerine döndürülür.
+   Kullanıcı verisi BOZULMAZ.
+   ────────────────────────────────────────────────────────── */
+function _ravenfitSelfTest(){
+  console.log('%c🔬 RavenFit Self-Test başlıyor...', 'color:#4CC9F0;font-weight:bold;font-size:14px');
+  console.log('-'.repeat(60));
+  
+  var passed = 0, failed = 0;
+  var results = [];
+  
+  /* Tolerans ile karşılaştırma */
+  function _approx(actual, expected, tolerance, label){
+    var ok = Math.abs(actual - expected) <= tolerance;
+    var status = ok ? '✅' : '❌';
+    var msg = status + ' ' + label.padEnd(40) + ' → ' + 
+              (typeof actual === 'number' ? actual.toFixed(2) : actual) + 
+              ' (beklenen ~' + expected + ' ±' + tolerance + ')';
+    console.log('%c' + msg, ok ? 'color:#2EC4B6' : 'color:#E63946;font-weight:bold');
+    results.push({label: label, actual: actual, expected: expected, passed: ok});
+    if(ok) passed++; else failed++;
+    return ok;
+  }
+  
+  /* Range içinde mi? */
+  function _range(actual, min, max, label){
+    var ok = actual >= min && actual <= max;
+    var status = ok ? '✅' : '❌';
+    var msg = status + ' ' + label.padEnd(40) + ' → ' + 
+              (typeof actual === 'number' ? actual.toFixed(2) : actual) +
+              ' (beklenen [' + min + '-' + max + '])';
+    console.log('%c' + msg, ok ? 'color:#2EC4B6' : 'color:#E63946;font-weight:bold');
+    results.push({label: label, actual: actual, range: [min, max], passed: ok});
+    if(ok) passed++; else failed++;
+    return ok;
+  }
+  
+  /* Backup mevcut state */
+  var bU = JSON.parse(JSON.stringify(U));
+  var bR = JSON.parse(JSON.stringify(R));
+  var bA = typeof A !== 'undefined' ? JSON.parse(JSON.stringify(A)) : null;
+  var bSelGL = typeof selGL !== 'undefined' ? selGL : null;
+  var bSelST = typeof selST !== 'undefined' ? selST : null;
+  
+  try {
+    /* ════════ TEST 1: Navy Body Fat (Erkek) ════════ */
+    console.log('%c\n📊 TEST GRUBU 1: Navy Vücut Yağı', 'color:#9B72FF;font-weight:bold');
+    U.gender = 'male';
+    U.height = 180;
+    U.neck = 40;
+    U.waist = 85;
+    var bfMale = calcBF();
+    _range(bfMale, 12, 20, 'calcBF (erkek 180cm, n40, w85)');
+    
+    /* TEST 2: Navy Body Fat (Kadın) */
+    U.gender = 'female';
+    U.height = 165;
+    U.neck = 33;
+    U.waist = 75;
+    U.hip = 95;
+    var bfFemale = calcBF();
+    _range(bfFemale, 22, 30, 'calcBF (kadın 165cm, n33, w75, h95)');
+    
+    /* ════════ TEST 3: FFMI ════════ */
+    console.log('%c\n📊 TEST GRUBU 2: FFMI', 'color:#9B72FF;font-weight:bold');
+    U.gender = 'male';
+    U.weight = 80;
+    U.height = 180;
+    var ffmiData = calcFFMI(15);
+    _approx(ffmiData.ffmi, 21.0, 0.5, 'calcFFMI (80kg, 15%bf, 180cm)');
+    _approx(ffmiData.ffm, 68, 0.5, 'calcFFMI.ffm (yağsız kütle)');
+    
+    /* ════════ TEST 4: BMR (Katch-McArdle) ════════ */
+    console.log('%c\n📊 TEST GRUBU 3: BMR (Katch-McArdle)', 'color:#9B72FF;font-weight:bold');
+    var bmr70 = calcBMR(70);
+    _approx(bmr70, 1882, 5, 'calcBMR (LM=70)');
+    var bmr50 = calcBMR(50);
+    _approx(bmr50, 1450, 5, 'calcBMR (LM=50)');
+    
+    /* ════════ TEST 5: calcGoalCalories (Cut/Bulk) ════════ */
+    console.log('%c\n📊 TEST GRUBU 4: Hedef Kalori', 'color:#9B72FF;font-weight:bold');
+    var cutCal = calcGoalCalories(2500, 'cut', 15, true);
+    _approx(cutCal, 2125, 25, 'calcGoalCalories (cut, bf15%, male) -15%');
+    var bulkCal = calcGoalCalories(2500, 'bulk', 15, true);
+    _approx(bulkCal, 2750, 25, 'calcGoalCalories (bulk, bf15%, male) +10%');
+    var maintCal = calcGoalCalories(2500, 'maintain', 15, true);
+    _approx(maintCal, 2500, 5, 'calcGoalCalories (maintain) ±0');
+    /* Cut en yüksek bf'de -20% sınırı */
+    var cutHighest = calcGoalCalories(2500, 'cut', 30, true);
+    _approx(cutHighest, 2000, 25, 'calcGoalCalories (cut, bf30% highest band) -20%');
+    
+    /* ════════ TEST 6: Makro Hesabı ════════ */
+    console.log('%c\n📊 TEST GRUBU 5: Makrolar', 'color:#9B72FF;font-weight:bold');
+    /* Normal kullanıcı (BF<30%) — bodyweight bazlı */
+    var macros1 = calcMacros(2500, 'maintain', 'hybrid', 70, 80, 15, true, null);
+    _range(macros1.pg, 130, 175, 'calcMacros protein (normal bf)');
+    _approx(macros1.proteinSource === 'bw' ? 1 : 0, 1, 0, 'calcMacros source=bw (normal bf)');
+    
+    /* Obez kullanıcı (BF≥30%) — LM bazlı */
+    var macros2 = calcMacros(2500, 'cut', 'hybrid', 60, 100, 35, true, null);
+    /* LM = 60, protein = 60 × 2.4 = 144 */
+    _approx(macros2.pg, 144, 3, 'calcMacros protein (LM bazlı, bf35%)');
+    _approx(macros2.proteinSource === 'lm' ? 1 : 0, 1, 0, 'calcMacros source=lm (obez)');
+    
+    /* ════════ TEST 7: Su Hesabı ════════ */
+    console.log('%c\n📊 TEST GRUBU 6: Su Hesabı', 'color:#9B72FF;font-weight:bold');
+    /* Manuel hesap: 70kg → 35*70/1000 = 2.45 L */
+    var w70 = (70 * 35) / 1000;
+    _approx(w70, 2.45, 0.01, 'Su (70kg base, 35ml/kg)');
+    /* Antrenman bonusu: +500 ml */
+    var w70bonus = (70 * 35 + 500) / 1000;
+    _approx(w70bonus, 2.95, 0.01, 'Su (70kg + antrenman bonus)');
+    
+    /* ════════ TEST 8: İdeal Kilo Aralığı ════════ */
+    console.log('%c\n📊 TEST GRUBU 7: BMI Referans Aralığı', 'color:#9B72FF;font-weight:bold');
+    var ir = calcIdealRange(180);
+    _approx(ir.lo, 60, 1, 'calcIdealRange.lo (180cm BMI 18.5)');
+    _approx(ir.hi, 81, 1, 'calcIdealRange.hi (180cm BMI 24.9)');
+    
+    /* ════════ TEST 9: Edge Cases ════════ */
+    console.log('%c\n📊 TEST GRUBU 8: Edge Cases', 'color:#9B72FF;font-weight:bold');
+    /* Geçersiz input sanitize ediliyor mu? */
+    U.weight = -10;
+    U.height = NaN;
+    U.age = 999;
+    _sanitizeUserInputs();
+    _range(U.weight, 25, 300, '_sanitize: negatif kilo düzeltilmesi');
+    _range(U.height, 120, 230, '_sanitize: NaN boy düzeltilmesi');
+    _range(U.age, 12, 100, '_sanitize: max yaş düzeltilmesi');
+    
+    /* RED-S risk kontrolü */
+    U.gender = 'male'; R.bf = 5;
+    var redsMale = _checkRedsRisk('cut');
+    _approx(redsMale ? 1 : 0, 1, 0, '_checkRedsRisk (erkek bf5%)');
+    R.bf = 15;
+    var redsMaleSafe = _checkRedsRisk('cut');
+    _approx(redsMaleSafe ? 1 : 0, 0, 0, '_checkRedsRisk (erkek bf15% güvenli)');
+    
+    U.gender = 'female'; R.bf = 12;
+    var redsFemale = _checkRedsRisk('cut');
+    _approx(redsFemale ? 1 : 0, 1, 0, '_checkRedsRisk (kadın bf12%)');
+    
+    /* Bulk seçiminde RED-S çalışmamalı */
+    R.bf = 5;
+    var redsBulkNo = _checkRedsRisk('bulk');
+    _approx(redsBulkNo ? 1 : 0, 0, 0, '_checkRedsRisk bulk için false');
+    
+  } catch(err){
+    console.error('❌ Test sırasında hata:', err);
+    failed++;
+  } finally {
+    /* Restore state */
+    Object.assign(U, bU);
+    Object.assign(R, bR);
+    if(bA && typeof A !== 'undefined') Object.assign(A, bA);
+    if(bSelGL !== null && typeof selGL !== 'undefined') selGL = bSelGL;
+    if(bSelST !== null && typeof selST !== 'undefined') selST = bSelST;
+    _redsAcknowledged = false; /* test sonrası reset */
+  }
+  
+  /* SONUÇ */
+  var total = passed + failed;
+  var pct = total > 0 ? Math.round(passed/total*100) : 0;
+  console.log('-'.repeat(60));
+  var summaryStyle = failed === 0 ? 'color:#2EC4B6;font-weight:bold;font-size:14px' 
+                                  : 'color:#FFB703;font-weight:bold;font-size:14px';
+  console.log('%c📊 SONUÇ: '+passed+'/'+total+' geçti ('+pct+'%)', summaryStyle);
+  if(failed > 0){
+    console.log('%c⚠️ '+failed+' test başarısız oldu — yukarıdaki ❌ satırlara bak', 'color:#E63946');
+  } else {
+    console.log('%c🎉 Tüm testler geçti — sistem sağlıklı!', 'color:#2EC4B6;font-weight:bold');
+  }
+  
+  return {passed: passed, failed: failed, total: total, results: results};
+}
+
+/* Console'a kısayol mesajı */
+console.log('%c💡 RavenFit Self-Test: _ravenfitSelfTest() ile çalıştır', 'color:#9B72FF;font-style:italic;font-size:11px');
+
 </script>
 
 <!-- 🔥 Firebase SDK -->
