@@ -68,7 +68,7 @@
       "entries": [
         {
           "dateStr": "05.05.2026",
-          "timestamp": 1746435600000,
+          "timestamp": 1777975200000,
           "weight": 83,
           "height": 180,
           "age": 27,
@@ -85,7 +85,7 @@
         },
         {
           "dateStr": "12.05.2026",
-          "timestamp": 1747040400000,
+          "timestamp": 1778580000000,
           "weight": 81.4,
           "height": 180,
           "age": 27,
@@ -102,7 +102,7 @@
         },
         {
           "dateStr": "19.05.2026",
-          "timestamp": 1747645200000,
+          "timestamp": 1779184800000,
           "weight": 80,
           "height": 180,
           "age": 27,
@@ -170,7 +170,7 @@
       "entries": [
         {
           "dateStr": "05.05.2026",
-          "timestamp": 1746435600000,
+          "timestamp": 1777975200000,
           "weight": 71,
           "height": 165,
           "age": 29,
@@ -187,7 +187,7 @@
         },
         {
           "dateStr": "12.05.2026",
-          "timestamp": 1747040400000,
+          "timestamp": 1778580000000,
           "weight": 69.5,
           "height": 165,
           "age": 29,
@@ -204,7 +204,7 @@
         },
         {
           "dateStr": "19.05.2026",
-          "timestamp": 1747645200000,
+          "timestamp": 1779184800000,
           "weight": 68,
           "height": 165,
           "age": 29,
@@ -218,6 +218,108 @@
           "forearm": 23,
           "leg": 56,
           "calf": 36
+        }
+      ]
+    },
+    {
+      "id": "onur",
+      "name": "Onur",
+      "age": 23,
+      "gender": "male",
+      "desc": "23y · Erkek · 174cm/75kg · Mezomorf · Kalisteniks (3+ yıl) · BF~%9 · Bulk hedefi · Omuz/Dirsek",
+      "color": "var(--success)",
+      "avatar": "🤸",
+      "testFor": "Mezomorf bulk + advanced training age + üst vücut overuse condition'ları + düşük BF + RED-S sınırı civarı",
+      "user": {
+        "name": "Onur",
+        "gender": "male",
+        "age": 23,
+        "height": 174,
+        "weight": 75,
+        "neck": 38,
+        "waist": 76,
+        "shoulder": 122,
+        "hip": 92,
+        "chest": 104,
+        "arm": 38,
+        "forearm": 31,
+        "leg": 56,
+        "thigh": 56,
+        "calf": 37
+      },
+      "A": {
+        "job": 1,
+        "sd": 5,
+        "sh": 1.5,
+        "ta": "gt3",
+        "ex": 0.6,
+        "st": "strength",
+        "gl": "bulk"
+      },
+      "bt": {
+        "bt1": {"ec":0, "me":1, "en":0},
+        "bt2": {"ec":0, "me":1, "en":0},
+        "bt3": {"ec":0, "me":1, "en":0},
+        "bt4": {"ec":0, "me":1, "en":0},
+        "bt5": {"ec":0, "me":1, "en":0},
+        "bt6": {"ec":0, "me":1, "en":0},
+        "bt7": {"ec":0, "me":1, "en":0},
+        "bt8": {"ec":0, "me":1, "en":0}
+      },
+      "goal": "bulk",
+      "sportType": "strength",
+      "conditions": ["shoulder-injury"],
+      "entries": [
+        {
+          "dateStr": "05.05.2026",
+          "timestamp": 1777975200000,
+          "weight": 73.5,
+          "height": 174,
+          "age": 23,
+          "gender": "male",
+          "neck": 38,
+          "waist": 75,
+          "shoulder": 121,
+          "hip": 91,
+          "chest": 103,
+          "arm": 37.5,
+          "forearm": 30.5,
+          "leg": 55.5,
+          "calf": 37
+        },
+        {
+          "dateStr": "12.05.2026",
+          "timestamp": 1778580000000,
+          "weight": 74.2,
+          "height": 174,
+          "age": 23,
+          "gender": "male",
+          "neck": 38,
+          "waist": 75.5,
+          "shoulder": 121,
+          "hip": 92,
+          "chest": 104,
+          "arm": 37.8,
+          "forearm": 31,
+          "leg": 56,
+          "calf": 37
+        },
+        {
+          "dateStr": "19.05.2026",
+          "timestamp": 1779184800000,
+          "weight": 75,
+          "height": 174,
+          "age": 23,
+          "gender": "male",
+          "neck": 38,
+          "waist": 76,
+          "shoulder": 122,
+          "hip": 92,
+          "chest": 104,
+          "arm": 38,
+          "forearm": 31,
+          "leg": 56,
+          "calf": 37
         }
       ]
     }
