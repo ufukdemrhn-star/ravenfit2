@@ -1607,6 +1607,32 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
   </div>
 </div>
 
+<!-- ══ BULK UYARI MODAL (Bulk + Yüksek BF) ══════════════════ -->
+<div id="bulk-warning-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:900;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)">
+  <div style="background:var(--card);border:2px solid var(--warn);border-radius:16px;padding:24px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(255,183,3,.3)">
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-size:42px;margin-bottom:8px">⚠️</div>
+      <div style="font-size:18px;font-weight:800;color:var(--warn);letter-spacing:.5px">SAĞLIK UYARISI</div>
+      <div style="font-size:11px;color:var(--text2);margin-top:4px;text-transform:uppercase;letter-spacing:1px">Yüksek Yağ Oranında Bulk Riski</div>
+    </div>
+    <div id="bulk-warning-body" style="font-size:13px;color:var(--text);line-height:1.6;margin-bottom:18px">
+      <!-- İçerik openBulkWarning() ile dolduruluyor -->
+    </div>
+    <div style="background:rgba(255,183,3,.08);border-left:3px solid var(--warn);border-radius:8px;padding:12px 14px;margin-bottom:18px">
+      <div style="font-size:12px;color:var(--text);line-height:1.5">
+        <strong>Yüksek Yağ Oranında Bulk Neden Riskli?</strong> Yüksek yağ oranıyla başlanan bulk dönemi insülin direncini artırır, yağ kazanımını hızlandırır ve gelişmiş yağ hücreleri (hipertrofi) ileride yağ kaybetmeyi zorlaştırır. Aynı zamanda kalori fazlasının daha büyük kısmı yağ olarak depolanır, kas kazanımı verimi düşer.
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--text2);text-align:center;margin-bottom:14px;font-style:italic">
+      Bu sadece bir bilgilendirmedir; tıbbi tavsiye değildir. Hedeflerini bir profesyonelle değerlendirmen önerilir.
+    </div>
+    <div style="display:flex;gap:10px">
+      <button onclick="bulkWarningCancel()" style="flex:1;background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:13px;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;font-family:'Outfit',sans-serif">İptal (Recomp Seç)</button>
+      <button onclick="bulkWarningProceed()" style="flex:2;background:var(--warn);border:none;border-radius:11px;padding:13px;font-size:12px;font-weight:700;color:#000;cursor:pointer;font-family:'Outfit',sans-serif;letter-spacing:.5px">Riskleri Anladım, Devam Et</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══ 🧪 ADMIN TEST PANEL OVERLAY (geçici) ════════════════ -->
 <div class="calc-overlay" id="admin-test-overlay">
   <div class="calc-header" style="background:linear-gradient(135deg,rgba(155,114,255,.15),rgba(155,114,255,.05))">
@@ -2023,6 +2049,17 @@ function selOpt(el,grp){
         } catch(e){}
       });
       return; /* Modal açıldı, gerisini bekle */
+    }
+    
+    /* Bulk kontrolü: Bulk + yüksek BF → güçlü uyarı */
+    if(_checkBulkRisk(selGL)){
+      openBulkWarning(function(){
+        try {
+          if(typeof renderGoalStep==='function') renderGoalStep();
+          if(typeof renderAll==='function') renderAll();
+        } catch(e){}
+      });
+      return;
     }
     
     /* Risky gate kontrolü — sadece tıklanan kart riskliyse uyar */
@@ -5349,6 +5386,79 @@ function redsWarningCancel(){
   }
 }
 
+/* ──────────────────────────────────────────────────────────
+   BULK UYARI SİSTEMİ
+   Bulk seçiminde yüksek yağ oranı (erkek >%20, kadın >%30) için detaylı uyarı.
+   ────────────────────────────────────────────────────────── */
+var _bulkPendingCallback = null;
+var _bulkAcknowledged = false;
+
+function _checkBulkRisk(gl){
+  if(gl !== 'bulk') return false;
+  if(_bulkAcknowledged) return false;
+  var bf = R.bf;
+  if(bf == null) return false;
+  var male = U.gender === 'male';
+  if(male && bf > 20) return true;
+  if(!male && bf > 30) return true;
+  return false;
+}
+
+function openBulkWarning(proceedCallback){
+  _bulkPendingCallback = proceedCallback || null;
+  var body = document.getElementById('bulk-warning-body');
+  if(!body) return;
+  
+  var male = U.gender === 'male';
+  var bf = R.bf;
+  var threshold = male ? 20 : 30;
+  
+  body.innerHTML = 
+    '<p style="margin:0 0 12px 0">Mevcut vücut yağ oranın <strong style="color:var(--warn)">%'+bf.toFixed(1)+'</strong>. '+(male?'Erkekler':'Kadınlar')+' için <strong>%'+threshold+'</strong> üzerinde yağ oranıyla <strong>bulk dönemi</strong> başlatmak şu riskleri taşır:</p>'+
+    '<ul style="margin:0 0 12px 18px;padding:0;font-size:12px;color:var(--text2);line-height:1.7">'+
+      '<li>İnsülin direncinde artış, kortizol yüksekliği</li>'+
+      '<li>Yağ kazanımının kas kazanımına oranı yükselir (kötü P-ratio)</li>'+
+      '<li>Yeni yağ hücreleri (hipertrofi) — ileride cut yapmak zorlaşır</li>'+
+      '<li>Estradiol artışı, testosteron baskılanması (erkek)</li>'+
+      '<li>Toparlanma süresi uzar, antrenman verimi düşer</li>'+
+      '<li>Görsel olarak kas tanımı belirgin azalır</li>'+
+      '<li>Uyku kalitesi ve enerji seviyesinde düşüş</li>'+
+    '</ul>'+
+    '<p style="margin:0;font-size:12px;color:var(--text2)">Bu yağ oranında <strong style="color:var(--text)">recomp</strong> veya <strong style="color:var(--text)">cut</strong> hedefi seçip önce yağ oranını düşürmek bulk verimini ciddi şekilde artırır.</p>';
+  
+  document.getElementById('bulk-warning-overlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function bulkWarningProceed(){
+  _bulkAcknowledged = true;
+  document.getElementById('bulk-warning-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+  if(typeof _bulkPendingCallback === 'function'){
+    var cb = _bulkPendingCallback;
+    _bulkPendingCallback = null;
+    cb();
+  }
+}
+
+function bulkWarningCancel(){
+  document.getElementById('bulk-warning-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+  _bulkPendingCallback = null;
+  /* Recomp'a çek */
+  if(typeof selGL !== 'undefined'){
+    selGL = 'recomp';
+    try {
+      document.querySelectorAll('[data-g="gl"]').forEach(function(b){
+        b.classList.remove('sel');
+        if(b.getAttribute('data-v')==='recomp') b.classList.add('sel');
+      });
+      if(typeof renderGoalStep === 'function') renderGoalStep();
+      if(typeof renderAll === 'function') renderAll();
+    } catch(e){ console.warn('Bulk cancel UI sync:',e); }
+  }
+}
+
 
 /* ══════════════════════════════════════════════════════════
    🧪 ADMIN TEST PANEL SİSTEMİ — GEÇİCİ
@@ -5367,6 +5477,10 @@ var ADMIN_TEST_MODE = true;  /* ⚠️ Yayında bu satırı false yap */
 /* Test profili aktif mi? */
 var _adminTestActive = false;
 var _adminTestProfileId = null;
+/* Auth ekranının tekrar açılmasını blokla — test profili aktifken */
+var _adminBlockAuth = false;
+/* Test modunda rozet/water/supp gibi otomatik tetiklemeleri blokla */
+var _adminBlockBadges = false;
 
 /* Kullanıcının kendi verilerinin yedeği (test moduna girerken alınır, çıkarken geri yüklenir) */
 var _adminUserBackup = null;
@@ -5599,6 +5713,7 @@ function loadAdminTestProfile(profileId){
   /* ── 2. Admin modunu işaretle ── */
   _adminTestActive = true;
   _adminTestProfileId = profileId;
+  _adminBlockBadges = true;
   
   /* ── 3. In-memory state'i tamamen sıfırla (sıfır profil hissi) ── */
   /* U, R, A, BT objelerinin tüm anahtarlarını silmek lazım (yeni atama referansı bozar) */
@@ -5639,6 +5754,16 @@ function loadAdminTestProfile(profileId){
     try {
       var entries = profile.entries.map(function(e){
         var clone = JSON.parse(JSON.stringify(e));
+        /* Tarihleri TAZE hesapla — dateStr'den (sistemin yanlış tarihinde olmasını engelle) */
+        if(clone.dateStr){
+          var parts = clone.dateStr.split('.');
+          if(parts.length === 3){
+            /* gg.aa.yyyy → Date(yyyy, aa-1, gg) */
+            var d = new Date(parseInt(parts[2],10), parseInt(parts[1],10)-1, parseInt(parts[0],10), 10, 0, 0);
+            clone.timestamp = d.getTime();
+            clone.date = clone.dateStr;
+          }
+        }
         _adminCalcEntryMetrics(clone, profile.gender || 'male');
         return clone;
       });
@@ -5653,13 +5778,14 @@ function loadAdminTestProfile(profileId){
     console.log('  ✓ Hesaplamalar tamamlandı (BMR:', R.bmr, 'TDEE:', R.tdee, 'BF:', R.bf, ')');
   } catch(e){ console.warn('calcAll hatası:', e); }
   
-  /* ── 11. Auth ekranını TAMAMEN gizle (inline display + class) ── */
+  /* ── 11. Auth ekranını TAMAMEN gizle (inline display + class + MutationObserver) ── */
   try {
     var auth = document.getElementById('auth-screen');
     if(auth){
       auth.style.display = 'none';
       auth.style.visibility = 'hidden';
       auth.style.zIndex = '-1';
+      auth.style.pointerEvents = 'none';
       auth.classList.add('admin-hidden');
     }
     var appMain = document.getElementById('app-main');
@@ -5668,6 +5794,8 @@ function loadAdminTestProfile(profileId){
       appMain.style.visibility = 'visible';
     }
     _isGuest = true;
+    /* Auth ekranı tekrar açılmasın diye guard koy — başka kod showAuthScreen çağırsa bile */
+    _adminBlockAuth = true;
   } catch(e){ console.warn('Auth gizleme hatası:',e); }
   closeAdminTestPanel();
   
@@ -5739,6 +5867,8 @@ function exitAdminTestProfile(){
     step = 0;
     _adminTestActive = false;
     _adminTestProfileId = null;
+    _adminBlockAuth = false;
+    _adminBlockBadges = false;
     _isGuest = false;
     _redsAcknowledged = false;
     
@@ -10089,9 +10219,17 @@ function _getBadgeDefs(){
   return (BADGES_DATA&&BADGES_DATA.badges)||BADGES_FALLBACK;
 }
 function getEarnedBadges(){
+  /* Admin test modu — rozet listesi boş döner (sıfır profil hissi) */
+  if(typeof _adminBlockBadges !== 'undefined' && _adminBlockBadges){
+    return [];
+  }
   try{return JSON.parse(localStorage.getItem('rf_badges')||'[]');}catch(e){return[];}
 }
 function saveEarnedBadges(arr){
+  /* Admin test modunda rozet kaydetme */
+  if(typeof _adminBlockBadges !== 'undefined' && _adminBlockBadges){
+    return;
+  }
   localStorage.setItem('rf_badges',JSON.stringify(arr));
   saveToFirebase();
 }
@@ -10101,6 +10239,10 @@ var _badgeQueue=[];
 var _badgeShowing=false;
 
 function checkAndAwardBadges(){
+  /* Admin test modunda rozet verme — sıfır profil hissi için */
+  if(typeof _adminBlockBadges !== 'undefined' && _adminBlockBadges){
+    return [];
+  }
   var defs=_getBadgeDefs();
   var earned=getEarnedBadges();
   var logs=getWorkoutLogs();
@@ -10347,6 +10489,11 @@ function initFirebase(){
 }
 
 function showAuthScreen(){
+  /* Admin test modu aktifse auth ekranını AÇMA — başka kod çağırsa bile blokla */
+  if(typeof _adminBlockAuth !== 'undefined' && _adminBlockAuth){
+    console.warn('🛡️ showAuthScreen bloklandı (admin test aktif)');
+    return;
+  }
   document.getElementById('auth-screen').style.display='flex';
   document.getElementById('app-main').style.display='none';
 }
