@@ -728,9 +728,9 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
       </button>
       <div style="font-size:10px;color:var(--text3);margin-top:7px;text-align:center;line-height:1.5">Kayıt olmadan keşfet. Veriler yalnızca bu cihazda saklanır,<br>hesap oluşturulana kadar buluta yüklenmez.</div>
       
-      <!-- 🧪 GEÇİCİ TEST PROFİLLERİ BUTONU — yayında ADMIN_TEST_MODE=false yapılarak gizlenir -->
-      <div id="admin-test-btn-wrap" style="display:none;margin-top:18px;padding-top:14px;border-top:1px dashed var(--border)">
-        <button onclick="openAdminTestPanel()" style="width:100%;background:rgba(155,114,255,.08);border:1px dashed var(--purple);border-radius:9px;padding:10px;font-family:'Outfit',sans-serif;font-size:11px;font-weight:600;color:var(--purple);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:.3px">
+      <!-- 🧪 GEÇİCİ TEST PROFİLLERİ BUTONU — yayında ADMIN_TEST_MODE=false yapılınca _initAdminTestUI gizler -->
+      <div id="admin-test-btn-wrap" style="margin-top:18px;padding-top:14px;border-top:1px dashed var(--border)">
+        <button type="button" onclick="openAdminTestPanel(); return false;" style="width:100%;background:rgba(155,114,255,.08);border:1px dashed var(--purple);border-radius:9px;padding:10px;font-family:'Outfit',sans-serif;font-size:11px;font-weight:600;color:var(--purple);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:.3px;position:relative;z-index:10">
           <span style="font-size:14px">🧪</span>
           <span>Test Profilleri (Geliştirici)</span>
         </button>
@@ -1746,6 +1746,10 @@ window.addEventListener('load',function(){
 });
 
 function saveData(){
+  /* Admin test modunda kendi verilerini bozmamak için yazma — tamamen RAM'de tut */
+  if(typeof ADMIN_TEST_MODE !== 'undefined' && ADMIN_TEST_MODE && _adminTestActive){
+    return;
+  }
   var str=JSON.stringify({U:U,R:R,A:A,BT:BT,selST:selST,selGL:selGL,conditions:U.conditions||[]});
   localStorage.setItem('rf_data',str);
   if(!_isGuest)saveToFirebase();
@@ -3272,7 +3276,7 @@ function saveFirstWeekMeasurements() {
   } else {
     entries.push(entry);
   }
-  localStorage.setItem('rf_entries', JSON.stringify(entries));
+  _setEntries(entries);
   saveToFirebase();
 }
 
@@ -3362,7 +3366,7 @@ function saveWeeklyMeasurements(){
     if(fd.forearm)U.forearm=fd.forearm;if(fd.hip)U.hip=fd.hip;if(fd.leg)U.leg=fd.leg;if(fd.calf)U.calf=fd.calf;
     calcAll();saveData();entries.push(entry);
   }
-  localStorage.setItem('rf_entries',JSON.stringify(entries));
+  _setEntries(entries);
   saveToFirebase();
   var wasEdit=_editingEntryIdx!==null;
   closeMeasurementModal();renderAll();
@@ -3542,12 +3546,24 @@ function renderIlerleme(){
   drawCharts();
 }
 
-function getEntries(){try{return JSON.parse(localStorage.getItem('rf_entries')||'[]');}catch(e){return[];}}
+function getEntries(){
+  /* Admin test modu — sandbox anahtarından oku */
+  if(typeof ADMIN_TEST_MODE !== 'undefined' && ADMIN_TEST_MODE && _adminTestActive){
+    try{return JSON.parse(localStorage.getItem('rf_admin_entries')||'[]');}catch(e){return[];}
+  }
+  try{return JSON.parse(localStorage.getItem('rf_entries')||'[]');}catch(e){return[];}
+}
+/* Entry yazımı (admin sandbox'a veya normal storage'a) */
+function _setEntries(entries){
+  var key = (typeof ADMIN_TEST_MODE !== 'undefined' && ADMIN_TEST_MODE && _adminTestActive)
+    ? 'rf_admin_entries' : 'rf_entries';
+  try { localStorage.setItem(key, JSON.stringify(entries)); } catch(e){ console.warn('setEntries err:',e); }
+}
 function deleteEntry(i){
   showConfirm('Kaydı Sil','Bu ölçüm kaydını silmek istediğine emin misin?',function(){
     var entries=getEntries();
     entries.splice(i,1);
-    localStorage.setItem('rf_entries',JSON.stringify(entries));
+    _setEntries(entries);
     /* U'yu en son entry'ye göre güncelle (varsa) */
     if(entries.length>0){
       _syncUFromLatestEntry(entries);
@@ -5339,9 +5355,10 @@ function redsWarningCancel(){
    Yayın için ADMIN_TEST_MODE = false yapılınca tüm sistem
    devre dışı kalır, butonlar görünmez, fonksiyonlar pasif olur.
    
-   Test profilleri sadece in-memory (U, R, A, BT) doldurur,
-   3 haftalık entry'leri localStorage'a yazar (chart için).
-   Çıkışta tüm veri tamamen temizlenir.
+   Test profilleri sandbox modunda yüklenir:
+   - rf_admin_entries anahtarına ölçümler yazılır
+   - Kullanıcının kendi rf_entries verisine dokunulmaz
+   - Çıkışta sandbox temizlenir
    ══════════════════════════════════════════════════════════ */
 
 var ADMIN_TEST_MODE = true;  /* ⚠️ Yayında bu satırı false yap */
@@ -5350,17 +5367,21 @@ var ADMIN_TEST_MODE = true;  /* ⚠️ Yayında bu satırı false yap */
 var _adminTestActive = false;
 var _adminTestProfileId = null;
 
-/* Test profilleri kataloğu */
+/* Kullanıcının kendi verilerinin yedeği (test moduna girerken alınır, çıkarken geri yüklenir) */
+var _adminUserBackup = null;
+
+/* Test profilleri kataloğu — Her profil tüm wizard'ı doldurabilecek veriye sahip */
 var ADMIN_TEST_PROFILES = [
   {
     id: 'ufuk',
     name: 'Ufuk',
     age: 27,
     gender: 'male',
-    desc: '27y · Erkek · 180cm/80kg · Ektomorf · Sedanter (ayakta iş) · Cut hedefi · Bel/Diz/Omuz/Kalp+HT',
+    desc: '27y · Erkek · 180cm/80kg · Ektomorf · Aktif ayakta iş · Cut hedefi · 5 özel durum',
     color: 'var(--purple)',
     avatar: '👤',
     user: {
+      name: 'Ufuk',
       gender: 'male',
       age: 27,
       height: 180,
@@ -5372,52 +5393,70 @@ var ADMIN_TEST_PROFILES = [
       chest: 102,
       arm: 35,
       forearm: 29,
+      leg: 58,
       thigh: 58,
-      calf: 35,
-      activityLevel: 'low',     /* hiç spor yapmıyor */
-      jobActivity: 'active',     /* ayakta aktif iş */
-      trainingExperience: 'beginner',
-      extraActivity: 'none'
+      calf: 35
     },
+    /* A objesi — wizard adım 3-4 cevapları */
+    A: {
+      job: 2,          /* Aktif / Ayakta */
+      sd: 0,           /* Spor günü: Hiç yapmıyorum */
+      sh: 0,           /* Spor süresi: yapmıyor → 0 (locked) */
+      ta: 'none',      /* Training age: Hiç düzenli yapmadım */
+      ex: 0,           /* Ekstra aktivite: Hayır */
+      st: 'hybrid',
+      gl: 'cut'
+    },
+    /* BT objesi — Vücut Tipi Testi (bt1-bt8 keyleri, {ec,me,en} puanları) */
     bt: {
-      /* Vücut tipi testi sıralı cevaplar — Ektomorf profili */
-      q1: 'overlap',          /* parmaklar üst üste */
-      q2: 'visible-bones',    /* kemikleri belirgin */
-      q3: 'pencil',           /* kalem gibi (bilekler) */
-      q4: 'long-narrow',      /* ince uzun */
-      q5: 'hard-gain',        /* kütle kazanmakta zorlanıyor */
-      q6: 'minimal',          /* pek değişmiyor */
-      q7: 'fit-easy',         /* rahatça giriyor (giysi) */
-      q8: 'both'              /* veririm de alırım da */
+      bt1: {ec:1, me:0, en:0},  /* Parmaklar üst üste geldi → ektomorf */
+      bt2: {ec:1, me:0, en:0},  /* Kemiklerim → ektomorf */
+      bt3: {ec:1, me:0, en:0},  /* Kalem gibi → ektomorf */
+      bt4: {ec:1, me:0, en:0},  /* İnce ve uzun → ektomorf */
+      bt5: {ec:1, me:0, en:0},  /* Kütle kazanmakta zorlanıyorum → ektomorf */
+      bt6: {ec:0, me:1, en:0},  /* Pek değişmiyor → mezomorf */
+      bt7: {ec:1, me:0, en:0},  /* Rahatça içine girebiliyorum → ektomorf */
+      bt8: {ec:0, me:1, en:0}   /* Veririm de alırım da → mezomorf */
     },
     goal: 'cut',
     sportType: 'hybrid',
     conditions: ['lower-back','knee-injury','shoulder-injury','cardiovascular','hypertension'],
-    /* 3 haftalık geçmiş ölçüm */
+    /* 3 haftalık geçmiş ölçüm — bf/ffmi/bmi otomatik hesaplanır, age tüm entry'lere yazılır */
     entries: [
-      /* En eski — 05.05.2026 */
-      { date:'2026-05-05', timestamp: new Date('2026-05-05T10:00:00').getTime(),
-        weight:83, neck:39, waist:97.5, shoulder:117, hip:96, chest:101, arm:35, forearm:28, thigh:57, calf:34, bf:null, ffmi:null, bmi:null },
-      /* Orta — 12.05.2026 */
-      { date:'2026-05-12', timestamp: new Date('2026-05-12T10:00:00').getTime(),
-        weight:81.4, neck:39, waist:97.5, shoulder:117, hip:97, chest:102, arm:35, forearm:29, thigh:57, calf:35, bf:null, ffmi:null, bmi:null },
-      /* En güncel — 19.05.2026 (bugün) */
-      { date:'2026-05-19', timestamp: new Date('2026-05-19T10:00:00').getTime(),
-        weight:80, neck:39, waist:96.5, shoulder:118, hip:99, chest:102, arm:35, forearm:29, thigh:58, calf:35, bf:null, ffmi:null, bmi:null }
+      { dateStr:'05.05.2026', timestamp: new Date('2026-05-05T10:00:00').getTime(),
+        weight:83, height:180, age:27, gender:'male',
+        neck:39, waist:97.5, shoulder:117, hip:96, chest:101, arm:35, forearm:28, leg:57, calf:34 },
+      { dateStr:'12.05.2026', timestamp: new Date('2026-05-12T10:00:00').getTime(),
+        weight:81.4, height:180, age:27, gender:'male',
+        neck:39, waist:97.5, shoulder:117, hip:97, chest:102, arm:35, forearm:29, leg:57, calf:35 },
+      { dateStr:'19.05.2026', timestamp: new Date('2026-05-19T10:00:00').getTime(),
+        weight:80, height:180, age:27, gender:'male',
+        neck:39, waist:96.5, shoulder:118, hip:99, chest:102, arm:35, forearm:29, leg:58, calf:35 }
     ]
   }
 ];
 
 /* Admin panel açılış — auth ekranındaki butondan çağrılır */
 function openAdminTestPanel(){
-  if(!ADMIN_TEST_MODE) return;
-  _renderAdminProfilesList();
-  document.getElementById('admin-test-overlay').classList.add('active');
+  console.log('🧪 openAdminTestPanel çağrıldı, mode:', ADMIN_TEST_MODE);
+  if(!ADMIN_TEST_MODE){ console.warn('Admin test modu kapalı'); return false; }
+  var overlay = document.getElementById('admin-test-overlay');
+  if(!overlay){ console.error('admin-test-overlay elementi bulunamadı!'); return false; }
+  try { _renderAdminProfilesList(); } catch(e){ console.error('Profil listesi render hatası:', e); }
+  /* Auth ekranı z-index'ini geçecek şekilde overlay'i üste taşı */
+  overlay.style.zIndex = '9999';
+  overlay.classList.add('active');
   document.body.style.overflow = 'hidden';
+  console.log('✓ Admin paneli açıldı (z-index 9999)');
+  return false;
 }
 
 function closeAdminTestPanel(){
-  document.getElementById('admin-test-overlay').classList.remove('active');
+  var overlay = document.getElementById('admin-test-overlay');
+  if(overlay){
+    overlay.classList.remove('active');
+    overlay.style.zIndex = '';
+  }
   document.body.style.overflow = '';
 }
 
@@ -5427,13 +5466,12 @@ function _renderAdminProfilesList(){
   
   var html = '';
   ADMIN_TEST_PROFILES.forEach(function(p){
-    /* Conditions kısa özetini hazırla */
     var condCount = (p.conditions || []).length;
     var condBadge = condCount > 0 
       ? '<span style="display:inline-block;background:rgba(230,57,70,.12);color:var(--danger);font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;margin-top:4px">🩺 '+condCount+' Özel Durum</span>'
       : '';
     
-    html += '<div style="background:var(--card2);border:1.5px solid '+p.color+';border-radius:12px;padding:14px;margin-bottom:12px;cursor:pointer;transition:all .2s" onclick="loadAdminTestProfile(\''+p.id+'\')" onmousedown="this.style.transform=\'scale(.98)\'" onmouseup="this.style.transform=\'\'" ontouchstart="this.style.transform=\'scale(.98)\'" ontouchend="this.style.transform=\'\'">';
+    html += '<div style="background:var(--card2);border:1.5px solid '+p.color+';border-radius:12px;padding:14px;margin-bottom:12px;cursor:pointer;transition:all .2s" onclick="loadAdminTestProfile(\''+p.id+'\')">';
     html += '<div style="display:flex;align-items:center;gap:12px">';
     html += '<div style="font-size:32px">'+p.avatar+'</div>';
     html += '<div style="flex:1;min-width:0">';
@@ -5450,11 +5488,50 @@ function _renderAdminProfilesList(){
 }
 
 /**
- * Test profilini yükler:
- * 1. U, A, BT objelerini doldurur
- * 2. 3 haftalık entry'leri localStorage'a yazar
- * 3. selGL ve selST seçimlerini ayarlar
- * 4. Wizard'ı step 7'de açar — kullanıcı 1-7 arası gezebilir
+ * Bir entry için bf/ffmi/bmi/lm/fm/shoulderToWaist hesaplar.
+ * U geçici olarak değiştirilir, sonra geri yüklenir.
+ */
+function _adminCalcEntryMetrics(entry, gender){
+  var snap = {
+    height: U.height, weight: U.weight, neck: U.neck, waist: U.waist, hip: U.hip, gender: U.gender
+  };
+  try {
+    U.gender = gender;
+    U.height = entry.height || 180;
+    U.weight = entry.weight;
+    U.neck = entry.neck;
+    U.waist = entry.waist;
+    U.hip = entry.hip;
+    
+    var bf = calcBF();
+    var ffmiData = calcFFMI(bf);
+    var bmi = entry.weight / Math.pow((entry.height||180)/100, 2);
+    
+    entry.bf = Math.round(bf*100)/100;
+    entry.ffmi = ffmiData.ffmi;
+    entry.bmi = Math.round(bmi*100)/100;
+    entry.fm = Math.round((entry.weight * bf/100)*100)/100;
+    entry.lm = Math.round(ffmiData.ffm*100)/100;
+    entry.fatMass = entry.fm;
+    entry.leanMass = entry.lm;
+    /* Omuz/Bel oranı — kullanıcı bu metriği görüyor */
+    if(entry.shoulder && entry.waist){
+      entry.swr = Math.round((entry.shoulder/entry.waist)*100)/100;
+      entry.shoulderToWaist = entry.swr;
+    }
+    /* date alanı (gg.aa.yyyy) */
+    if(entry.dateStr) entry.date = entry.dateStr;
+  } catch(e){
+    console.warn('Entry metric calc error:', e);
+  } finally {
+    Object.keys(snap).forEach(function(k){ U[k] = snap[k]; });
+  }
+  return entry;
+}
+
+/**
+ * Test profilini yükler — SANDBOX MODU
+ * Kullanıcının kendi verisine HİÇ DOKUNULMAZ.
  */
 function loadAdminTestProfile(profileId){
   if(!ADMIN_TEST_MODE) return;
@@ -5463,72 +5540,117 @@ function loadAdminTestProfile(profileId){
   
   console.log('%c🧪 Test profili yükleniyor: '+profile.name, 'color:#9B72FF;font-weight:bold');
   
-  /* 1. U objesini doldur */
-  Object.keys(profile.user).forEach(function(k){
-    U[k] = profile.user[k];
-  });
+  /* ── 1. Kullanıcının mevcut state'ini yedekle (çıkışta geri yüklenebilsin) ── */
+  _adminUserBackup = {
+    U: JSON.parse(JSON.stringify(U||{})),
+    R: JSON.parse(JSON.stringify(R||{})),
+    A: JSON.parse(JSON.stringify(A||{})),
+    BT: JSON.parse(JSON.stringify(BT||{})),
+    selGL: selGL,
+    selST: selST,
+    _isGuest: _isGuest,
+    badges: localStorage.getItem('rf_badges'),
+    suppsUsed: localStorage.getItem('rf_supplements_used'),
+    waterToday: localStorage.getItem('rf_water_today')
+  };
   
-  /* 2. BT objesini doldur (vücut tipi cevapları) */
-  if(profile.bt){
-    Object.keys(profile.bt).forEach(function(k){
-      BT[k] = profile.bt[k];
-    });
-  }
-  
-  /* 3. A objesini başlat (recomp vs için boş) */
-  if(typeof A === 'undefined') window.A = {};
-  
-  /* 4. Conditions */
-  U.conditions = (profile.conditions || []).slice();
-  
-  /* 5. Hedef + spor türü (startWizard sonrası tekrar set edilecek) */
-  var _goalToSet = profile.goal || 'maintain';
-  var _stToSet = profile.sportType || 'hybrid';
-  selGL = _goalToSet;
-  selST = _stToSet;
-  
-  /* 6. 3 haftalık entry'leri localStorage'a yaz */
-  if(profile.entries && profile.entries.length){
-    try {
-      localStorage.setItem('rf_entries', JSON.stringify(profile.entries));
-    } catch(e){ console.warn('Entry kaydetme hatası:', e); }
-  }
-  
-  /* 7. A objesine training_age ve hedef yaz (wizard restore için) */
-  A.gl = _goalToSet;
-  A.st = _stToSet;
-  A.ta = U.trainingExperience || 'beginner';
-  /* Aktivite (job + extra) */
-  A.job = U.jobActivity || 'sedentary';
-  A.act = U.activityLevel || 'low';
-  
-  /* 8. Admin test aktif olarak işaretle */
+  /* ── 2. Admin modunu işaretle ── */
   _adminTestActive = true;
   _adminTestProfileId = profileId;
   
-  /* 9. Auth ekranını kapat, wizard'ı aç */
+  /* ── 3. In-memory state'i tamamen sıfırla (sıfır profil hissi) ── */
+  /* U, R, A, BT objelerinin tüm anahtarlarını silmek lazım (yeni atama referansı bozar) */
+  Object.keys(U).forEach(function(k){ delete U[k]; });
+  Object.keys(R).forEach(function(k){ delete R[k]; });
+  Object.keys(A).forEach(function(k){ delete A[k]; });
+  Object.keys(BT).forEach(function(k){ delete BT[k]; });
+  selGL = null; selST = null;
+  
+  /* ── 4. Test profilini "ilk defa giren kullanıcı" gibi yükle ── */
+  /* Rozet ve diğer kullanıcı verisini geçici olarak temizle */
+  try { localStorage.removeItem('rf_badges'); } catch(e){}
+  try { localStorage.removeItem('rf_supplements_used'); } catch(e){}
+  try { localStorage.removeItem('rf_water_today'); } catch(e){}
+  
+  /* ── 5. U objesini doldur ── */
+  Object.keys(profile.user).forEach(function(k){ U[k] = profile.user[k]; });
+  U.conditions = (profile.conditions || []).slice();
+  
+  /* ── 6. A objesini doldur ── */
+  if(profile.A){
+    Object.keys(profile.A).forEach(function(k){ A[k] = profile.A[k]; });
+  }
+  
+  /* ── 7. BT objesini doldur ── */
+  if(profile.bt){
+    Object.keys(profile.bt).forEach(function(k){ BT[k] = profile.bt[k]; });
+  }
+  
+  /* ── 8. Hedef + spor türü ── */
+  selGL = profile.goal || 'maintain';
+  selST = profile.sportType || 'hybrid';
+  A.gl = selGL;
+  A.st = selST;
+  
+  /* ── 9. 3 haftalık entry'leri hesapla ve SANDBOX'a yaz ── */
+  if(profile.entries && profile.entries.length){
+    try {
+      var entries = profile.entries.map(function(e){
+        var clone = JSON.parse(JSON.stringify(e));
+        _adminCalcEntryMetrics(clone, profile.gender || 'male');
+        return clone;
+      });
+      localStorage.setItem('rf_admin_entries', JSON.stringify(entries));
+      console.log('  📊 '+entries.length+' adet ölçüm sandboxa yüklendi');
+    } catch(e){ console.warn('Entry sandbox yazma hatası:', e); }
+  }
+  
+  /* ── 10. Hesaplamaları yap ── */
   try {
-    if(typeof hideAuthScreen === 'function') hideAuthScreen();
-    /* Misafir modunu aktive et — Firebase'e dokunulmasın */
+    if(typeof calcAll === 'function') calcAll();
+    console.log('  ✓ Hesaplamalar tamamlandı (BMR:', R.bmr, 'TDEE:', R.tdee, 'BF:', R.bf, ')');
+  } catch(e){ console.warn('calcAll hatası:', e); }
+  
+  /* ── 11. Auth ekranını kapat ── */
+  try {
+    var auth = document.getElementById('auth-screen');
+    if(auth){ auth.style.display='none'; }
+    var appMain = document.getElementById('app-main');
+    if(appMain){ appMain.style.display='block'; }
     _isGuest = true;
   } catch(e){}
   closeAdminTestPanel();
   
-  /* 10. Wizard'ı step 7'de aç (özel durumlar) */
-  /* startWizard selST/selGL'i null yapar, sonra restoreWiz ile A'dan geri alır */
+  /* ── 12. Wizard'ı step 7'de aç ── */
   try {
-    if(typeof startWizard === 'function'){
-      startWizard();
-      /* selST/selGL'i tekrar set et (startWizard null'a çekti, A.gl/A.st üzerinden restore olmuş olabilir) */
-      selGL = _goalToSet;
-      selST = _stToSet;
-      /* Adımı 6'ya getir (özel durumlar = step 7/7) */
-      step = 6;
-      if(typeof updWizStep === 'function') updWizStep();
-    }
+    if(typeof showScreen === 'function') showScreen('wizard');
+    var bnav = document.getElementById('bottom-nav');
+    if(bnav) bnav.classList.remove('visible');
+    
+    /* selGL ve selST'i tekrar set et (showScreen sırasında sıfırlanmasın) */
+    selGL = profile.goal || 'cut';
+    selST = profile.sportType || 'hybrid';
+    
+    /* Step'i 6'ya getir */
+    step = 6;
+    if(typeof updWizStep === 'function') updWizStep();
+    
+    /* Gender UI güncelle (s5 boyun/bel etiketleri için) */
+    if(typeof updGenderUI === 'function') updGenderUI();
+    if(typeof updS5GenderUI === 'function') updS5GenderUI();
+    
+    /* Form alanlarını doldur (sv ile) */
+    if(typeof restoreWiz === 'function') restoreWiz();
+    
+    /* KRİTİK: Conditions step'i manuel render et (updWizStep step 6'da otomatik çağırmıyor) */
+    setTimeout(function(){
+      if(typeof renderConditionsStep === 'function'){
+        try { renderConditionsStep(); console.log('  ✓ Conditions step render edildi'); }
+        catch(e){ console.warn('renderConditionsStep hatası:', e); }
+      }
+    }, 50);
   } catch(e){ console.warn('Wizard başlatma hatası:', e); }
   
-  /* 10. Bildirim */
   setTimeout(function(){
     if(typeof showToast === 'function'){
       showToast('🧪 Test profili yüklendi: '+profile.name, 'success');
@@ -5537,57 +5659,72 @@ function loadAdminTestProfile(profileId){
 }
 
 /**
- * Admin test profilinden çıkış:
- * - Tüm in-memory veriyi temizler
- * - localStorage'daki test entry'lerini siler
- * - Firebase oturumu (varsa) kapatır
- * - Auth ekranına döner (hiç giriş yapmamış gibi)
+ * Admin test profilinden çıkış — sandbox temizliği + kullanıcı verisini geri yükle
  */
 function exitAdminTestProfile(){
-  if(!confirm('Test profilinden çıkmak istediğinden emin misin?\n\nTüm test verisi silinecek ve giriş ekranına döneceksin.')) return;
+  if(!confirm('Test profilinden çıkmak istediğinden emin misin?\n\nTüm test verisi silinecek ve giriş ekranına döneceksin.\n(Kendi hesabın etkilenmez)')) return;
   
-  console.log('%c🧪 Test profilinden çıkılıyor...', 'color:#9B72FF;font-weight:bold');
+  console.log('%c🧪 Test profilinden çıkılıyor (sandbox temizleniyor)...', 'color:#9B72FF;font-weight:bold');
   
   try {
-    /* 1. Tüm localStorage anahtarlarını temizle (RavenFit'e ait) */
-    var rfKeys = ['rf_data','rf_entries','rf_water_today','rf_workout_logs',
-                  'rf_custom_workouts','rf_supplements_used','rf_badges',
-                  'rf_avatar','rf_last_supp_results','rf_active_session'];
-    rfKeys.forEach(function(k){ try{ localStorage.removeItem(k); }catch(e){} });
+    /* 1. Sandbox anahtarlarını temizle */
+    try{ localStorage.removeItem('rf_admin_entries'); }catch(e){}
     
-    /* 2. In-memory state temizle */
-    U = {}; R = {}; A = {}; BT = {};
+    /* 2. Kullanıcının kendi verilerini geri yükle (varsa) */
+    if(_adminUserBackup){
+      try {
+        if(_adminUserBackup.badges !== null) localStorage.setItem('rf_badges', _adminUserBackup.badges);
+        if(_adminUserBackup.suppsUsed !== null) localStorage.setItem('rf_supplements_used', _adminUserBackup.suppsUsed);
+        if(_adminUserBackup.waterToday !== null) localStorage.setItem('rf_water_today', _adminUserBackup.waterToday);
+      } catch(e){ console.warn('Backup restore err:', e); }
+    }
+    _adminUserBackup = null;
+    
+    /* 3. In-memory state'i temizle */
+    Object.keys(U).forEach(function(k){ delete U[k]; });
+    Object.keys(R).forEach(function(k){ delete R[k]; });
+    Object.keys(A).forEach(function(k){ delete A[k]; });
+    Object.keys(BT).forEach(function(k){ delete BT[k]; });
     selGL = null; selST = null;
     step = 0;
     _adminTestActive = false;
     _adminTestProfileId = null;
     _isGuest = false;
+    _redsAcknowledged = false;
     
-    /* 3. UI state temizle */
+    /* 4. UI state temizle */
     document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
     document.querySelectorAll('.main-screen').forEach(function(m){m.classList.remove('active');});
     document.querySelectorAll('.bnav-btn').forEach(function(b){b.classList.remove('active');});
-    document.querySelectorAll('.calc-overlay.active').forEach(function(o){o.classList.remove('active');});
+    document.querySelectorAll('.calc-overlay.active').forEach(function(o){o.classList.remove('active');o.style.zIndex='';});
     document.body.style.overflow = '';
     
-    /* 4. Bottom nav gizle */
     var bnav = document.getElementById('bottom-nav');
     if(bnav) bnav.classList.remove('visible');
     
-    /* 5. Inline display style'larını temizle */
     ['splash','results','wizard'].forEach(function(id){
       var el = document.getElementById(id);
-      if(el){ el.style.display = ''; }
+      if(el){ el.style.display = ''; el.classList.remove('active'); }
     });
     
-    /* 6. Firebase oturumunu kapat (varsa) */
-    try { if(_fbAuth && _fbAuth.currentUser) _fbAuth.signOut(); } catch(e){}
-    _fbUser = null;
+    try {
+      document.querySelectorAll('.ps').forEach(function(p,i){
+        p.classList.toggle('act', i===0);
+        p.classList.remove('done');
+      });
+      var progLbl = document.getElementById('prog-lbl');
+      if(progLbl) progLbl.textContent = 'Adım 1 / 7';
+    } catch(e){}
     
-    /* 7. Auth ekranına dön */
+    try {
+      document.querySelectorAll('.fi').forEach(function(inp){ inp.value=''; });
+      document.querySelectorAll('.oc.sel').forEach(function(c){ c.classList.remove('sel'); });
+    } catch(e){}
+    
+    /* Auth ekranına dön */
     if(typeof showAuthScreen === 'function') showAuthScreen();
     
-    console.log('%c✓ Çıkış tamamlandı, auth ekranına dönüldü', 'color:#2EC4B6');
+    console.log('%c✓ Sandbox temizlendi, kullanıcı verisi geri yüklendi, auth ekranına dönüldü', 'color:#2EC4B6');
   } catch(err){
     console.error('Test çıkış hatası:', err);
     alert('Çıkış sırasında bir sorun oluştu. Sayfayı yenile.');
@@ -5595,19 +5732,18 @@ function exitAdminTestProfile(){
 }
 
 /**
- * Akıllı çıkış — test profili aktifse exitAdminTestProfile, değilse doLogout çağırır.
+ * Akıllı çıkış — test profili aktifse exitAdminTestProfile, değilse doLogout
  */
 function _smartLogout(){
   if(ADMIN_TEST_MODE && _adminTestActive){
     exitAdminTestProfile();
-  } else {
+  } else if(typeof doLogout === 'function'){
     doLogout();
   }
 }
 
 /**
- * Profil > Hesabım'daki test rozetini günceller.
- * renderConditionsSummary ile birlikte çağrılır.
+ * Profil > Hesabım'daki test rozetini günceller
  */
 function _renderAdminTestBadge(){
   var badge = document.getElementById('admin-test-badge');
@@ -5622,13 +5758,14 @@ function _renderAdminTestBadge(){
   }
 }
 
-/* Buton görünürlüğünü ADMIN_TEST_MODE'a göre ayarla — DOM ready sonrası */
+/* Buton görünürlüğünü ADMIN_TEST_MODE'a göre ayarla — yayında false yapılırsa buton gizlenir */
 function _initAdminTestUI(){
-  if(!ADMIN_TEST_MODE) return;
   var btnWrap = document.getElementById('admin-test-btn-wrap');
-  if(btnWrap) btnWrap.style.display = 'block';
+  if(!btnWrap) return;
+  if(!ADMIN_TEST_MODE){
+    btnWrap.style.display = 'none';
+  }
 }
-/* Sayfa yüklendiğinde otomatik göster */
 if(typeof document !== 'undefined'){
   if(document.readyState === 'loading'){
     document.addEventListener('DOMContentLoaded', _initAdminTestUI);
@@ -10551,6 +10688,8 @@ function onUserLoggedOut(){
 var _fbSaveTimer=null;
 function saveToFirebase(){
   if(!_fbUser||!_fbDb)return;
+  /* Admin test modunda buluta yazma — sandbox modu */
+  if(typeof ADMIN_TEST_MODE !== 'undefined' && ADMIN_TEST_MODE && _adminTestActive) return;
   /* Debounce: 800ms içinde birden fazla kayıt gelirse sadece sonuncuyu gönder */
   clearTimeout(_fbSaveTimer);
   _fbSaveTimer=setTimeout(function(){
