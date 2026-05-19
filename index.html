@@ -604,6 +604,7 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 /* ── HESAPLAYICILAR ─────────────────────────────────── */
 .calc-overlay{position:fixed;inset:0;background:var(--bg);z-index:800;display:none;flex-direction:column;overflow:hidden}
 .calc-overlay.active{display:flex}
+#auth-screen.admin-hidden{display:none !important;visibility:hidden !important;z-index:-1 !important}
 .calc-header{background:var(--hbg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0;max-width:640px;width:100%;margin:0 auto;box-sizing:border-box}
 .calc-header-title{flex:1;font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:2px;line-height:1}
 .calc-header-sub{font-size:10px;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
@@ -5370,71 +5371,86 @@ var _adminTestProfileId = null;
 /* Kullanıcının kendi verilerinin yedeği (test moduna girerken alınır, çıkarken geri yüklenir) */
 var _adminUserBackup = null;
 
-/* Test profilleri kataloğu — Her profil tüm wizard'ı doldurabilecek veriye sahip */
-var ADMIN_TEST_PROFILES = [
-  {
+/* Test profilleri kataloğu — /data/admin-profiles.json'dan dinamik yüklenir.
+   Eğer JSON yüklenemezse fallback: minimal Ufuk profili in-memory'de.
+   Yayında ADMIN_TEST_MODE=false yapılırsa fetch hiç yapılmaz. */
+var ADMIN_TEST_PROFILES = [];
+var _adminProfilesLoaded = false;
+var _adminProfilesLoading = false;
+
+/**
+ * Admin test profillerini /data/admin-profiles.json'dan yükler.
+ * Promise döner — fetch tamamlanınca ADMIN_TEST_PROFILES dolar.
+ */
+function _loadAdminProfilesFromJson(){
+  if(_adminProfilesLoaded) return Promise.resolve(ADMIN_TEST_PROFILES);
+  if(_adminProfilesLoading) return new Promise(function(resolve){
+    var checkInterval = setInterval(function(){
+      if(_adminProfilesLoaded){
+        clearInterval(checkInterval);
+        resolve(ADMIN_TEST_PROFILES);
+      }
+    }, 50);
+  });
+  
+  _adminProfilesLoading = true;
+  
+  /* Cache-busting timestamp ile fetch */
+  var ts = Date.now();
+  var url = 'data/admin-profiles.json?v=' + ts;
+  
+  return fetch(url)
+    .then(function(res){
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      return res.json();
+    })
+    .then(function(data){
+      if(data && data.profiles && Array.isArray(data.profiles)){
+        ADMIN_TEST_PROFILES = data.profiles;
+        _adminProfilesLoaded = true;
+        _adminProfilesLoading = false;
+        console.log('%c✓ Test profilleri yüklendi: '+ADMIN_TEST_PROFILES.length+' profil', 'color:#2EC4B6');
+        return ADMIN_TEST_PROFILES;
+      }
+      throw new Error('Geçersiz JSON yapısı');
+    })
+    .catch(function(err){
+      console.warn('⚠️ admin-profiles.json yüklenemedi:', err.message);
+      console.warn('   Fallback Ufuk profili kullanılacak (in-memory minimal)');
+      /* FALLBACK: Eğer JSON yüklenmezse minimal Ufuk profili */
+      ADMIN_TEST_PROFILES = [_getAdminFallbackProfile()];
+      _adminProfilesLoaded = true;
+      _adminProfilesLoading = false;
+      return ADMIN_TEST_PROFILES;
+    });
+}
+
+/**
+ * Fallback: JSON yüklenmezse minimal Ufuk profili.
+ * (Geliştirme veya offline durumlarda devreye girer)
+ */
+function _getAdminFallbackProfile(){
+  return {
     id: 'ufuk',
     name: 'Ufuk',
     age: 27,
     gender: 'male',
-    desc: '27y · Erkek · 180cm/80kg · Ektomorf · Aktif ayakta iş · Cut hedefi · 5 özel durum',
+    desc: '27y · Erkek · 180cm/80kg · Ektomorf · Cut hedefi · (fallback)',
     color: 'var(--purple)',
     avatar: '👤',
-    user: {
-      name: 'Ufuk',
-      gender: 'male',
-      age: 27,
-      height: 180,
-      weight: 80,
-      neck: 39,
-      waist: 96.5,
-      shoulder: 118,
-      hip: 99,
-      chest: 102,
-      arm: 35,
-      forearm: 29,
-      leg: 58,
-      thigh: 58,
-      calf: 35
-    },
-    /* A objesi — wizard adım 3-4 cevapları */
-    A: {
-      job: 2,          /* Aktif / Ayakta */
-      sd: 0,           /* Spor günü: Hiç yapmıyorum */
-      sh: 0,           /* Spor süresi: yapmıyor → 0 (locked) */
-      ta: 'none',      /* Training age: Hiç düzenli yapmadım */
-      ex: 0,           /* Ekstra aktivite: Hayır */
-      st: 'hybrid',
-      gl: 'cut'
-    },
-    /* BT objesi — Vücut Tipi Testi (bt1-bt8 keyleri, {ec,me,en} puanları) */
-    bt: {
-      bt1: {ec:1, me:0, en:0},  /* Parmaklar üst üste geldi → ektomorf */
-      bt2: {ec:1, me:0, en:0},  /* Kemiklerim → ektomorf */
-      bt3: {ec:1, me:0, en:0},  /* Kalem gibi → ektomorf */
-      bt4: {ec:1, me:0, en:0},  /* İnce ve uzun → ektomorf */
-      bt5: {ec:1, me:0, en:0},  /* Kütle kazanmakta zorlanıyorum → ektomorf */
-      bt6: {ec:0, me:1, en:0},  /* Pek değişmiyor → mezomorf */
-      bt7: {ec:1, me:0, en:0},  /* Rahatça içine girebiliyorum → ektomorf */
-      bt8: {ec:0, me:1, en:0}   /* Veririm de alırım da → mezomorf */
-    },
+    user: {name:'Ufuk',gender:'male',age:27,height:180,weight:80,neck:39,waist:96.5,shoulder:118,hip:99,chest:102,arm:35,forearm:29,leg:58,thigh:58,calf:35},
+    A: {job:2,sd:0,sh:0,ta:'none',ex:0,st:'hybrid',gl:'cut'},
+    bt: {bt1:{ec:1,me:0,en:0},bt2:{ec:1,me:0,en:0},bt3:{ec:1,me:0,en:0},bt4:{ec:1,me:0,en:0},bt5:{ec:1,me:0,en:0},bt6:{ec:0,me:1,en:0},bt7:{ec:1,me:0,en:0},bt8:{ec:0,me:1,en:0}},
     goal: 'cut',
     sportType: 'hybrid',
     conditions: ['lower-back','knee-injury','shoulder-injury','cardiovascular','hypertension'],
-    /* 3 haftalık geçmiş ölçüm — bf/ffmi/bmi otomatik hesaplanır, age tüm entry'lere yazılır */
     entries: [
-      { dateStr:'05.05.2026', timestamp: new Date('2026-05-05T10:00:00').getTime(),
-        weight:83, height:180, age:27, gender:'male',
-        neck:39, waist:97.5, shoulder:117, hip:96, chest:101, arm:35, forearm:28, leg:57, calf:34 },
-      { dateStr:'12.05.2026', timestamp: new Date('2026-05-12T10:00:00').getTime(),
-        weight:81.4, height:180, age:27, gender:'male',
-        neck:39, waist:97.5, shoulder:117, hip:97, chest:102, arm:35, forearm:29, leg:57, calf:35 },
-      { dateStr:'19.05.2026', timestamp: new Date('2026-05-19T10:00:00').getTime(),
-        weight:80, height:180, age:27, gender:'male',
-        neck:39, waist:96.5, shoulder:118, hip:99, chest:102, arm:35, forearm:29, leg:58, calf:35 }
+      {dateStr:'05.05.2026',timestamp:1746435600000,weight:83,height:180,age:27,gender:'male',neck:39,waist:97.5,shoulder:117,hip:96,chest:101,arm:35,forearm:28,leg:57,calf:34},
+      {dateStr:'12.05.2026',timestamp:1747040400000,weight:81.4,height:180,age:27,gender:'male',neck:39,waist:97.5,shoulder:117,hip:97,chest:102,arm:35,forearm:29,leg:57,calf:35},
+      {dateStr:'19.05.2026',timestamp:1747645200000,weight:80,height:180,age:27,gender:'male',neck:39,waist:96.5,shoulder:118,hip:99,chest:102,arm:35,forearm:29,leg:58,calf:35}
     ]
-  }
-];
+  };
+}
 
 /* Admin panel açılış — auth ekranındaki butondan çağrılır */
 function openAdminTestPanel(){
@@ -5442,11 +5458,28 @@ function openAdminTestPanel(){
   if(!ADMIN_TEST_MODE){ console.warn('Admin test modu kapalı'); return false; }
   var overlay = document.getElementById('admin-test-overlay');
   if(!overlay){ console.error('admin-test-overlay elementi bulunamadı!'); return false; }
-  try { _renderAdminProfilesList(); } catch(e){ console.error('Profil listesi render hatası:', e); }
-  /* Auth ekranı z-index'ini geçecek şekilde overlay'i üste taşı */
+  
+  /* Overlay'i hemen aç, loading göster */
   overlay.style.zIndex = '9999';
   overlay.classList.add('active');
   document.body.style.overflow = 'hidden';
+  
+  /* Yüklenmediyse loading göster, JSON'u fetch et */
+  if(!_adminProfilesLoaded){
+    var listEl = document.getElementById('admin-profiles-list');
+    if(listEl){
+      listEl.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--text2)">' +
+        '<div style="font-size:32px;margin-bottom:10px">⏳</div>' +
+        '<div style="font-size:13px">Test profilleri yükleniyor...</div></div>';
+    }
+    _loadAdminProfilesFromJson().then(function(){
+      try { _renderAdminProfilesList(); } catch(e){ console.error('Profil listesi render hatası:', e); }
+    });
+  } else {
+    /* Zaten yüklü, doğrudan render */
+    try { _renderAdminProfilesList(); } catch(e){ console.error('Profil listesi render hatası:', e); }
+  }
+  
   console.log('✓ Admin paneli açıldı (z-index 9999)');
   return false;
 }
@@ -5535,6 +5568,15 @@ function _adminCalcEntryMetrics(entry, gender){
  */
 function loadAdminTestProfile(profileId){
   if(!ADMIN_TEST_MODE) return;
+  
+  /* Profiller yüklenmemişse önce yükle */
+  if(!_adminProfilesLoaded){
+    _loadAdminProfilesFromJson().then(function(){
+      loadAdminTestProfile(profileId);
+    });
+    return;
+  }
+  
   var profile = ADMIN_TEST_PROFILES.find(function(p){return p.id===profileId;});
   if(!profile){ console.warn('Profil bulunamadı:', profileId); return; }
   
@@ -5611,14 +5653,22 @@ function loadAdminTestProfile(profileId){
     console.log('  ✓ Hesaplamalar tamamlandı (BMR:', R.bmr, 'TDEE:', R.tdee, 'BF:', R.bf, ')');
   } catch(e){ console.warn('calcAll hatası:', e); }
   
-  /* ── 11. Auth ekranını kapat ── */
+  /* ── 11. Auth ekranını TAMAMEN gizle (inline display + class) ── */
   try {
     var auth = document.getElementById('auth-screen');
-    if(auth){ auth.style.display='none'; }
+    if(auth){
+      auth.style.display = 'none';
+      auth.style.visibility = 'hidden';
+      auth.style.zIndex = '-1';
+      auth.classList.add('admin-hidden');
+    }
     var appMain = document.getElementById('app-main');
-    if(appMain){ appMain.style.display='block'; }
+    if(appMain){
+      appMain.style.display = 'block';
+      appMain.style.visibility = 'visible';
+    }
     _isGuest = true;
-  } catch(e){}
+  } catch(e){ console.warn('Auth gizleme hatası:',e); }
   closeAdminTestPanel();
   
   /* ── 12. Wizard'ı step 7'de aç ── */
@@ -5719,6 +5769,16 @@ function exitAdminTestProfile(){
     try {
       document.querySelectorAll('.fi').forEach(function(inp){ inp.value=''; });
       document.querySelectorAll('.oc.sel').forEach(function(c){ c.classList.remove('sel'); });
+    } catch(e){}
+    
+    /* Auth ekranını sıfırla (admin-hidden class'ı ve inline style temizle) */
+    try {
+      var auth = document.getElementById('auth-screen');
+      if(auth){
+        auth.style.visibility = '';
+        auth.style.zIndex = '';
+        auth.classList.remove('admin-hidden');
+      }
     } catch(e){}
     
     /* Auth ekranına dön */
