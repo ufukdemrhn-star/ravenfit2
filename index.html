@@ -1581,53 +1581,59 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
   </div>
 </div>
 
-<!-- ══ RED-S UYARI MODAL (Cut + Düşük BF) ══════════════════ -->
+<!-- ══ RED-S UYARI MODAL (Cut + Düşük BF) — Bilimsel + Sarı Tema ══ -->
 <div id="reds-warning-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:900;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)">
-  <div style="background:var(--card);border:2px solid var(--danger);border-radius:16px;padding:24px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(230,57,70,.3)">
+  <div style="background:var(--card);border:2px solid var(--warn);border-radius:16px;padding:24px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(255,183,3,.3)">
     <div style="text-align:center;margin-bottom:16px">
       <div style="font-size:42px;margin-bottom:8px">⚠️</div>
-      <div style="font-size:18px;font-weight:800;color:var(--danger);letter-spacing:.5px">SAĞLIK UYARISI</div>
-      <div style="font-size:11px;color:var(--text2);margin-top:4px;text-transform:uppercase;letter-spacing:1px">RED-S Riski</div>
+      <div style="font-size:18px;font-weight:800;color:var(--warn);letter-spacing:.5px">SAĞLIK BİLGİLENDİRMESİ</div>
+      <div style="font-size:11px;color:var(--text2);margin-top:4px;text-transform:uppercase;letter-spacing:1px">Düşük Yağ Oranı + Cut Riski</div>
     </div>
     <div id="reds-warning-body" style="font-size:13px;color:var(--text);line-height:1.6;margin-bottom:18px">
       <!-- İçerik openRedsWarning() ile dolduruluyor -->
     </div>
-    <div style="background:rgba(230,57,70,.08);border-left:3px solid var(--danger);border-radius:8px;padding:12px 14px;margin-bottom:18px">
-      <div style="font-size:12px;color:var(--text);line-height:1.5">
-        <strong>RED-S (Relative Energy Deficiency in Sport):</strong> Düşük enerji alımı + düşük yağ oranı kombinasyonu hormonal bozukluk, performans düşüşü, kemik yoğunluğu kaybı, libido azalması ve psikolojik sorunlara yol açabilir.
+    <div style="background:rgba(255,183,3,.08);border-left:3px solid var(--warn);border-radius:8px;padding:12px 14px;margin-bottom:14px">
+      <div style="font-size:12px;color:var(--text);line-height:1.55">
+        <strong>RED-S Nedir?</strong> Sporda Göreceli Enerji Yetersizliği (Relative Energy Deficiency in Sport), düşük enerji erişilebilirliğiyle (low energy availability) bağlantılı bir <strong>klinik sendromdur</strong>. IOC (Uluslararası Olimpiyat Komitesi) 2023 konsensüsünde tanımlanmıştır. Hem kadın hem erkek sporcuları etkileyebilir; metabolik hız, hormonal denge, kemik sağlığı, bağışıklık ve performans üzerinde olumsuz etkilerle <strong>ilişkili bulunmuştur</strong>.
       </div>
     </div>
-    <div style="font-size:11px;color:var(--text2);text-align:center;margin-bottom:14px;font-style:italic">
-      Bu sadece bir bilgilendirmedir; tıbbi tavsiye değildir. Sağlık profesyoneline danışmanı öneririz.
+    <div style="background:rgba(76,201,240,.06);border-left:3px solid var(--info);border-radius:8px;padding:11px 13px;margin-bottom:14px;font-size:11px;color:var(--text2);line-height:1.55">
+      💡 <strong style="color:var(--info)">Alternatif öneri:</strong> Bu yağ oranında <strong>maintenance</strong> (idame), <strong>diet break</strong> veya <strong>performance odaklı beslenme</strong> daha sürdürülebilir olabilir. Kalori açığı yerine antrenman kalitesine ve toparlanmaya odaklanmak hormonal sağlığı korur.
+    </div>
+    <div style="font-size:10px;color:var(--text3);text-align:center;margin-bottom:14px;line-height:1.5;font-style:italic">
+      Bu bilgiler IOC 2023 RED-S konsensüsü ve ilgili spor bilimi literatürüne dayanır. Verdiğin yağ oranı bir <strong>tahmindir</strong> (Navy formülü ±3-5% hata payı). Kişisel sağlık kararları için bir spor hekimi veya diyetisyene danışman önerilir.
     </div>
     <div style="display:flex;gap:10px">
-      <button onclick="redsWarningCancel()" style="flex:1;background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:13px;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;font-family:'Outfit',sans-serif">İptal</button>
-      <button onclick="redsWarningProceed()" style="flex:2;background:var(--danger);border:none;border-radius:11px;padding:13px;font-size:12px;font-weight:700;color:#fff;cursor:pointer;font-family:'Outfit',sans-serif;letter-spacing:.5px">Riskleri Anladım, Devam Et</button>
+      <button onclick="redsWarningCancel()" style="flex:1;background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:13px;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;font-family:'Outfit',sans-serif">İptal (Maintain Seç)</button>
+      <button onclick="redsWarningProceed()" style="flex:2;background:var(--warn);border:none;border-radius:11px;padding:13px;font-size:12px;font-weight:700;color:#000;cursor:pointer;font-family:'Outfit',sans-serif;letter-spacing:.5px">Riskleri Anladım, Devam Et</button>
     </div>
   </div>
 </div>
 
-<!-- ══ BULK UYARI MODAL (Bulk + Yüksek BF) ══════════════════ -->
+<!-- ══ BULK UYARI MODAL (Bulk + Yüksek BF) — Bilimsel + Sarı Tema ══ -->
 <div id="bulk-warning-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:900;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)">
   <div style="background:var(--card);border:2px solid var(--warn);border-radius:16px;padding:24px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(255,183,3,.3)">
     <div style="text-align:center;margin-bottom:16px">
       <div style="font-size:42px;margin-bottom:8px">⚠️</div>
-      <div style="font-size:18px;font-weight:800;color:var(--warn);letter-spacing:.5px">SAĞLIK UYARISI</div>
-      <div style="font-size:11px;color:var(--text2);margin-top:4px;text-transform:uppercase;letter-spacing:1px">Yüksek Yağ Oranında Bulk Riski</div>
+      <div style="font-size:18px;font-weight:800;color:var(--warn);letter-spacing:.5px">SAĞLIK BİLGİLENDİRMESİ</div>
+      <div style="font-size:11px;color:var(--text2);margin-top:4px;text-transform:uppercase;letter-spacing:1px">Yüksek Yağ Oranı + Bulk Verimi</div>
     </div>
     <div id="bulk-warning-body" style="font-size:13px;color:var(--text);line-height:1.6;margin-bottom:18px">
       <!-- İçerik openBulkWarning() ile dolduruluyor -->
     </div>
-    <div style="background:rgba(255,183,3,.08);border-left:3px solid var(--warn);border-radius:8px;padding:12px 14px;margin-bottom:18px">
-      <div style="font-size:12px;color:var(--text);line-height:1.5">
-        <strong>Yüksek Yağ Oranında Bulk Neden Riskli?</strong> Yüksek yağ oranıyla başlanan bulk dönemi insülin direncini artırır, yağ kazanımını hızlandırır ve gelişmiş yağ hücreleri (hipertrofi) ileride yağ kaybetmeyi zorlaştırır. Aynı zamanda kalori fazlasının daha büyük kısmı yağ olarak depolanır, kas kazanımı verimi düşer.
+    <div style="background:rgba(255,183,3,.08);border-left:3px solid var(--warn);border-radius:8px;padding:12px 14px;margin-bottom:14px">
+      <div style="font-size:12px;color:var(--text);line-height:1.55">
+        <strong>Bilimsel Arkaplan:</strong> Yüksek yağ oranıyla bulk yapmanın "yasak" olduğuna dair <strong>kesin bir bilimsel konsensüs yoktur</strong>. Ancak çoğunluk literatür şunu gösterir: yüksek yağ oranı insülin duyarlılığını düşürebilir, aromataz aktivitesi (yağ dokusu kaynaklı östrojen dönüşümü) artabilir ve nutrient partitioning (besin dağıtımı) yağ depolama yönüne kayabilir. Bu, kalori fazlasının daha büyük kısmının yağ olarak depolanmasıyla <strong>ilişkilendirilmiştir</strong>.
       </div>
     </div>
-    <div style="font-size:11px;color:var(--text2);text-align:center;margin-bottom:14px;font-style:italic">
-      Bu sadece bir bilgilendirmedir; tıbbi tavsiye değildir. Hedeflerini bir profesyonelle değerlendirmen önerilir.
+    <div style="background:rgba(76,201,240,.06);border-left:3px solid var(--info);border-radius:8px;padding:11px 13px;margin-bottom:14px;font-size:11px;color:var(--text2);line-height:1.55">
+      💡 <strong style="color:var(--info)">Alternatif öneri:</strong> Bu yağ oranında önce <strong>recomp</strong> (yağ kaybı + kas koruma) veya <strong>hafif cut</strong> ile yağ oranını düşürmek; ardından lean bulk başlatmak — uzun vadeli kas gelişimi açısından daha verimli olabilir. <strong>"Mini-cut → lean bulk"</strong> döngüsü popüler bir yaklaşımdır.
+    </div>
+    <div style="font-size:10px;color:var(--text3);text-align:center;margin-bottom:14px;line-height:1.5;font-style:italic">
+      Bu bilgiler güncel hipertrofi literatürüne dayanır (Helms, Trexler, Nuckols, Henselmans). Eşikler <strong>kesin tıbbi sınırlar değil</strong>, kanıt-bazlı yaklaşık değerlerdir. Yağ oranın bir <strong>tahmindir</strong> (Navy formülü ±3-5% hata payı). Bireysel genetik, antrenman geçmişi ve hormon profili bu sonuçları değiştirebilir.
     </div>
     <div style="display:flex;gap:10px">
-      <button onclick="bulkWarningCancel()" style="flex:1;background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:13px;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;font-family:'Outfit',sans-serif">İptal (Recomp Seç)</button>
+      <button onclick="bulkWarningCancel()" style="flex:1;background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:13px;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;font-family:'Outfit',sans-serif">Recomp Seç</button>
       <button onclick="bulkWarningProceed()" style="flex:2;background:var(--warn);border:none;border-radius:11px;padding:13px;font-size:12px;font-weight:700;color:#000;cursor:pointer;font-family:'Outfit',sans-serif;letter-spacing:.5px">Riskleri Anladım, Devam Et</button>
     </div>
   </div>
@@ -5340,17 +5346,17 @@ function openRedsWarning(proceedCallback){
   var threshold = male ? 6 : 14;
   
   body.innerHTML = 
-    '<p style="margin:0 0 12px 0">Mevcut vücut yağ oranın <strong style="color:var(--danger)">%'+bf.toFixed(1)+'</strong>. '+(male?'Erkekler':'Kadınlar')+' için <strong>%'+threshold+'</strong> altı yağ oranında <strong>kalori açığı</strong> oluşturmak ciddi sağlık riskleri taşır:</p>'+
+    '<p style="margin:0 0 12px 0">Tahmini vücut yağ oranın <strong style="color:var(--warn)">%'+bf.toFixed(1)+'</strong>. '+(male?'Erkeklerde':'Kadınlarda')+' yaklaşık <strong>%'+threshold+'</strong> altındaki yağ oranlarında <strong>kalori açığı</strong> oluşturmak, literatürde aşağıdaki risk artışlarıyla <strong>ilişkilendirilmiştir</strong>:</p>'+
     '<ul style="margin:0 0 12px 18px;padding:0;font-size:12px;color:var(--text2);line-height:1.7">'+
-      '<li>'+(male?'Testosteron düşüşü':'Menstrual döngü bozuklukları (amenore)')+'</li>'+
-      '<li>Tiroid hormonu düşüşü, metabolik yavaşlama</li>'+
-      '<li>Kas kütlesi kaybı (anabolik direncin azalması)'+'</li>'+
-      '<li>Performans ve toparlanma düşüşü</li>'+
-      '<li>Kemik yoğunluğu kaybı (osteoporoz riski)</li>'+
-      '<li>Bağışıklık sistemi zayıflaması</li>'+
-      '<li>Uyku ve ruh hali bozuklukları</li>'+
+      '<li>'+(male?'Testosteron seviyelerinde düşüş eğilimi':'Menstrual döngü düzensizlikleri (oligomenore / amenore)')+'</li>'+
+      '<li>Tiroid hormonu (T3) düşüşü ve metabolik hızda yavaşlama</li>'+
+      '<li>Kemik mineral yoğunluğu kaybı (stres kırığı riski artar)</li>'+
+      '<li>Kas protein sentezinde azalma, kas kaybı eğilimi</li>'+
+      '<li>Performans, güç ve toparlanma kapasitesinde düşüş</li>'+
+      '<li>Bağışıklık fonksiyonunda gerileme</li>'+
+      '<li>Uyku kalitesi ve ruh hali üzerinde olumsuz etkiler</li>'+
     '</ul>'+
-    '<p style="margin:0;font-size:12px;color:var(--text2)">Bu yağ oranında <strong style="color:var(--text)">maintain</strong> veya <strong style="color:var(--text)">recomp</strong> hedefini seçmek daha güvenli olabilir.</p>';
+    '<p style="margin:0;font-size:12px;color:var(--text2)">Bu eşik <strong>kesin bir tıbbi sınır değildir</strong>; bireysel genetik, spor türü, hormonal profil ve enerji alımına göre değişir. Ancak çoğunluk literatür bu seviyelerin altında <strong>düşük enerji erişilebilirliği (LEA)</strong> riskinin belirgin artığını göstermektedir.</p>';
   
   document.getElementById('reds-warning-overlay').style.display = 'flex';
   document.body.style.overflow = 'hidden';
@@ -5414,17 +5420,17 @@ function openBulkWarning(proceedCallback){
   var threshold = male ? 20 : 30;
   
   body.innerHTML = 
-    '<p style="margin:0 0 12px 0">Mevcut vücut yağ oranın <strong style="color:var(--warn)">%'+bf.toFixed(1)+'</strong>. '+(male?'Erkekler':'Kadınlar')+' için <strong>%'+threshold+'</strong> üzerinde yağ oranıyla <strong>bulk dönemi</strong> başlatmak şu riskleri taşır:</p>'+
+    '<p style="margin:0 0 12px 0">Tahmini vücut yağ oranın <strong style="color:var(--warn)">%'+bf.toFixed(1)+'</strong>. '+(male?'Erkeklerde':'Kadınlarda')+' yaklaşık <strong>%'+threshold+'</strong> üzerindeki yağ oranlarında <strong>bulk</strong> başlatmak, çoğunluk literatürde aşağıdaki etkilerle <strong>ilişkilendirilmiştir</strong>:</p>'+
     '<ul style="margin:0 0 12px 18px;padding:0;font-size:12px;color:var(--text2);line-height:1.7">'+
-      '<li>İnsülin direncinde artış, kortizol yüksekliği</li>'+
-      '<li>Yağ kazanımının kas kazanımına oranı yükselir (kötü P-ratio)</li>'+
-      '<li>Yeni yağ hücreleri (hipertrofi) — ileride cut yapmak zorlaşır</li>'+
-      '<li>Estradiol artışı, testosteron baskılanması (erkek)</li>'+
-      '<li>Toparlanma süresi uzar, antrenman verimi düşer</li>'+
-      '<li>Görsel olarak kas tanımı belirgin azalır</li>'+
-      '<li>Uyku kalitesi ve enerji seviyesinde düşüş</li>'+
+      '<li><strong>Nutrient partitioning</strong> (besin dağıtımı) bozulabilir — kalori fazlası yağ depolama yönüne kayar</li>'+
+      '<li>İnsülin duyarlılığında <strong>azalma eğilimi</strong> görülebilir</li>'+
+      '<li>'+(male?'Aromataz aktivitesinde artış → östrojen-testosteron oranı değişebilir':'Hormonal dengede ve adipokine seviyelerinde değişim')+'</li>'+
+      '<li>Kronik düşük seviyeli inflamasyon riski artar</li>'+
+      '<li>Bulk sonunda gereken cut süresi <strong>uzayabilir</strong></li>'+
+      '<li>Görsel olarak kas tanımı belirgin biçimde azalır</li>'+
+      '<li>Toparlanma kalitesi ve uyku üzerinde olumsuz etkiler olabilir</li>'+
     '</ul>'+
-    '<p style="margin:0;font-size:12px;color:var(--text2)">Bu yağ oranında <strong style="color:var(--text)">recomp</strong> veya <strong style="color:var(--text)">cut</strong> hedefi seçip önce yağ oranını düşürmek bulk verimini ciddi şekilde artırır.</p>';
+    '<p style="margin:0;font-size:12px;color:var(--text2)">Önemli not: Bu konuda <strong>kanıt-bazlı yaklaşımlar tartışmalıdır</strong>. Bazı güncel araştırmalar (Nuckols, Trexler) yağ oranıyla p-ratio arasındaki ilişkinin daha zayıf olduğunu öne sürer. Yine de çoğunluk pratisyenler ve klasik hipertrofi rehberleri (Helms, ACSM) bu eşiklerin altında bulk başlatmayı önerir.</p>';
   
   document.getElementById('bulk-warning-overlay').style.display = 'flex';
   document.body.style.overflow = 'hidden';
