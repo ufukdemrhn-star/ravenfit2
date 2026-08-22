@@ -65,7 +65,7 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 
 /* ── SPLASH ──────────────────────────────────────────────────  */
 #splash{align-items:center;justify-content:center;text-align:center;padding:30px 22px;position:relative;overflow:hidden}
-#splash .splash-title,#splash .splash-sub,#splash .pills,#splash .btn,#splash-cont{position:relative;z-index:3}
+#splash .splash-title,#splash .splash-sub,#splash .pills,#splash .btn{position:relative;z-index:3}
 .s-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 50% 100%,var(--ag),transparent 70%);pointer-events:none}
 /* Arka plan silüeti */
 .s-silhouette{position:absolute;top:50%;left:50%;transform:translate(-50%,-54%);width:min(420px,90vw);opacity:.045;pointer-events:none;z-index:1;filter:blur(1px)}
@@ -95,7 +95,6 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 .pill:nth-child(1){animation-delay:.5s}.pill:nth-child(2){animation-delay:.55s}.pill:nth-child(3){animation-delay:.6s}.pill:nth-child(4){animation-delay:.65s}.pill:nth-child(5){animation-delay:.7s}.pill:nth-child(6){animation-delay:.75s}.pill:nth-child(7){animation-delay:.8s}.pill:nth-child(8){animation-delay:.85s}.pill:nth-child(9){animation-delay:.9s}.pill:nth-child(10){animation-delay:.95s}
 .pill-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0}
 #splash .btn{animation:splashFadeUp .5s .9s both}
-#splash-cont{animation:splashFadeUp .4s 1.05s both}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
 
 /* ── BUTTONS ─────────────────────────────────────────────────  */
@@ -758,10 +757,7 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
     <div class="pill"><div class="pill-dot"></div>Yüzme Modülü</div>
   </div>
   <button class="btn btn-p btn-lg" type="button" onclick="startWizard()" ontouchend="startWizardFromTouch(event)">Analize Başla <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
-  <div id="splash-cont" style="display:none;margin-top:11px">
-    <button class="btn btn-s" onclick="showResults()">📊 Önceki Sonuçlarım</button>
-  </div>
-  <!-- Daima görünen: ana menüye git (analiz varsa erişilebilir) -->
+  <!-- Ana menüye dön — sadece analiz tamamlanmışsa görünür -->
   <button id="splash-home-btn" type="button" onclick="goToMainMenu()" style="display:none;margin-top:14px;background:transparent;border:1.5px solid var(--border);border-radius:50%;width:48px;height:48px;cursor:pointer;align-items:center;justify-content:center;transition:all .2s;-webkit-tap-highlight-color:transparent" onmousedown="this.style.transform='scale(.92)'" onmouseup="this.style.transform=''" ontouchstart="this.style.transform='scale(.92)'" ontouchend="this.style.transform=''" title="Ana Menüye Dön">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text2)">
       <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -1778,16 +1774,49 @@ function applyTheme(t){
 }
 
 /* ── SCREENS ──────────────────────────────────────────── */
-function showScreen(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+
+/* Ekran geçişinden önce açık kalan tüm overlay/modal'ları kapat.
+   Yeni kayıt akışında splash üzerinde takılı kalan katmanları önler. */
+function closeAllOverlays(){
+  try{
+    document.querySelectorAll('.calc-overlay.active').forEach(function(o){
+      o.classList.remove('active'); o.style.removeProperty('z-index');
+    });
+    document.querySelectorAll('.modal-overlay.active').forEach(function(o){
+      o.classList.remove('active');
+    });
+    ['reds-warning-overlay','bulk-warning-overlay','warmup-overlay'].forEach(function(id){
+      var el=document.getElementById(id);
+      if(el) el.style.display='none';
+    });
+    document.body.style.overflow='';
+  }catch(e){ console.warn('closeAllOverlays:',e); }
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(function(s){
+    s.classList.remove('active');
+    /* Eski sürümlerden kalan inline display stilini temizle —
+       aksi halde .screen.active kuralı ezilir ve ekran gizlenmez */
+    if(s.style.display) s.style.removeProperty('display');
+  });
+  var el=document.getElementById(id);
+  if(el){ el.style.removeProperty('display'); el.classList.add('active'); }
+  window.scrollTo(0,0);
+}
 function goHome(){
   showScreen('splash');
   document.getElementById('bottom-nav').classList.remove('visible');
-  /* Eğer kullanıcı analizini tamamladıysa "Ana Menüye Dön" butonunu göster */
+  _syncSplashHomeBtn();
+}
+
+/* Splash'teki ev butonunu duruma göre göster/gizle.
+   Analiz tamamlanmamış yeni kullanıcıda görünmez. */
+function _syncSplashHomeBtn(){
   var hb=document.getElementById('splash-home-btn');
-  if(hb){
-    if(R && R.tdee){ hb.style.display='flex'; }
-    else { hb.style.display='none'; }
-  }
+  if(!hb) return;
+  var hasAnalysis = !!(R && R.tdee);
+  hb.style.display = hasAnalysis ? 'flex' : 'none';
 }
 
 /* Splash → Ana menü (Vücudum > Analiz) */
@@ -1807,8 +1836,8 @@ function goToMainMenu(){
   } catch(e){ console.warn('Analiz tab geçiş hatası:',e); }
 }
 /* switchMain tanımı aşağıda (FAZ 3 bölümünde) */
-function showResults(){showScreen('results');document.getElementById('bottom-nav').classList.add('visible');switchMain('vucudum');renderAll();if(_isGuest){var nickEl=document.getElementById('user-email-display');if(nickEl)nickEl.textContent='Misafir';var note=document.getElementById('guest-mode-note');if(note)note.style.display='block';setAvatarInitials('MI');}setTimeout(checkAndAwardBadges,1000);}
-function startWizard(){step=0;selST=null;selGL=null;_redsAcknowledged=false;_bulkAcknowledged=false;showScreen('wizard');document.getElementById('bottom-nav').classList.remove('visible');updWizStep();updGenderUI();restoreWiz();}
+function showResults(){showScreen('results');document.getElementById('bottom-nav').classList.add('visible');switchMain('vucudum');renderAll();if(_isGuest){var nickEl=document.getElementById('user-email-display');if(nickEl)nickEl.textContent='Misafir';var note=document.getElementById('guest-mode-note');if(note)note.style.display='block';setAvatarInitials('MI');}setTimeout(checkAndAwardBadges,1000);_syncSplashHomeBtn();}
+function startWizard(){step=0;selST=null;selGL=null;_redsAcknowledged=false;_bulkAcknowledged=false;closeAllOverlays();showScreen('wizard');document.getElementById('bottom-nav').classList.remove('visible');updWizStep();updGenderUI();restoreWiz();}
 function startWizardFromTouch(e){if(e)e.preventDefault();startWizard();}
 
 function restoreWiz(){
@@ -3884,7 +3913,6 @@ function resetAll(){
     document.querySelectorAll('#wizard input.fi').forEach(function(inp){inp.value='';});
     document.querySelectorAll('.gbtn.sel').forEach(function(el){el.classList.remove('sel');});
     document.querySelectorAll('.oc.sel').forEach(function(el){el.classList.remove('sel');});
-    document.getElementById('splash-cont').style.display='none';
     document.getElementById('bottom-nav').classList.remove('visible');
     goHome();
     showToast('Tüm veriler sıfırlandı.','success');
@@ -10616,13 +10644,11 @@ function onUserLoggedIn(user){
           showResults();
         } catch(e){
           console.warn('showResults hatası, splash gösteriliyor:',e);
-          document.getElementById('splash-cont').style.display='block';
-          document.getElementById('splash').style.display='flex';
+          goHome();
         }
       } else {
         /* Analiz tamamlanmamış — splash ekranını göster */
-        document.getElementById('splash-cont').style.display='block';
-        document.getElementById('splash').style.display='flex';
+        goHome();
       }
       if(fbHasData) showToast('Hoş geldin! 👋');
     })
@@ -10634,14 +10660,10 @@ function onUserLoggedIn(user){
         if(raw){var d=JSON.parse(raw);U=d.U||{};R=d.R||{};A=d.A||{};BT=d.BT||{};}
       }catch(ex){}
       if(Object.keys(R).length && R.tdee){
-        try { showResults(); } catch(err){
-          document.getElementById('splash-cont').style.display='block';
-          document.getElementById('splash').style.display='flex';
-        }
+        try { showResults(); } catch(err){ goHome(); }
       } else {
         /* Hata + analiz yok → splash göster */
-        document.getElementById('splash-cont').style.display='block';
-        document.getElementById('splash').style.display='flex';
+        goHome();
       }
     });
 }
@@ -10651,7 +10673,6 @@ function onUserLoggedOut(){
   _redsAcknowledged=false;_bulkAcknowledged=false;
   _clearUserLocalData();
   /* Yıkımları görsel temizle */
-  document.getElementById('splash-cont').style.display='none';
   document.getElementById('bottom-nav').classList.remove('visible');
   /* Sayfa yüklenmiş elementleri sıfırla */
   try {
