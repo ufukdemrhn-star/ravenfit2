@@ -1,0 +1,71 @@
+/* ══════════════════════════════════════════════════════════
+   RavenFit — calculators.css
+   Hesaplayıcılar ve PR testi
+   ══════════════════════════════════════════════════════════ */
+
+/* ── HESAPLAYICILAR ─────────────────────────────────── */
+.calc-overlay{position:fixed;inset:0;background:var(--bg);z-index:800;display:none;flex-direction:column;overflow:hidden}
+.calc-overlay.active{display:flex}
+.calc-header{background:var(--hbg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0;max-width:640px;width:100%;margin:0 auto;box-sizing:border-box}
+.calc-header-title{flex:1;font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:2px;line-height:1}
+.calc-header-sub{font-size:10px;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.calc-close{background:none;border:none;color:var(--text2);cursor:pointer;padding:4px 8px;font-size:22px}
+.calc-body{flex:1;overflow-y:auto;padding:18px;max-width:640px;width:100%;margin:0 auto;box-sizing:border-box}
+.calc-grid-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:14px}
+.calc-label{font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.calc-input{background:var(--card2);border:2px solid var(--border);border-radius:12px;padding:14px 12px;color:var(--text);font-family:'Bebas Neue',cursive;font-size:32px;letter-spacing:1px;text-align:center;width:100%;outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none}
+.calc-input:focus{border-color:var(--accent);background:var(--card)}
+.calc-result{background:var(--card2);border-radius:14px;padding:16px;margin-bottom:10px;text-align:center}
+.calc-result-val{font-family:'Bebas Neue',cursive;font-size:44px;letter-spacing:2px;color:var(--accent);line-height:1}
+.calc-result-unit{font-size:13px;color:var(--text2);margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:1px}
+.calc-result-sub{font-size:11px;color:var(--text3);margin-top:6px}
+.calc-btn-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
+.calc-btn-grid.three{grid-template-columns:repeat(3,1fr)}
+.calc-btn-grid.two{grid-template-columns:repeat(2,1fr)}
+.calc-btn{background:var(--card2);border:1.5px solid var(--border);border-radius:10px;padding:10px 4px;color:var(--text2);font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all .15s;text-align:center}
+.calc-btn:active,.calc-btn.sel{background:var(--accent);border-color:var(--accent);color:#fff}
+.calc-formula-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px}
+.calc-formula-cell{background:var(--card2);border-radius:10px;padding:10px;text-align:center}
+.calc-formula-val{font-family:'Bebas Neue',cursive;font-size:22px;color:var(--text);line-height:1}
+.calc-formula-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
+.calc-percentage-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}
+.calc-percentage-row:last-child{border-bottom:none}
+.calc-pct-pct{font-weight:700;color:var(--accent);width:50px}
+.calc-pct-val{font-family:'Bebas Neue',cursive;font-size:18px;color:var(--text)}
+.calc-pct-range{font-size:10px;color:var(--text2)}
+.calc-tool-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:16px 10px;cursor:pointer;text-align:center;-webkit-tap-highlight-color:transparent;transition:all .18s}
+.calc-tool-card:active{border-color:var(--accent);transform:scale(.97)}
+.calc-tool-icon{font-size:30px;line-height:1;margin-bottom:4px}
+.calc-tool-label{font-family:'Bebas Neue',cursive;font-size:14px;letter-spacing:1px;color:var(--text);line-height:1.1}
+.calc-tool-sub{font-size:9px;color:var(--text3);margin-top:2px}
+
+@media(max-width:380px){.frow,.gender-grid{grid-template-columns:1fr}.splash-title{font-size:52px}.tb{font-size:9px}.r-stats{gap:10px}}
+
+/* ══════════════════════════════════════════════════════════
+   PR TESTİ — "Bu set nasıl hissettirdi?" ekranı
+   Bu kurallar önceden js/calculators/pr-test.js içinde
+   çalışma anında <style> olarak enjekte ediliyordu.
+   Buraya taşındı: tarayıcı bir kez yükler, her açılışta
+   yeniden ayrıştırmaz ve görsel yolları doğru çözülür.
+   ══════════════════════════════════════════════════════════ */
+
+.pr-feel-wrap{position:relative;min-height:480px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:30px 8px}
+.pr-feel-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;border-radius:14px}
+.pr-feel-bg::before{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(70vw,520px);height:min(70vw,520px);background:url("../assets/icons/logo.png") center/contain no-repeat;opacity:.045;filter:blur(2px) grayscale(1);animation:prFeelLogoFloat 8s ease-in-out infinite}
+.pr-feel-bg::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 60%);animation:prFeelPulse 4s ease-in-out infinite}
+@keyframes prFeelLogoFloat{0%,100%{transform:translate(-50%,-50%) scale(1) rotate(0)}50%{transform:translate(-50%,-52%) scale(1.04) rotate(3deg)}}
+@keyframes prFeelPulse{0%,100%{opacity:.5}50%{opacity:.9}}
+.pr-feel-title{position:relative;z-index:2;text-align:center;font-family:'Bebas Neue',cursive;font-size:30px;letter-spacing:3px;line-height:1.1;color:var(--text);margin:30px 0 10px;text-shadow:0 4px 24px color-mix(in srgb, var(--accent) 40%, transparent)}
+.pr-feel-sub{position:relative;z-index:2;text-align:center;font-size:11px;color:var(--text2);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:24px}
+.pr-feel-emoji{position:relative;z-index:2;font-size:72px;text-align:center;line-height:1;margin:0 0 6px;transition:all .3s cubic-bezier(.34,1.56,.64,1);filter:drop-shadow(0 6px 20px var(--shadow-md-c, rgba(0,0,0,.45)))}
+.pr-feel-label{position:relative;z-index:2;text-align:center;font-family:'Bebas Neue',cursive;font-size:32px;letter-spacing:2px;font-weight:700;margin-bottom:30px;transition:color .3s;text-shadow:0 2px 12px var(--shadow-md-c, rgba(0,0,0,.45))}
+.pr-feel-arc{position:relative;z-index:2;display:flex;justify-content:center;margin:8px 0 20px;width:100%;max-width:340px}
+.pr-feel-arc svg{width:100%;height:auto;overflow:visible}
+.pr-feel-thumb{transition:cx .3s cubic-bezier(.34,1.56,.64,1),cy .3s cubic-bezier(.34,1.56,.64,1),fill .3s;filter:drop-shadow(0 4px 12px var(--overlay, rgba(0,0,0,.68)))}
+.pr-feel-btns{position:relative;z-index:2;display:grid;gap:8px;width:100%;max-width:340px;margin-top:8px}
+.pr-feel-btn{background:var(--card2);border:2px solid var(--border);border-radius:14px;padding:14px 16px;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:14px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:600;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.pr-feel-btn:active{transform:scale(.98)}
+.pr-feel-btn .icn{font-size:24px;line-height:1;width:32px;text-align:center}
+.pr-feel-btn.sel{background:var(--card);transform:scale(1.02);box-shadow:0 6px 24px var(--shadow-md-c, rgba(0,0,0,.45))}
+.pr-feel-confirm{position:relative;z-index:2;width:100%;max-width:340px;margin:20px 0 0;padding:16px;border:none;border-radius:14px;color:#fff;font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;-webkit-tap-highlight-color:transparent;box-shadow:0 6px 24px var(--shadow-md-c, rgba(0,0,0,.45));transition:all .2s}
+.pr-feel-confirm:active{transform:translateY(2px)}
